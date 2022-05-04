@@ -1,8 +1,10 @@
 #ifndef POMOKU_H
 #define POMOKU_H
 
+
 #define TRUE 1
 #define FALSE 0
+
 
 #include "color.h"
 
