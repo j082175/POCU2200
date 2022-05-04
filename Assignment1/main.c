@@ -19,7 +19,7 @@ int main(void)
 
 
 
-    assert(is_placeable(0, 0) == TRUE);
+    /*assert(is_placeable(0, 0) == TRUE);
     assert(is_placeable(14, 14) == TRUE);
     assert(is_placeable(15, 15) == FALSE);
 
@@ -27,15 +27,15 @@ int main(void)
     assert(is_placeable(0, 0) == FALSE);
     assert(get_color(0, 0) == 0);
     assert(place_stone(COLOR_WHITE, 0, 0) == FALSE);
-    assert(place_stone(COLOR_BLACK, 0, 0) == FALSE);
+    assert(place_stone(COLOR_BLACK, 0, 0) == FALSE);*/
 
-    test_horizontal_chain();
+    /*test_horizontal_chain();*/
     test_combined_chains();
 
-    test_swap_row();
+    /*test_swap_row();
     test_insert_row();
     test_remove_row();
-    test_copy_row();
+    test_copy_row();*/
 
 
 

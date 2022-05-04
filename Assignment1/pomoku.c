@@ -378,6 +378,12 @@ int insert_row(const color_t color, const unsigned int row)
 	/* 추가할 위치에 돌이 없어야함. */
 	/* 20 이 최대 크기 */
 
+    unsigned int i = 0;
+    unsigned int j = 0;
+
+    unsigned int i1 = 0;
+    unsigned int j1 = 0;
+
 	if (color == COLOR_BLACK)
 	{
 		if (user_score_black >= 3 && row_count < 20 && row < row_count)
@@ -391,9 +397,11 @@ int insert_row(const color_t color, const unsigned int row)
 			/* 맨 끝 열에서부터 입력받은 row 값 까지 for문을 시작하는것이 핵심 */
 			/* 입력받은 row 쪽 행은 위의 작업 실행이후 추가적인 for 문으로 모두 지워준다. */
 			/* row가 2일때, */
-			for (unsigned int i = row_count - 1; i >= row; i--) /* 아래에서부터 위로가는 for 문 */
+           
+            
+			for (i = row_count - 1; i >= row; i--) /* 아래에서부터 위로가는 for 문 */
 			{
-				for (unsigned int j = 0; j < column_count; j++)/* 각 행의 모든 열을 순차적으로 훑는 과정 */
+				for (j = 0; j < column_count; j++)/* 각 행의 모든 열을 순차적으로 훑는 과정 */
 				{
 					if (pomoku_board[i][j].is_stone == TRUE) /* 돌이 존재할때만 그 돌을 아래 행으로 복사하는 과정 */
 					{
@@ -429,9 +437,10 @@ int insert_row(const color_t color, const unsigned int row)
 			++row_count;
 			user_score_white = user_score_white - 3;
 
-			for (unsigned int i = row_count - 1; i >= row; i--)
+
+			for (i1 = row_count - 1; i1 >= row; i1--)
 			{
-				for (unsigned int j = 0; j < column_count; j++)
+				for (j1 = 0; j1 < column_count; j1++)
 				{
 					if (pomoku_board[i][j].is_stone == TRUE)
 					{
@@ -466,6 +475,12 @@ int insert_column(const color_t color, const unsigned int col)
 	   /* 추가할 위치에 돌이 없어야함. */
 	   /* 20 이 최대 크기 */
 
+    unsigned int i = 0;
+    unsigned int j = 0;
+
+    unsigned int i1;
+    unsigned int j1;
+
 	if (color == COLOR_BLACK)
 	{
 		if (user_score_black >= 3 && column_count < 20 && col < column_count)
@@ -476,9 +491,10 @@ int insert_column(const color_t color, const unsigned int col)
 			++column_count;
 			user_score_black = user_score_black - 3;
 
-			for (unsigned int i = column_count - 1; i >= col; i--)
+
+			for (i = column_count - 1; i >= col; i--)
 			{
-				for (unsigned int j = 0; j < row_count; j++)
+				for (j = 0; j < row_count; j++)
 				{
 					if (pomoku_board[j][i].is_stone == TRUE)
 					{
@@ -513,16 +529,18 @@ int insert_column(const color_t color, const unsigned int col)
 			++column_count;
 			user_score_white = user_score_white - 3;
 
-			for (unsigned int i = column_count - 1; i >= col; i--)
-			{
-				for (unsigned int j = 0; j < row_count; j++)
-				{
-					if (pomoku_board[j][i].is_stone == TRUE)
-					{
-						pomoku_board[j][i + 1] = pomoku_board[j][i];
 
-						pomoku_board[j][i].is_stone = FALSE;
-						pomoku_board[j][i].m_color = COLOR_DEFAULT;
+
+			for (i1 = column_count - 1; i1 >= col; i1--)
+			{
+				for (j1 = 0; j1 < row_count; j1++)
+				{
+					if (pomoku_board[j1][i1].is_stone == TRUE)
+					{
+						pomoku_board[j1][i1 + 1] = pomoku_board[j1][i1];
+
+						pomoku_board[j1][i1].is_stone = FALSE;
+						pomoku_board[j1][i1].m_color = COLOR_DEFAULT;
 					}
 
 				}
@@ -555,7 +573,8 @@ int remove_row(const color_t color, const unsigned int row)
 			/*구현부*/
 
 
-			for (unsigned int i = 0; i < column_count; i++)
+            unsigned int i;
+			for (i = 0; i < column_count; i++)
 			{
 				pomoku_board[row][i].is_stone = FALSE;
 				pomoku_board[row][i].m_color = COLOR_DEFAULT;
@@ -585,8 +604,8 @@ int remove_row(const color_t color, const unsigned int row)
 			/*구현부*/
 
 
-
-			for (unsigned int i = 0; i < column_count; i++)
+            unsigned int i;
+			for (i = 0; i < column_count; i++)
 			{
 				pomoku_board[row][i].is_stone = FALSE;
 				pomoku_board[row][i].m_color = COLOR_DEFAULT;
@@ -624,8 +643,8 @@ int remove_column(const color_t color, const unsigned int col)
 
 
 
-
-			for (unsigned int i = 0; i < column_count; i++)
+            unsigned int i;
+			for (i = 0; i < column_count; i++)
 			{
 				pomoku_board[i][col].is_stone = FALSE;
 				pomoku_board[i][col].m_color = COLOR_DEFAULT;
@@ -655,8 +674,8 @@ int remove_column(const color_t color, const unsigned int col)
 
 
 
-
-			for (unsigned int i = 0; i < column_count; i++)
+            unsigned int i;
+			for (i = 0; i < column_count; i++)
 			{
 				pomoku_board[i][col].is_stone = FALSE;
 				pomoku_board[i][col].m_color = COLOR_DEFAULT;
@@ -687,29 +706,42 @@ int swap_rows(const color_t color, const unsigned int row0, const unsigned int r
 {
 	/* 2점 사용 */
 
+    user_info_t backup_info[20] = { 0, };
+
+    user_info_t backup_info1[20] = {0,};
+
 	if (color == COLOR_BLACK)
 	{
 		if (user_score_black >= 2 && row0 < row_count && row1 < row_count)
 		{
 			user_score_black = user_score_black - 2;
 
-			user_info_t backup_info[20] = { 0, };
+
 
 			/* 먼저 row0 를 백업하는 방향으로 */
-			for (unsigned int i = 0; i < column_count; i++)
+            {
+            unsigned int i;
+			for (i = 0; i < column_count; i++)
 			{
 				backup_info[i] = pomoku_board[row0][i];
 			}
+            }
 
-			for (unsigned int i = 0; i < column_count; i++)
+            {
+                unsigned int i;
+			for (i = 0; i < column_count; i++)
 			{
 				pomoku_board[row0][i] = pomoku_board[row1][i];
 			}
+            }
 
-			for (unsigned int i = 0; i < column_count; i++)
+            {
+                unsigned int i;
+			for (i = 0; i < column_count; i++)
 			{
 				pomoku_board[row1][i] = backup_info[i];
 			}
+            }
 		}
 
 		return TRUE;
@@ -720,23 +752,31 @@ int swap_rows(const color_t color, const unsigned int row0, const unsigned int r
 		{
 			user_score_white = user_score_white - 2;
 
-			user_info_t backup_info[20] = { 0, };
 
 			/* 먼저 row0 를 백업하는 방향으로 */
-			for (unsigned int i = 0; i < column_count; i++)
+            {
+                unsigned int i;
+			for (i = 0; i < column_count; i++)
 			{
-				backup_info[i] = pomoku_board[row0][i];
+				backup_info1[i] = pomoku_board[row0][i];
 			}
+            }
 
-			for (unsigned int i = 0; i < column_count; i++)
+            {
+                unsigned int i;
+			for (i = 0; i < column_count; i++)
 			{
 				pomoku_board[row0][i] = pomoku_board[row1][i];
 			}
+            }
 
-			for (unsigned int i = 0; i < column_count; i++)
+            {
+                unsigned int i;
+			for (i = 0; i < column_count; i++)
 			{
-				pomoku_board[row1][i] = backup_info[i];
+				pomoku_board[row1][i] = backup_info1[i];
 			}
+            }
 		}
 
 		return TRUE;
@@ -747,26 +787,30 @@ int swap_rows(const color_t color, const unsigned int row0, const unsigned int r
 int swap_columns(const color_t color, const unsigned int col0, const unsigned int col1)
 {
 	/* 2점 사용 */
+    unsigned int i = 0;
+    user_info_t backup_info[20] = { 0, };
+    user_info_t backup_info1[20] = { 0, };
+
 	if (color == COLOR_BLACK)
 	{
 		if (user_score_black >= 2 && col0 < column_count && col1 < column_count)
 		{
 			user_score_black = user_score_black - 2;
 
-			user_info_t backup_info[20] = { 0, };
+			
 
 			/* 먼저 col0 를 백업하는 방향으로 */
-			for (unsigned int i = 0; i < row_count; i++)
+			for (i = 0; i < row_count; i++)
 			{
 				backup_info[i] = pomoku_board[i][col0];
 			}
 
-			for (unsigned int i = 0; i < row_count; i++)
+			for (i = 0; i < row_count; i++)
 			{
 				pomoku_board[i][col0] = pomoku_board[i][col1];
 			}
 
-			for (unsigned int i = 0; i < column_count; i++)
+			for (i = 0; i < column_count; i++)
 			{
 				pomoku_board[i][col1] = backup_info[i];
 			}
@@ -780,22 +824,24 @@ int swap_columns(const color_t color, const unsigned int col0, const unsigned in
 		{
 			user_score_white = user_score_white - 2;
 
-			user_info_t backup_info[20] = { 0, };
+
+
+            i = 0;
 
 			/* 먼저 col0 를 백업하는 방향으로 */
-			for (unsigned int i = 0; i < row_count; i++)
+			for (i = 0; i < row_count; i++)
 			{
-				backup_info[i] = pomoku_board[i][col0];
+				backup_info1[i] = pomoku_board[i][col0];
 			}
 
-			for (unsigned int i = 0; i < row_count; i++)
+			for (i = 0; i < row_count; i++)
 			{
 				pomoku_board[i][col0] = pomoku_board[i][col1];
 			}
 
-			for (unsigned int i = 0; i < column_count; i++)
+			for (i = 0; i < column_count; i++)
 			{
-				pomoku_board[i][col1] = backup_info[i];
+				pomoku_board[i][col1] = backup_info1[i];
 			}
 		}
 
@@ -809,13 +855,15 @@ int copy_row(const color_t color, const unsigned int src, const unsigned int dst
 {
 	/* 4점 사용 */
 
+    unsigned int i = 0;
+
 	if (color == COLOR_BLACK)
 	{
 		if (user_score_black >= 4 && src < row_count && dst < row_count)
 		{
 			user_score_black = user_score_black - 4;
 
-			for (unsigned int i = 0; i < column_count; i++)
+			for (i = 0; i < column_count; i++)
 			{
 				pomoku_board[dst][i] = pomoku_board[src][i];
 			}
@@ -830,7 +878,9 @@ int copy_row(const color_t color, const unsigned int src, const unsigned int dst
 		{
 			user_score_white = user_score_white - 4;
 
-			for (unsigned int i = 0; i < column_count; i++)
+            i = 0;
+
+			for (i = 0; i < column_count; i++)
 			{
 				pomoku_board[dst][i] = pomoku_board[src][i];
 			}
@@ -846,13 +896,15 @@ int copy_row(const color_t color, const unsigned int src, const unsigned int dst
 int copy_column(const color_t color, const unsigned int src, const unsigned int dst)
 {
 	/* 4점 사용 */
+
+    unsigned int i = 0;
 	if (color == COLOR_BLACK)
 	{
 		if (user_score_black >= 4 && src < column_count && dst < column_count)
 		{
 			user_score_black = user_score_black - 4;
 
-			for (unsigned int i = 0; i < row_count; i++)
+			for (i = 0; i < row_count; i++)
 			{
 				pomoku_board[i][dst] = pomoku_board[i][src];
 			}
@@ -867,7 +919,7 @@ int copy_column(const color_t color, const unsigned int src, const unsigned int 
 		{
 			user_score_white = user_score_white - 4;
 
-			for (unsigned int i = 0; i < row_count; i++)
+			for (i = 0; i < row_count; i++)
 			{
 				pomoku_board[i][dst] = pomoku_board[i][src];
 			}
