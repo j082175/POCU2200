@@ -7,8 +7,7 @@ unsigned int g_user_score_white = 0;
 unsigned int g_row_count = 0;
 unsigned int g_column_count = 0;
 
-typedef struct user_info
-{
+typedef struct user_info {
     unsigned int is_stone;
     color_t m_color;
 } user_info_t;
@@ -99,8 +98,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
             g_pomoku_board[row][col].is_stone = TRUE;
             /* 왼쪽 대각선 */
             /* 왼쪽부분 */
-            while ((row > 0) && (col > 0) && g_pomoku_board[row - one_index][col - one_index].is_stone &&
-                   (g_pomoku_board[row - one_index][col - one_index].m_color == color)) {
+            while ((row > 0) && (col > 0) && g_pomoku_board[row - one_index][col - one_index].is_stone && (g_pomoku_board[row - one_index][col - one_index].m_color == color)) {
 
                 ++count;
                 ++one_index;
@@ -124,7 +122,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
             /* 왼쪽 대각선 */
             /* 오른쪽부분 */
             while (g_pomoku_board[row + one_index][col + one_index].is_stone &&
-                   (g_pomoku_board[row + one_index][col + one_index].m_color == color)) {
+                    (g_pomoku_board[row + one_index][col + one_index].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -148,7 +146,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
             /* 오른쪽 대각선 */
             /* 왼쪽부분*/
             while ((row > 0) && g_pomoku_board[row - one_index][col + one_index].is_stone &&
-                   (g_pomoku_board[row - one_index][col + one_index].m_color == color)) {
+                    (g_pomoku_board[row - one_index][col + one_index].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -171,7 +169,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
             /* 오른쪽 대각선 */
             /* 오른쪽부분 */
             while ((col > 0) && g_pomoku_board[row + one_index][col - one_index].is_stone &&
-                   (g_pomoku_board[row + one_index][col - one_index].m_color == color)) {
+                    (g_pomoku_board[row + one_index][col - one_index].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -195,7 +193,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
             /* 좌우 */
             /* 왼쪽부분 */
             while ((row > 0) && g_pomoku_board[row - one_index][col].is_stone &&
-                   (g_pomoku_board[row - one_index][col].m_color == color)) {
+                    (g_pomoku_board[row - one_index][col].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -218,7 +216,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
             /* 좌우 */
             /* 오른쪽부분 */
             while (g_pomoku_board[row + one_index][col].is_stone &&
-                   (g_pomoku_board[row + one_index][col].m_color == color)) {
+                    (g_pomoku_board[row + one_index][col].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -242,7 +240,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
             /* 위아래 */
             /* 왼쪽부분 */
             while ((col > 0) && g_pomoku_board[row][col - one_index].is_stone &&
-                   (g_pomoku_board[row][col - one_index].m_color == color)) {
+                    (g_pomoku_board[row][col - one_index].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -265,7 +263,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
             /* 위아래 */
             /* 오른쪽부분 */
             while (g_pomoku_board[row][col + one_index].is_stone &&
-                   (g_pomoku_board[row][col + one_index].m_color == color)) {
+                    (g_pomoku_board[row][col + one_index].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -344,8 +342,7 @@ int insert_row(const color_t color, const unsigned int row)
         } else {
             return FALSE;
         }
-    }
-    else if (color == COLOR_WHITE) {
+    } else if (color == COLOR_WHITE) {
         if (g_user_score_white >= 3 && g_row_count < 20 && row < g_row_count) {
             /*구현부*/
 
@@ -369,8 +366,7 @@ int insert_row(const color_t color, const unsigned int row)
              }*/
 
             return TRUE;
-        }
-        else {
+        } else {
             return FALSE;
         }
     }
@@ -440,8 +436,7 @@ int insert_column(const color_t color, const unsigned int col)
               }*/
 
             return TRUE;
-        }
-        else {
+        } else {
             return FALSE;
         }
     }
@@ -515,8 +510,7 @@ int remove_row(const color_t color, const unsigned int row)
               }*/
 
             return TRUE;
-        }
-        else {
+        } else {
             return FALSE;
         }
     }
