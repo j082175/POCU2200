@@ -4,8 +4,8 @@
 unsigned int g_user_score_black = 0;
 unsigned int g_user_score_white = 0;
 
-unsigned int g_row_count = 0;
-unsigned int g_column_count = 0;
+unsigned int g_row_count = 15;
+unsigned int g_column_count = 15;
 
 typedef struct user_info {
     unsigned int is_stone;
