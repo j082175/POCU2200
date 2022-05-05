@@ -45,8 +45,7 @@ int get_score(const color_t color)
 {
     if (color == COLOR_BLACK) {
         return g_user_score_black;
-    }
-    else if (color == COLOR_WHITE) {
+    } else if (color == COLOR_WHITE) {
         return g_user_score_white;
     }
     return -1;
@@ -60,11 +59,9 @@ int get_color(const unsigned int row, const unsigned int col)
         if (g_pomoku_board[row][col].is_stone == TRUE) {
             if (g_pomoku_board[row][col].m_color == COLOR_BLACK) {
                 return 0;
-            }
-            else if (g_pomoku_board[row][col].m_color == COLOR_WHITE) {
+            } else if (g_pomoku_board[row][col].m_color == COLOR_WHITE) {
                 return 1;
-            }
-            else {
+            } else {
                 return -1;
             }
         }
@@ -78,8 +75,7 @@ int is_placeable(const unsigned int row, const unsigned int col)
     if ((g_row_count > row) && (g_column_count > col)) {
         if (g_pomoku_board[row][col].is_stone == TRUE) {
             return FALSE;
-        }
-        else {
+        } else {
             return TRUE;
         }
     }
@@ -110,8 +106,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
                 if (count >= 4) {
                     if (color == COLOR_BLACK) {
                         ++g_user_score_black;
-                    }
-                    else if (color == COLOR_WHITE) {
+                    } else if (color == COLOR_WHITE) {
                         ++g_user_score_white;
                     }
                 }
@@ -133,8 +128,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
                 if (count >= 4) {
                     if (color == COLOR_BLACK) {
                         ++g_user_score_black;
-                    }
-                    else if (color == COLOR_WHITE) {
+                    } else if (color == COLOR_WHITE) {
                         ++g_user_score_white;
                     }
                 }
@@ -157,8 +151,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
                 if (count >= 4) {
                     if (color == COLOR_BLACK) {
                         ++g_user_score_black;
-                    }
-                    else if (color == COLOR_WHITE) {
+                    } else if (color == COLOR_WHITE) {
                         ++g_user_score_white;
                     }
                 }
@@ -180,8 +173,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
                 if (count >= 4) {
                     if (color == COLOR_BLACK) {
                         ++g_user_score_black;
-                    }
-                    else if (color == COLOR_WHITE) {
+                    } else if (color == COLOR_WHITE) {
                         ++g_user_score_white;
                     }
                 }
@@ -204,8 +196,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
                 if (count >= 4) {
                     if (color == COLOR_BLACK) {
                         ++g_user_score_black;
-                    }
-                    else if (color == COLOR_WHITE) {
+                    } else if (color == COLOR_WHITE) {
                         ++g_user_score_white;
                     }
                 }
@@ -227,8 +218,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
                 if (count >= 4) {
                     if (color == COLOR_BLACK) {
                         ++g_user_score_black;
-                    }
-                    else if (color == COLOR_WHITE) {
+                    } else if (color == COLOR_WHITE) {
                         ++g_user_score_white;
                     }
                 }
@@ -251,8 +241,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
                 if (count >= 4) {
                     if (color == COLOR_BLACK) {
                         ++g_user_score_black;
-                    }
-                    else if (color == COLOR_WHITE) {
+                    } else if (color == COLOR_WHITE) {
                         ++g_user_score_white;
                     }
                 }
@@ -274,8 +263,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
                 if (count >= 4) {
                     if (color == COLOR_BLACK) {
                         ++g_user_score_black;
-                    }
-                    else if (color == COLOR_WHITE) {
+                    } else if (color == COLOR_WHITE) {
                         ++g_user_score_white;
                     }
                 }
