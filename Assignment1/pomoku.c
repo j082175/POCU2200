@@ -8,13 +8,11 @@ unsigned int g_row_count = 0;
 unsigned int g_column_count = 0;
 
 typedef struct user_info {
-	unsigned int is_stone;
+    unsigned int is_stone;
 	color_t m_color;
 } user_info_t;
 
-user_info_t g_pomoku_board[20][20] = {
-	0,
-};
+user_info_t g_pomoku_board[20][20] = { 0, };
 
 void init_game(void)
 {
