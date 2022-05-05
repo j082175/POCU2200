@@ -445,7 +445,7 @@ int remove_row(const color_t color, const unsigned int row)
     unsigned int j1;
 
     if (color == COLOR_BLACK) {
-        if (g_user_score_black >= 3 && row < g_row_count && g_row_count >= 9) {
+        if (g_user_score_black >= 3 && row < g_row_count && g_row_count >= 11) {
             /*구현부*/
 
             for (i = row + 1; i < g_row_count; i++) {
@@ -476,7 +476,7 @@ int remove_row(const color_t color, const unsigned int row)
             return FALSE;
         }
     } else if (color == COLOR_WHITE) {
-        if (g_user_score_white >= 3 && row < g_row_count && g_row_count >= 9) {
+        if (g_user_score_white >= 3 && row < g_row_count && g_row_count >= 11) {
             /*구현부*/
 
             for (i1 = row + 1; i1 < g_row_count; i1++) {
@@ -519,7 +519,7 @@ int remove_column(const color_t color, const unsigned int col)
     unsigned int j1;
 
     if (color == COLOR_BLACK) {
-        if (g_user_score_black >= 3 && col < g_column_count && g_column_count >= 9) {
+        if (g_user_score_black >= 3 && col < g_column_count && g_column_count >= 11) {
             /*구현부*/
 
             for (i = col + 1; i < g_column_count; i++) {
@@ -550,7 +550,7 @@ int remove_column(const color_t color, const unsigned int col)
             return FALSE;
         }
     } else if (color == COLOR_WHITE) {
-        if (g_user_score_white >= 3 && col < g_column_count && g_column_count >= 9) {
+        if (g_user_score_white >= 3 && col < g_column_count && g_column_count >= 11) {
             /*구현부*/
 
             for (i1 = col + 1; i1 < g_column_count; i1++) {
