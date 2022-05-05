@@ -121,8 +121,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
 
             /* 왼쪽 대각선 */
             /* 오른쪽부분 */
-            while (g_pomoku_board[row + one_index][col + one_index].is_stone &&
-                    (g_pomoku_board[row + one_index][col + one_index].m_color == color)) {
+            while (g_pomoku_board[row + one_index][col + one_index].is_stone && (g_pomoku_board[row + one_index][col + one_index].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -145,8 +144,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
 
             /* 오른쪽 대각선 */
             /* 왼쪽부분*/
-            while ((row > 0) && g_pomoku_board[row - one_index][col + one_index].is_stone &&
-                    (g_pomoku_board[row - one_index][col + one_index].m_color == color)) {
+            while ((row > 0) && g_pomoku_board[row - one_index][col + one_index].is_stone && (g_pomoku_board[row - one_index][col + one_index].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -168,8 +166,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
 
             /* 오른쪽 대각선 */
             /* 오른쪽부분 */
-            while ((col > 0) && g_pomoku_board[row + one_index][col - one_index].is_stone &&
-                    (g_pomoku_board[row + one_index][col - one_index].m_color == color)) {
+            while ((col > 0) && g_pomoku_board[row + one_index][col - one_index].is_stone && (g_pomoku_board[row + one_index][col - one_index].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -192,8 +189,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
 
             /* 좌우 */
             /* 왼쪽부분 */
-            while ((row > 0) && g_pomoku_board[row - one_index][col].is_stone &&
-                    (g_pomoku_board[row - one_index][col].m_color == color)) {
+            while ((row > 0) && g_pomoku_board[row - one_index][col].is_stone && (g_pomoku_board[row - one_index][col].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -215,8 +211,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
 
             /* 좌우 */
             /* 오른쪽부분 */
-            while (g_pomoku_board[row + one_index][col].is_stone &&
-                    (g_pomoku_board[row + one_index][col].m_color == color)) {
+            while (g_pomoku_board[row + one_index][col].is_stone && (g_pomoku_board[row + one_index][col].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -239,8 +234,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
 
             /* 위아래 */
             /* 왼쪽부분 */
-            while ((col > 0) && g_pomoku_board[row][col - one_index].is_stone &&
-                    (g_pomoku_board[row][col - one_index].m_color == color)) {
+            while ((col > 0) && g_pomoku_board[row][col - one_index].is_stone && (g_pomoku_board[row][col - one_index].m_color == color)) {
                 ++count;
                 ++one_index;
 
@@ -262,8 +256,7 @@ int place_stone(const color_t color, const unsigned int row, const unsigned int 
 
             /* 위아래 */
             /* 오른쪽부분 */
-            while (g_pomoku_board[row][col + one_index].is_stone &&
-                    (g_pomoku_board[row][col + one_index].m_color == color)) {
+            while (g_pomoku_board[row][col + one_index].is_stone && (g_pomoku_board[row][col + one_index].m_color == color)) {
                 ++count;
                 ++one_index;
 
