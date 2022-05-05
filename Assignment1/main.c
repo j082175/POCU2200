@@ -34,7 +34,7 @@ int main(void)
     /*game_start();*/
 
     init_game_and_test();
-    /*score_test();*/
+    score_test();
 }
 
 void init_game_and_test(void)

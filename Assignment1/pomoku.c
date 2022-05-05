@@ -18,10 +18,21 @@ user_info_t g_pomoku_board[20][20] = {
 
 void init_game(void)
 {
+	unsigned int i = 0;
+	unsigned int j = 0;
 	g_user_score_black = 0;
 	g_user_score_white = 0;
 	g_row_count = 15;
 	g_column_count = 15;
+
+	for (i = 0; i < g_row_count; i++)
+	{
+		for (j = 0; j < g_column_count; j++)
+		{
+			g_pomoku_board[i][j].is_stone = FALSE;
+			g_pomoku_board[i][j].m_color = COLOR_DEFAULT;
+		}
+	}
 }
 
 unsigned int get_row_count(void)
