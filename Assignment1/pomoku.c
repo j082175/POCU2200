@@ -18,20 +18,10 @@ user_info_t g_pomoku_board[20][20] = {
 
 void init_game(void)
 {
-    unsigned int i = 0;
-    unsigned int j = 0;
 	g_user_score_black = 0;
 	g_user_score_white = 0;
 	g_row_count = 15;
 	g_column_count = 15;
-
-    for (i = 0; i < g_row_count; i++){
-        for (j = 0; j < g_column_count; j++)
-        {
-            g_pomoku_board[i][j].is_stone = FALSE;
-            g_pomoku_board[i][j].m_color = COLOR_DEFAULT;
-        }
-    }
 }
 
 unsigned int get_row_count(void)
@@ -323,12 +313,12 @@ int insert_row(const color_t color, const unsigned int row)
 			/* 입력받은 row 쪽 행은 위의 작업 실행이후 추가적인 for 문으로 모두 지워준다. */
 			/* row가 2일때, */
 
-			for (i = g_row_count - 1; i >= row; i--){ /* 아래에서부터 위로가는 for 문 */
+			for (i = g_row_count; i > row; i--){ /* 아래에서부터 위로가는 for 문 */
 				for (j = 0; j < g_column_count; j++){/* 각 행의 모든 열을 순차적으로 훑는 과정 */
-					if (g_pomoku_board[i][j].is_stone == TRUE){ /* 돌이 존재할때만 그 돌을 아래 행으로 복사하는 과정 */
-						g_pomoku_board[i + 1][j] = g_pomoku_board[i][j];
-						g_pomoku_board[i][j].is_stone = FALSE; /* 옮기고 난후에 기존 돌들은 모두 초기화 */
-						g_pomoku_board[i][j].m_color = COLOR_DEFAULT;
+					if (g_pomoku_board[i - 1][j].is_stone == TRUE){ /* 돌이 존재할때만 그 돌을 아래 행으로 복사하는 과정 */
+						g_pomoku_board[i][j] = g_pomoku_board[i - 1][j];
+						g_pomoku_board[i - 1][j].is_stone = FALSE; /* 옮기고 난후에 기존 돌들은 모두 초기화 */
+						g_pomoku_board[i - 1][j].m_color = COLOR_DEFAULT;
 					}
 				}
 			}
@@ -356,12 +346,12 @@ int insert_row(const color_t color, const unsigned int row)
 			++g_row_count;
 			g_user_score_white = g_user_score_white - 3;
 
-			for (i1 = g_row_count - 1; i1 >= row; i1--){
+			for (i1 = g_row_count; i1 > row; i1--){
 				for (j1 = 0; j1 < g_column_count; j1++){
-					if (g_pomoku_board[i][j].is_stone == TRUE){
-						g_pomoku_board[i + 1][j] = g_pomoku_board[i][j];
-						g_pomoku_board[i][j].is_stone = FALSE;
-						g_pomoku_board[i][j].m_color = COLOR_DEFAULT;
+					if (g_pomoku_board[i1 - 1][j1].is_stone == TRUE){
+						g_pomoku_board[i1][j1] = g_pomoku_board[i1 - 1][j1];
+						g_pomoku_board[i1 - 1][j1].is_stone = FALSE;
+						g_pomoku_board[i1 - 1][j1].m_color = COLOR_DEFAULT;
 					}
 				}
 			}
@@ -401,12 +391,12 @@ int insert_column(const color_t color, const unsigned int col)
 			++g_column_count;
 			g_user_score_black = g_user_score_black - 3;
 
-			for (i = g_column_count - 1; i >= col; i--){
+			for (i = g_column_count; i > col; i--){
 				for (j = 0; j < g_row_count; j++){
-					if (g_pomoku_board[j][i].is_stone == TRUE){
-						g_pomoku_board[j][i + 1] = g_pomoku_board[j][i];
-						g_pomoku_board[j][i].is_stone = FALSE;
-						g_pomoku_board[j][i].m_color = COLOR_DEFAULT;
+					if (g_pomoku_board[j][i - 1].is_stone == TRUE){
+						g_pomoku_board[j][i] = g_pomoku_board[j][i - 1];
+						g_pomoku_board[j][i - 1].is_stone = FALSE;
+						g_pomoku_board[j][i - 1].m_color = COLOR_DEFAULT;
 					}
 				}
 			}
@@ -428,12 +418,12 @@ int insert_column(const color_t color, const unsigned int col)
 			++g_column_count;
 			g_user_score_white = g_user_score_white - 3;
 
-			for (i1 = g_column_count - 1; i1 >= col; i1--){
+			for (i1 = g_column_count; i1 > col; i1--){
 				for (j1 = 0; j1 < g_row_count; j1++){
-					if (g_pomoku_board[j1][i1].is_stone == TRUE){
-						g_pomoku_board[j1][i1 + 1] = g_pomoku_board[j1][i1];
-						g_pomoku_board[j1][i1].is_stone = FALSE;
-						g_pomoku_board[j1][i1].m_color = COLOR_DEFAULT;
+					if (g_pomoku_board[j1][i1 - 1].is_stone == TRUE){
+						g_pomoku_board[j1][i1] = g_pomoku_board[j1][i1 - 1];
+						g_pomoku_board[j1][i1 - 1].is_stone = FALSE;
+						g_pomoku_board[j1][i1 - 1].m_color = COLOR_DEFAULT;
 					}
 				}
 			}
@@ -456,15 +446,28 @@ int insert_column(const color_t color, const unsigned int col)
 int remove_row(const color_t color, const unsigned int row)
 {
 	/* 3점 사용 */
+	unsigned int i;
+	unsigned int j;
+	unsigned int i1;
+	unsigned int j1;
 
 	if (color == COLOR_BLACK){
-		if (g_user_score_black >= 3 && g_row_count < 20 && row < g_row_count){
+		if (g_user_score_black >= 3 && row < g_row_count && g_row_count >= 11){
 			/*구현부*/
 
-			unsigned int i;
-			for (i = 0; i < g_column_count; i++){
-				g_pomoku_board[row][i].is_stone = FALSE;
-				g_pomoku_board[row][i].m_color = COLOR_DEFAULT;
+
+			for (i = row + 1; i < g_row_count; i++){
+				for (j = 0; j < g_column_count; j++){
+
+					g_pomoku_board[i - 1][j].is_stone = FALSE;
+					g_pomoku_board[i - 1][j].m_color = COLOR_DEFAULT;
+
+					if (g_pomoku_board[i][j].is_stone == TRUE) {
+						g_pomoku_board[i - 1][j] = g_pomoku_board[i][j];
+						g_pomoku_board[i][j].is_stone = FALSE;
+						g_pomoku_board[i][j].m_color = COLOR_DEFAULT;
+					}
+				}
 			}
 
 			--g_row_count;
@@ -482,13 +485,22 @@ int remove_row(const color_t color, const unsigned int row)
 			return FALSE;
 		}
 	} else if (color == COLOR_WHITE){
-		if (g_user_score_white >= 3 && g_row_count < 20 && row < g_row_count){
+		if (g_user_score_white >= 3 && row < g_row_count && g_row_count >= 11){
 			/*구현부*/
 
-			unsigned int i;
-			for (i = 0; i < g_column_count; i++){
-				g_pomoku_board[row][i].is_stone = FALSE;
-				g_pomoku_board[row][i].m_color = COLOR_DEFAULT;
+
+			for (i1 = row + 1; i1 < g_row_count; i1++) {
+				for (j1 = 0; j1 < g_column_count; j1++) {
+
+					g_pomoku_board[i1 - 1][j1].is_stone = FALSE;
+					g_pomoku_board[i1 - 1][j1].m_color = COLOR_DEFAULT;
+
+					if (g_pomoku_board[i1][j1].is_stone == TRUE) {
+						g_pomoku_board[i1 - 1][j1] = g_pomoku_board[i1][j1];
+						g_pomoku_board[i1][j1].is_stone = FALSE;
+						g_pomoku_board[i1][j1].m_color = COLOR_DEFAULT;
+					}
+				}
 			}
 
 			--g_row_count;
@@ -512,14 +524,28 @@ int remove_row(const color_t color, const unsigned int row)
 int remove_column(const color_t color, const unsigned int col)
 {
 	/* 3점 사용 */
+	unsigned int i;
+	unsigned int j;
+	unsigned int i1;
+	unsigned int j1;
+
 	if (color == COLOR_BLACK){
-		if (g_user_score_black >= 3 && g_column_count < 20 && col < g_column_count){
+		if (g_user_score_black >= 3 && col < g_column_count && g_column_count >= 11){
 			/*구현부*/
 
-			unsigned int i;
-			for (i = 0; i < g_column_count; i++){
-				g_pomoku_board[i][col].is_stone = FALSE;
-				g_pomoku_board[i][col].m_color = COLOR_DEFAULT;
+
+			for (i = col + 1; i < g_column_count; i++) {
+				for (j = 0; j < g_row_count; j++) {
+
+					g_pomoku_board[j][i - 1].is_stone = FALSE;
+					g_pomoku_board[j][i - 1].m_color = COLOR_DEFAULT;
+
+					if (g_pomoku_board[j][i].is_stone == TRUE) {
+						g_pomoku_board[j][i - 1] = g_pomoku_board[j][i];
+						g_pomoku_board[j][i].is_stone = FALSE;
+						g_pomoku_board[j][i].m_color = COLOR_DEFAULT;
+					}
+				}
 			}
 
 			--g_column_count;
@@ -537,16 +563,24 @@ int remove_column(const color_t color, const unsigned int col)
 			return FALSE;
 		}
 	}else if (color == COLOR_WHITE){
-		if (g_user_score_white >= 3 && g_column_count < 20 && col < g_column_count){
+		if (g_user_score_white >= 3 && col < g_column_count && g_column_count >= 11){
 			/*구현부*/
 
-			unsigned int i;
-			for (i = 0; i < g_column_count; i++){
-				g_pomoku_board[i][col].is_stone = FALSE;
-				g_pomoku_board[i][col].m_color = COLOR_DEFAULT;
+			for (i1 = col + 1; i1 < g_column_count; i1++) {
+				for (j1 = 0; j1 < g_row_count; j1++) {
+
+					g_pomoku_board[j1][i1 - 1].is_stone = FALSE;
+					g_pomoku_board[j1][i1 - 1].m_color = COLOR_DEFAULT;
+
+					if (g_pomoku_board[j1][i1].is_stone == TRUE) {
+						g_pomoku_board[j1][i1 - 1] = g_pomoku_board[j1][i1];
+						g_pomoku_board[j1][i1].is_stone = FALSE;
+						g_pomoku_board[j1][i1].m_color = COLOR_DEFAULT;
+					}
+				}
 			}
 
-			--g_row_count;
+			--g_column_count;
 			g_user_score_white = g_user_score_white - 3;
 
 			/* for (int i = 0; i < row_count; i++)
