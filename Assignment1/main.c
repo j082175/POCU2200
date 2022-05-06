@@ -1,8 +1,8 @@
 #include <assert.h>
 #include "pomoku.h"
 
-
-/*#include <stdio.h>
+/*
+#include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <string.h>
@@ -31,10 +31,8 @@ int main(void)
 {
     /*test_init_game();*/
 
-    /*game_start();*/
 
-    init_game_and_test();
-    score_test();
+
 }
 
 void init_game_and_test(void)
