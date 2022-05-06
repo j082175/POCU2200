@@ -607,8 +607,8 @@ int swap_rows(const color_t color, const unsigned int row0, const unsigned int r
         } else if (row0 >= g_row_count || row1 >= g_row_count) {
             if (row0 > row1) {
                 {
-                    g_user_score_black = g_user_score_black - 2;
                     unsigned int i = 0;
+                    g_user_score_black = g_user_score_black - 2;
                     for (i = 0; i < g_column_count; i++) {
                         g_pomoku_board[row1][i].is_stone = FALSE;
                         g_pomoku_board[row1][i].m_color = COLOR_DEFAULT;
@@ -618,8 +618,8 @@ int swap_rows(const color_t color, const unsigned int row0, const unsigned int r
                 return TRUE;
             } else if (row0 < row1) {
                 {
-                    g_user_score_black = g_user_score_black - 2;
                     unsigned int i = 0;
+                    g_user_score_black = g_user_score_black - 2;
                     for (i = 0; i < g_column_count; i++) {
                         g_pomoku_board[row0][i].is_stone = FALSE;
                         g_pomoku_board[row0][i].m_color = COLOR_DEFAULT;
@@ -660,8 +660,8 @@ int swap_rows(const color_t color, const unsigned int row0, const unsigned int r
         } else if (row0 >= g_row_count || row1 >= g_row_count) {
             if (row0 > row1) {
                 {
-                    g_user_score_white = g_user_score_white - 2;
                     unsigned int i = 0;
+                    g_user_score_white = g_user_score_white - 2;
                     for (i = 0; i < g_column_count; i++) {
                         g_pomoku_board[row1][i].is_stone = FALSE;
                         g_pomoku_board[row1][i].m_color = COLOR_DEFAULT;
@@ -673,8 +673,8 @@ int swap_rows(const color_t color, const unsigned int row0, const unsigned int r
                 /* 범위밖 조건문*/
             } else if (row0 < row1) {
                 {
-                    g_user_score_white = g_user_score_white - 2;
                     unsigned int i = 0;
+                    g_user_score_white = g_user_score_white - 2;
                     for (i = 0; i < g_column_count; i++) {
                         g_pomoku_board[row0][i].is_stone = FALSE;
                         g_pomoku_board[row0][i].m_color = COLOR_DEFAULT;
@@ -718,8 +718,8 @@ int swap_columns(const color_t color, const unsigned int col0, const unsigned in
         } else if (col0 >= g_column_count || col1 >= g_column_count) {
             if (col0 > col1) {
                 {
-                    g_user_score_black = g_user_score_black - 2;
                     unsigned int i = 0;
+                    g_user_score_black = g_user_score_black - 2;
                     for (i = 0; i < g_row_count; i++) {
                         g_pomoku_board[i][col1].is_stone = FALSE;
                         g_pomoku_board[i][col1].m_color = COLOR_DEFAULT;
@@ -729,8 +729,8 @@ int swap_columns(const color_t color, const unsigned int col0, const unsigned in
                 return TRUE;
             } else if (col0 < col1) {
                 {
-                    g_user_score_black = g_user_score_black - 2;
                     unsigned int i = 0;
+                    g_user_score_black = g_user_score_black - 2;
                     for (i = 0; i < g_row_count; i++) {
                         g_pomoku_board[i][col0].is_stone = FALSE;
                         g_pomoku_board[i][col0].m_color = COLOR_DEFAULT;
@@ -765,8 +765,8 @@ int swap_columns(const color_t color, const unsigned int col0, const unsigned in
         } else if (col0 >= g_column_count || col1 >= g_column_count) {
             if (col0 > col1) {
                 {
-                    g_user_score_white = g_user_score_white - 2;
                     unsigned int i = 0;
+                    g_user_score_white = g_user_score_white - 2;
                     for (i = 0; i < g_row_count; i++) {
                         g_pomoku_board[i][col1].is_stone = FALSE;
                         g_pomoku_board[i][col1].m_color = COLOR_DEFAULT;
@@ -776,8 +776,8 @@ int swap_columns(const color_t color, const unsigned int col0, const unsigned in
                 return TRUE;
             } else if (col0 < col1) {
                 {
-                    g_user_score_white = g_user_score_white - 2;
                     unsigned int i = 0;
+                    g_user_score_white = g_user_score_white - 2;
                     for (i = 0; i < g_row_count; i++) {
                         g_pomoku_board[i][col0].is_stone = FALSE;
                         g_pomoku_board[i][col0].m_color = COLOR_DEFAULT;
