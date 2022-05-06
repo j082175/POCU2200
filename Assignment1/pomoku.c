@@ -300,7 +300,7 @@ int insert_row(const color_t color, const unsigned int row)
     unsigned int j1 = 0;
 
     if (color == COLOR_BLACK) {
-        if (g_user_score_black >= 3 && g_row_count < 20 && row < g_row_count) {
+        if (g_user_score_black >= 3 && g_row_count < 20 && row < g_row_count + 1) {
             /*구현부*/
             /* 넣을 행 기준으로 그 행보다 큰 행들은 모두 +1 씩 아래로 이동 */
 
@@ -334,7 +334,7 @@ int insert_row(const color_t color, const unsigned int row)
             return TRUE;
         }
     } else if (color == COLOR_WHITE) {
-        if (g_user_score_white >= 3 && g_row_count < 20 && row < g_row_count) {
+        if (g_user_score_white >= 3 && g_row_count < 20 && row < g_row_count + 1) {
             /*구현부*/
 
             ++g_row_count;
@@ -374,7 +374,7 @@ int insert_column(const color_t color, const unsigned int col)
     unsigned int j1;
 
     if (color == COLOR_BLACK) {
-        if (g_user_score_black >= 3 && g_column_count < 20 && col < g_column_count) {
+        if (g_user_score_black >= 3 && g_column_count < 20 && col < g_column_count + 1) {
             /*구현부*/
             /* 넣을 열 기준으로 그 열보다 큰 열들은 모두 +1 씩 오른쪽으로 이동 */
 
@@ -400,7 +400,7 @@ int insert_column(const color_t color, const unsigned int col)
             return TRUE;
         }
     } else if (color == COLOR_WHITE) {
-        if (g_user_score_white >= 3 && g_column_count < 20 && col < g_column_count) {
+        if (g_user_score_white >= 3 && g_column_count < 20 && col < g_column_count + 1) {
             /*구현부*/
 
             ++g_column_count;
@@ -603,7 +603,33 @@ int swap_rows(const color_t color, const unsigned int row0, const unsigned int r
             }
 
             return TRUE;
+            /* 범위밖 조건문*/
+        } else if (row0 >= g_row_count || row1 >= g_row_count) {
+            if (row0 > row1) {
+                {
+                    unsigned int i = 0;
+                    for (i = 0; i < g_column_count; i++)
+                    {
+                        g_pomoku_board[row1][i].is_stone = FALSE;
+                        g_pomoku_board[row1][i].m_color = COLOR_DEFAULT;
+                    }
+                }
+
+                return TRUE;
+            } else if (row0 < row1) {
+                {
+                    unsigned int i = 0;
+                    for (i = 0; i < g_column_count; i++)
+                    {
+                        g_pomoku_board[row0][i].is_stone = FALSE;
+                        g_pomoku_board[row0][i].m_color = COLOR_DEFAULT;
+                    }
+                }
+
+                return TRUE;
+            }
         }
+            /* 범위밖 조건문*/
     } else if (color == COLOR_WHITE) {
         if (g_user_score_white >= 2 && row0 < g_row_count && row1 < g_row_count) {
             g_user_score_white = g_user_score_white - 2;
@@ -631,6 +657,34 @@ int swap_rows(const color_t color, const unsigned int row0, const unsigned int r
             }
 
             return TRUE;
+                /* 범위밖 조건문*/
+        } else if (row0 >= g_row_count || row1 >= g_row_count) {
+            if (row0 > row1) {
+                {
+                    unsigned int i = 0;
+                    for (i = 0; i < g_column_count; i++)
+                    {
+                        g_pomoku_board[row1][i].is_stone = FALSE;
+                        g_pomoku_board[row1][i].m_color = COLOR_DEFAULT;
+                    }
+                }
+
+                return TRUE;
+
+                /* 범위밖 조건문*/
+            } else if (row0 < row1) {
+                {
+                    unsigned int i = 0;
+                    for (i = 0; i < g_column_count; i++)
+                    {
+                        g_pomoku_board[row0][i].is_stone = FALSE;
+                        g_pomoku_board[row0][i].m_color = COLOR_DEFAULT;
+                    }
+                }
+
+                return TRUE;
+            }
+                /* 범위밖 조건문*/
         }
     }
     return FALSE;
@@ -660,7 +714,34 @@ int swap_columns(const color_t color, const unsigned int col0, const unsigned in
                 g_pomoku_board[i][col1] = backup_info[i];
             }
             return TRUE;
+
+            /* 범위밖 조건문*/
+        } else if (col0 >= g_column_count || col1 >= g_column_count) {
+            if (col0 > col1) {
+                {
+                    unsigned int i = 0;
+                    for (i = 0; i < g_row_count; i++)
+                    {
+                        g_pomoku_board[i][col1].is_stone = FALSE;
+                        g_pomoku_board[i][col1].m_color = COLOR_DEFAULT;
+                    }
+                }
+
+                return TRUE;
+            } else if (col0 < col1) {
+                {
+                    unsigned int i = 0;
+                    for (i = 0; i < g_row_count; i++)
+                    {
+                        g_pomoku_board[i][col0].is_stone = FALSE;
+                        g_pomoku_board[i][col0].m_color = COLOR_DEFAULT;
+                    }
+                }
+
+                return TRUE;
+            }
         }
+        /* 범위밖 조건문*/
     } else if (color == COLOR_WHITE) {
         if (g_user_score_white >= 2 && col0 < g_column_count && col1 < g_column_count) {
             g_user_score_white = g_user_score_white - 2;
@@ -681,7 +762,33 @@ int swap_columns(const color_t color, const unsigned int col0, const unsigned in
             }
 
             return TRUE;
+            /* 범위밖 조건문*/
+        } else if (col0 >= g_column_count || col1 >= g_column_count) {
+            if (col0 > col1) {
+                {
+                    unsigned int i = 0;
+                    for (i = 0; i < g_row_count; i++)
+                    {
+                        g_pomoku_board[i][col1].is_stone = FALSE;
+                        g_pomoku_board[i][col1].m_color = COLOR_DEFAULT;
+                    }
+                }
+
+                return TRUE;
+            } else if (col0 < col1) {
+                {
+                    unsigned int i = 0;
+                    for (i = 0; i < g_row_count; i++)
+                    {
+                        g_pomoku_board[i][col0].is_stone = FALSE;
+                        g_pomoku_board[i][col0].m_color = COLOR_DEFAULT;
+                    }
+                }
+
+                return TRUE;
+            }
         }
+        /* 범위밖 조건문*/
     }
     return FALSE;
 }
