@@ -682,8 +682,7 @@ int swap_rows(const color_t color, const unsigned int row0, const unsigned int r
                 }
 
                 return TRUE;
-            }
-                /* 범위밖 조건문*/
+            } /* 범위밖 조건문*/
         }
     }
     return FALSE;
