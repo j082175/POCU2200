@@ -311,7 +311,7 @@ int insert_row(const color_t color, const unsigned int row)
             /* 입력받은 row 쪽 행은 위의 작업 실행이후 추가적인 for 문으로 모두 지워준다. */
             /* row가 2일때, */
 
-            for (i = g_row_count; i > row; i--) {
+            for (i = g_row_count - 1; i > row; i--) {
                 /* 아래에서부터 위로가는 for 문 */
                 for (j = 0; j < g_column_count; j++) {
                     /* 각 행의 모든 열을 순차적으로 훑는 과정 */
@@ -340,7 +340,7 @@ int insert_row(const color_t color, const unsigned int row)
             ++g_row_count;
             g_user_score_white = g_user_score_white - 3;
 
-            for (i1 = g_row_count; i1 > row; i1--) {
+            for (i1 = g_row_count - 1; i1 > row; i1--) {
                 for (j1 = 0; j1 < g_column_count; j1++) {
                     if (g_pomoku_board[i1 - 1][j1].is_stone == TRUE) {
                         g_pomoku_board[i1][j1] = g_pomoku_board[i1 - 1][j1];
@@ -381,7 +381,7 @@ int insert_column(const color_t color, const unsigned int col)
             ++g_column_count;
             g_user_score_black = g_user_score_black - 3;
 
-            for (i = g_column_count; i > col; i--) {
+            for (i = g_column_count - 1; i > col; i--) {
                 for (j = 0; j < g_row_count; j++) {
                     if (g_pomoku_board[j][i - 1].is_stone == TRUE) {
                         g_pomoku_board[j][i] = g_pomoku_board[j][i - 1];
@@ -406,7 +406,7 @@ int insert_column(const color_t color, const unsigned int col)
             ++g_column_count;
             g_user_score_white = g_user_score_white - 3;
 
-            for (i1 = g_column_count; i1 > col; i1--) {
+            for (i1 = g_column_count - 1; i1 > col; i1--) {
                 for (j1 = 0; j1 < g_row_count; j1++) {
                     if (g_pomoku_board[j1][i1 - 1].is_stone == TRUE) {
                         g_pomoku_board[j1][i1] = g_pomoku_board[j1][i1 - 1];
