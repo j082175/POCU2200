@@ -28,57 +28,50 @@ int get_last_index_of(const int numbers[], const size_t element_count, const int
 
 int get_max_index(const int numbers[], const size_t element_count)
 {
+	int max_number = numbers[0];
+	int count_index = 0;
+	size_t i = 0;
+
 	if (element_count == 0) {
 		return -1;
 	}
 
 	{
-		int max_number = 0;
-		int compare_number;
-		size_t i;
-		compare_number = numbers[0];
-		for (i = 0; i < element_count; i++) {
-			if (compare_number > numbers[i]) {
-				max_number = compare_number;
-				compare_number = max_number;
-			}
-		}
 
-		for (i = 0; i < element_count; i++) {
-			if (numbers[i] == max_number) {
-				return i;
+
+		for (i = 1; i < element_count; i++){
+			if (max_number < numbers[i]){
+				max_number = numbers[i];
+				count_index = i;
 			}
 		}
 	}
 
-	return -1;
+	return count_index;
 }
 
 int get_min_index(const int numbers[], const size_t element_count)
 {
+	int min_number = numbers[0];
+	int count_index = 0;
+	size_t i = 0;
+
 	if (element_count == 0) {
 		return -1;
 	}
 
 	{
-		int min_number = 0;
-		int compare_number = 0;
-		size_t i;
-		for (i = 0; i < element_count; i++) {
-			if (compare_number < numbers[i]) {
-				min_number = compare_number;
-				compare_number = min_number;
-			}
-		}
 
-		for (i = 0; i < element_count; i++) {
-			if (numbers[i] == min_number) {
-				return i;
+
+		for (i = 1; i < element_count; i++) {
+			if (min_number > numbers[i]) {
+				min_number = numbers[i];
+				count_index = i;
 			}
 		}
 	}
 
-	return -1;
+	return count_index;
 }
 
 int is_all_positive(const int numbers[], const size_t element_count)
@@ -106,10 +99,10 @@ int has_even(const int numbers[], const size_t element_count)
 	for (i = 0; i < element_count; i++) {
 		if (numbers[i] % 2 == 0) {
 			even = 1;
+			break;
 		}
 		else {
 			even = 0;
-			break;
 		}
 	}
 	return even;
@@ -119,12 +112,13 @@ int insert(int numbers[], const size_t element_count, const int num, const size_
 {
 	size_t i;
 
-	if (element_count <= pos) {
+	if (element_count < pos) {
 		return 0;
 	}
 
 	for (i = element_count; i > pos; i--) {
 		numbers[i] = numbers[i - 1];
+		numbers[i - 1] = 99999;
 	}
 
 	numbers[pos] = num;
@@ -136,9 +130,15 @@ int remove_at(int numbers[], const size_t element_count, const size_t index)
 {
 	size_t i;
 
-	for (i = index; i < element_count - 1; i++) {
+	if (element_count < index) {
+		return 0;
+	}
+
+	for (i = index; i < element_count; i++) {
 		numbers[i] = numbers[i + 1];
 	}
+
+
 
 	return 1;
 }
