@@ -41,8 +41,8 @@ int get_max_index(const int numbers[], const size_t element_count)
 
         for (i = 1; i < element_count; i++){
             if (max_number < numbers[i]){
-            max_number = numbers[i];
-            count_index = i;
+                max_number = numbers[i];
+                count_index = i;
             }
         }
     }
@@ -65,8 +65,8 @@ int get_min_index(const int numbers[], const size_t element_count)
 
         for (i = 1; i < element_count; i++) {
             if (min_number > numbers[i]) {
-            min_number = numbers[i];
-            count_index = i;
+                min_number = numbers[i];
+                count_index = i;
             }
         }
     }
