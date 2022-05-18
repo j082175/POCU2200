@@ -24,11 +24,15 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 	{
 		int i;
 		int j;
+		int cluster_move_ptr;
 
 		int location = (int)cab_start_location;
 
 		for (i = 0; i < cab_length; i++) { /* 한 인자씩 검사 */
 			for (j = 0; j < cluster_count; j++) { /* 차례대로 모든 클러스터의 주소값 비교 */
+
+
+
 				if (location == (int)cluster_start_locations[j] || safe) {
 					if (count < cluster_lengths[j]) {
 						count++;
@@ -56,6 +60,7 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 	}
 
 	return (char*)longest_safe_ptr;
+}
 }
 
 int get_travel_time(const char* const cab_start_location, const size_t cab_length, const char* const cluster_start_locations[], const size_t cluster_lengths[], const size_t cluster_count) {
