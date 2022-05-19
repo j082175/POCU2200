@@ -3,24 +3,49 @@
 
 #define CAB_LENGTH (50)
 
+void test(char* arr, char* b) {
+    printf("%d\n%d\n", arr, b);
+
+}
+
 int main(void)
 {
-    const char cyber_asteroid_belt[30];
-const char* cluster_start_addresses[0];
-size_t cluster_lengths[0];
-size_t out_longest_safe_area_length = 0;
-size_t* out_longest_safe_area_length_p = &out_longest_safe_area_length;
-const char* longest_safe_cluster_start_address;
 
-const char* cluster1 = &cyber_asteroid_belt[12];
-const char* cluster2 = &cyber_asteroid_belt[3];
 
-// cluster_start_addresses[0] = cluster1;
-// cluster_start_addresses[1] = cluster2;
+    char cab[CAB_LENGTH];
+    const char* cluster_start_addresses[5];
+    size_t cluster_lengths[5];
 
-// cluster_lengths[0] = 15U;
-// cluster_lengths[1] = 25U;
+    size_t out_longest_safe_area_length = 0;
+    size_t* out_longest_safe_area_length_p = &out_longest_safe_area_length;
+    const char* longest_safe_cluster_start_address;
+    int time_in_mins;
+    const char* cab_start_address = cab;
 
-longest_safe_cluster_start_address = get_longest_safe_zone_or_null(cyber_asteroid_belt, 30, cluster_start_addresses, cluster_lengths, 2, out_longest_safe_area_length_p); /* longest_safe_cluster_start_address: (cyber_asteroid_belt + 12), out_longest_safe_area_length: 15 */
-printf("%d\n",longest_safe_cluster_start_address);
+    cluster_start_addresses[0] = &cab[8];
+    cluster_start_addresses[1] = &cab[1];
+    cluster_start_addresses[2] = &cab[13];
+    cluster_start_addresses[3] = &cab[33];
+    cluster_start_addresses[4] = &cab[38];
+
+    cluster_lengths[0] = 10U;
+    cluster_lengths[1] = 22U;
+    cluster_lengths[2] = 10U;
+    cluster_lengths[3] = 13U;
+    cluster_lengths[4] = 10U;
+
+    longest_safe_cluster_start_address = get_longest_safe_zone_or_null(cab_start_address, CAB_LENGTH, cluster_start_addresses, cluster_lengths, 0, out_longest_safe_area_length_p);
+
+    out_longest_safe_area_length;
+    //assert(out_longest_safe_area_length == 15);
+    //assert(longest_safe_cluster_start_address == cab_start_address + 18);
+
+    time_in_mins = get_travel_time(cab_start_address, CAB_LENGTH, cluster_start_addresses, cluster_lengths, 0);
+
+    //assert(time_in_mins == 7);
+    printf("%d\n", cab_start_address);
+    printf("%d\n", longest_safe_cluster_start_address);
+    printf("%d\n", out_longest_safe_area_length);
+
+    return 0;
 }
