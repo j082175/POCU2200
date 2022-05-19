@@ -15,12 +15,12 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 
 	if (cab_length == 0) {
 		out_longest_safe_area_length = 0;
-		return NULL;
+		return 0;
 	}
 
 	if (cluster_count == 0) {
-		cluster_start_locations = NULL;
-		cluster_lengths = NULL;
+		cluster_start_locations = 0;
+		cluster_lengths = 0;
 	}
 
 
@@ -74,15 +74,8 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 			}
 		}
 
-		if (safe = TRUE) {
-			total_travel_time += total_length / 5;
-		}
-		else {
-			total_travel_time += travel_count / 10;
-		}
-
-		out_longest_safe_area_length = (size_t*)longest_safe_ptr;
-		return out_longest_safe_area_length;
+		
+		return (char*)longest_safe_ptr;
 	}
 }
 
@@ -102,8 +95,8 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 	int unsafe_travel_count = 0;
 
 	if (cluster_count == 0) {
-		cluster_start_locations = NULL;
-		cluster_lengths = NULL;
+		cluster_start_locations = 0;
+		cluster_lengths = 0;
 	}
 
 
