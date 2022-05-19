@@ -22,6 +22,11 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 		cluster_lengths = 0;
 	}
 
+	if (cluster_start_locations == 0) {
+		out_longest_safe_area_length = (size_t*)cab_start_location;
+		return (char*)out_longest_safe_area_length;
+	}
+
 
 	{
 		int total_moved_count = 0;
