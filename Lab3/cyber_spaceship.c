@@ -20,9 +20,6 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 	if (cluster_count == 0) {
 		cluster_start_locations = 0;
 		cluster_lengths = 0;
-	}
-
-	if (cluster_start_locations == 0) {
 		out_longest_safe_area_length = (size_t*)cab_start_location;
 		return (char*)out_longest_safe_area_length;
 	}
