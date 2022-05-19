@@ -100,6 +100,9 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 	if (cluster_count == 0) {
 		cluster_start_locations = 0;
 		cluster_lengths = 0;
+		
+		total_travel_time = cab_length / 5;
+		return (int)total_travel_time;
 	}
 
 
