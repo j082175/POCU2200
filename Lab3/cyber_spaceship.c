@@ -28,13 +28,13 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 
 	{
 		int total_moved_count = 0;
-		int i;
-		int j;
-		int cluster_start_loacations_backup;
+		size_t i;
+		size_t j;
+		size_t cluster_start_loacations_backup;
 		int adder = 0;
 
 
-		int cab_start_location_backup = (int)cab_start_location;
+		size_t cab_start_location_backup = (int)cab_start_location;
 
 		for (i = 0; i < cab_length; i++) { /* CAB 끝까지 한 블록당 클러스터가 몇개인지 조사  */
 			for (j = 0; j < cluster_count; j++) { /* 한 블록당 차례대로 모든 클러스터의 주소값 비교 */
@@ -123,13 +123,13 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 
 	{
 		int total_moved_count = 0;
-		int i;
-		int j;
-		int cluster_start_loacations_backup;
+		size_t i;
+		size_t j;
+		size_t cluster_start_loacations_backup;
 		int adder = 0;
 
 
-		int cab_start_location_backup = (int)cab_start_location;
+		size_t cab_start_location_backup = (int)cab_start_location;
 
 		for (i = 0; i < cab_length; i++) { /* CAB 끝까지 한 블록당 클러스터가 몇개인지 조사  */
 			for (j = 0; j < cluster_count; j++) { /* 한 블록당 차례대로 모든 클러스터의 주소값 비교 */
