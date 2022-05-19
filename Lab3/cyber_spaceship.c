@@ -101,7 +101,22 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 		cluster_start_locations = 0;
 		cluster_lengths = 0;
 
-		total_travel_time = cab_length / 10;
+		{
+			double a;
+			int integer;
+			double real;
+			a = (double)cab_length / 10;
+
+			integer = cab_length / 10;
+			real = a - integer;
+
+			if (real >= 0.5) {
+				total_travel_time = integer + 1;
+			}
+			else {
+				total_travel_time = integer;
+			}
+		}
 		return (int)total_travel_time;
 	}
 
