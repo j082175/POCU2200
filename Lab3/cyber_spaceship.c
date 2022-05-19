@@ -1,16 +1,15 @@
 #include "cyber_spaceship.h"
 
 const char* get_longest_safe_zone_or_null(const char* const cab_start_location, const size_t cab_length, const char* const cluster_start_locations[], const size_t cluster_lengths[], const size_t cluster_count, size_t* out_longest_safe_area_length) {
-	int count = 0;
 
-	int safe = FALSE;
+
 
 
 	int total_length = 0;
 	int longest_length = 0;
 	int longest_safe_ptr = 0;
 
-	double total_travel_time = 0;
+
 	int travel_count = 0;
 
 	if (cab_length == 0) {
@@ -31,7 +30,7 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 		int cluster_start_loacations_backup;
 		int adder = 0;
 
-		int start = (int)cab_start_location;
+
 		int cab_start_location_backup = (int)cab_start_location;
 
 		for (i = 0; i < cab_length; i++) { /* CAB 끝까지 한 블록당 클러스터가 몇개인지 조사  */
@@ -48,11 +47,11 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 
 			if (adder % 2 == 0) {
 				total_length++;
-				safe = TRUE;
+
 			}
 			else {
 				travel_count++;
-				safe = FALSE;
+
 
 				if (total_length >= longest_length) {
 					longest_length = total_length;
@@ -74,21 +73,21 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 			}
 		}
 
-		
-		return (char*)longest_safe_ptr;
+		out_longest_safe_area_length = (size_t*)longest_safe_ptr;
+		return (char*)out_longest_safe_area_length;
 	}
 }
 
 int get_travel_time(const char* const cab_start_location, const size_t cab_length, const char* const cluster_start_locations[], const size_t cluster_lengths[], const size_t cluster_count) {
 
-	int count = 0;
 
-	int safe = FALSE;
+
+
 
 
 	int total_length = 0;
 	int longest_length = 0;
-	int longest_safe_ptr = 0;
+
 
 	double total_travel_time = 0;
 	int safe_travel_count = 0;
@@ -107,7 +106,7 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 		int cluster_start_loacations_backup;
 		int adder = 0;
 
-		int start = (int)cab_start_location;
+
 		int cab_start_location_backup = (int)cab_start_location;
 
 		for (i = 0; i < cab_length; i++) { /* CAB 끝까지 한 블록당 클러스터가 몇개인지 조사  */
@@ -125,15 +124,14 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 			if (adder % 2 == 0) {
 				total_length++;
 				safe_travel_count++;
-				safe = TRUE;
+
 			}
 			else {
 				unsafe_travel_count++;
-				safe = FALSE;
+
 
 				if (total_length >= longest_length) {
 					longest_length = total_length;
-					longest_safe_ptr = cab_start_location_backup - total_length;
 				}
 				total_length = 0;
 			}
@@ -147,7 +145,6 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 		if (i == cab_length) {
 			if (total_length >= longest_length) {
 				longest_length = total_length;
-				longest_safe_ptr = cab_start_location_backup - total_length;
 			}
 		}
 
