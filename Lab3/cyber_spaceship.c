@@ -179,7 +179,7 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 			integer = safe_travel_count / 10 + unsafe_travel_count / 5;
 			real = a - integer;
 
-			if (real > 0.5) {
+			if (real >= 0.5) {
 				total_travel_time = integer + 1;
 			}
 			else {
