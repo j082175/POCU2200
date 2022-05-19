@@ -93,7 +93,7 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 	int longest_length = 0;
 
 
-	double total_travel_time = 0;
+	int total_travel_time = 0;
 	int safe_travel_count = 0;
 	int unsafe_travel_count = 0;
 
@@ -117,7 +117,7 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 				total_travel_time = integer;
 			}
 		}
-		return (int)total_travel_time;
+		return total_travel_time;
 	}
 
 
@@ -176,7 +176,7 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 			double real;
 			a = (double)safe_travel_count / 10.0 + (double)unsafe_travel_count / 5.0;
 
-			integer = safe_travel_count / 10 + unsafe_travel_count / 5;
+			integer = (int)((double)safe_travel_count / 10.0 + (double)unsafe_travel_count / 5.0);
 			real = a - integer;
 
 			if (real >= 0.5) {
@@ -191,5 +191,5 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
 
 	}
 
-	return (int)total_travel_time;
+	return total_travel_time;
 }
