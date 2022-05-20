@@ -67,7 +67,7 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
         }
 
         *out_longest_safe_area_length = (size_t)longest_length;
-        return (char*) longest_safe_ptr;
+        return (char*)longest_safe_ptr;
     }
 }
 
