@@ -12,7 +12,7 @@ typedef struct user_info {
     color_t m_color;
 } user_info_t;
 
-user_info_t g_pomoku_board[20][20];
+user_info_t g_pomoku_board[20][20] = {2, };
 
 void init_game(void)
 {
