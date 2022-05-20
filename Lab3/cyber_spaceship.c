@@ -1,6 +1,6 @@
 #include "cyber_spaceship.h"
 
-const char *get_longest_safe_zone_or_null(const char *const cab_start_location, const size_t cab_length, const char *const cluster_start_locations[], const size_t cluster_lengths[], const size_t cluster_count, size_t *out_longest_safe_area_length)
+const char *get_longest_safe_zone_or_null(const char* const cab_start_location, const size_t cab_length, const char* const cluster_start_locations[], const size_t cluster_lengths[], const size_t cluster_count, size_t* out_longest_safe_area_length)
 {
 
     int total_length = 0;
@@ -19,7 +19,7 @@ const char *get_longest_safe_zone_or_null(const char *const cab_start_location, 
         cluster_lengths = 0;
 
         *out_longest_safe_area_length = (size_t)cab_length;
-        return (char *)cab_start_location;
+        return (char*)cab_start_location;
     }
 
     {
@@ -67,11 +67,11 @@ const char *get_longest_safe_zone_or_null(const char *const cab_start_location, 
         }
 
         *out_longest_safe_area_length = (size_t)longest_length;
-        return (char *)longest_safe_ptr;
+        return (char*) longest_safe_ptr;
     }
 }
 
-int get_travel_time(const char *const cab_start_location, const size_t cab_length, const char *const cluster_start_locations[], const size_t cluster_lengths[], const size_t cluster_count)
+int get_travel_time(const char* const cab_start_location, const size_t cab_length, const char* const cluster_start_locations[], const size_t cluster_lengths[], const size_t cluster_count)
 {
 
     int total_length = 0;
@@ -130,8 +130,7 @@ int get_travel_time(const char *const cab_start_location, const size_t cab_lengt
             } else {
                 unsafe_travel_count++;
 
-                if (total_length >= longest_length)
-                {
+                if (total_length >= longest_length) {
                     longest_length = total_length;
                 }
                 total_length = 0;
