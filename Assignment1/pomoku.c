@@ -23,8 +23,8 @@ void init_game(void)
     g_row_count = 15;
     g_column_count = 15;
 
-    for (i = 0; i < g_row_count; i++) {
-        for (j = 0; j < g_column_count; j++) {
+    for (i = 0; i < 20; i++) {
+        for (j = 0; j < 20; j++) {
             g_pomoku_board[i][j].is_stone = FALSE;
             g_pomoku_board[i][j].m_color = COLOR_DEFAULT;
         }
