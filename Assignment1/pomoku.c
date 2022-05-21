@@ -4,8 +4,8 @@
 unsigned int g_user_score_black = 0;
 unsigned int g_user_score_white = 0;
 
-unsigned int g_row_count = 15;
-unsigned int g_column_count = 15;
+unsigned int g_row_count = 20;
+unsigned int g_column_count = 20;
 
 typedef struct user_info {
     unsigned int is_stone;
@@ -20,8 +20,8 @@ void init_game(void)
     unsigned int j = 0;
     g_user_score_black = 0;
     g_user_score_white = 0;
-    g_row_count = 20;
-    g_column_count = 20;
+    g_row_count = 15;
+    g_column_count = 15;
 
     for (i = 0; i < g_row_count; i++) {
         for (j = 0; j < g_column_count; j++) {
