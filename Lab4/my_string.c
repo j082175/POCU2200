@@ -1,12 +1,17 @@
 #include "my_string.h"
 
-void reverse (char* str) {
+void reverse(char* str)
+{
     char backup[100] = { 0, };
     int str_length = 0;
     int space_count = 0;
     int current_position = 0;
     int current_space_position = -1;
     int count = 0;
+
+    if (str == 0) {
+        return;
+    }
 
     while (*(str + str_length) != '\0') {
         if (*(str + str_length) == ' ') {
@@ -41,7 +46,8 @@ void reverse (char* str) {
     }
 }
 
-int index_of (const char* str, const char* word) {
+int index_of(const char* str, const char* word)
+{
     int str_length = 0;
     int word_length = 0;
 
@@ -56,7 +62,8 @@ int index_of (const char* str, const char* word) {
     return 1;
 }
 
-void reverse_by_words (char* str) {
+void reverse_by_words(char* str)
+{
     char backup[100] = { 0, };
     int str_length = 0;
     int space_count = 0;
@@ -91,24 +98,26 @@ void reverse_by_words (char* str) {
 
     {
         int i;
-        for (i = 0; i < str_length; i++) {
+        for (i = 0; i < str_length; i++)
+        {
             *(str + i) = backup[i];
         }
     }
 }
 
-char* tokenize (char* str_or_null, const char* delims) {
+char* tokenize(char* str_or_null, const char* delims)
+{
     int delims_length = 0;
     int str_or_null_length = 0;
-    char* static str_or_null_backup_ptr;
+    static char* s_str_or_null_backup_ptr;
     int current_position = 0;
 
 
     if (str_or_null == 0) {
-        if (str_or_null_backup_ptr == 0) {
+        if (s_str_or_null_backup_ptr == 0) {
             return 0;
         }
-        str_or_null = str_or_null_backup_ptr;
+        str_or_null = s_str_or_null_backup_ptr;
     }
 
     while (*(delims + delims_length) != '\0') {
@@ -137,9 +146,11 @@ char* tokenize (char* str_or_null, const char* delims) {
             for (j = 0; j < delims_length; j++) {
                 if (*(str_or_null + current_position) == *(delims + j)) {
                     *(str_or_null + current_position) = '\0';
-                    str_or_null_backup_ptr = str_or_null + current_position + 1;
+
+                    s_str_or_null_backup_ptr = str_or_null + current_position + 1;
 
                     goto label1;
+
                 }
             }
             current_position++;
@@ -148,12 +159,14 @@ char* tokenize (char* str_or_null, const char* delims) {
 
 
 label1:
+    if (str_or_null_length == 0) {
+        str_or_null = 0;
+    }
     return str_or_null;
 }
 
-char* reverse_tokenize (char* str_or_null, const char* delims) {
-
-
+char* reverse_tokenize (char* str_or_null, const char* delims)
+{
     char* backup = tokenize(str_or_null, delims);
     reverse(backup);
     str_or_null = backup;
