@@ -17,11 +17,12 @@ void reverse(char* str) {
 
     {
         int i;
+        int j;
         for (i = 0; i < str_length + 1; i++) {
 
             if (*(str + i) == '0' || *(str + i) == '\0') {
-                for (i = current_position - 1; i >= current_space_position + 1; i--) {
-                    backup[count] = *(str + i);
+                for (j = current_position - 1; j >= current_space_position + 1; j--) {
+                    backup[count] = *(str + j);
                     count++;
                 }
                 backup[current_position] = ' ';
