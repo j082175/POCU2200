@@ -49,7 +49,7 @@ void reverse(char* str)
 int index_of(const char* str, const char* word) {
     int word_length = 0;
     int str_count = 0;
-    char word_backup[100] = {0, };
+    char word_backup[100] = { 0, };
     int check_count = 0;
     int check_first_word_count = 0;
     int is_check = 1;
