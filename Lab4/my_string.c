@@ -48,18 +48,43 @@ void reverse(char* str)
 
 int index_of(const char* str, const char* word)
 {
-    int str_length = 0;
     int word_length = 0;
-
-    while (*(str + str_length) != '\0') {
-        str_length++;
-    }
+    int str_count = 0;
+    char word_backup[100] = {0, };
+    int check_count = 0;
+    int check_first_word_count = 0;
+    int is_check = 1;
 
     while (*(word + word_length) != '\0') {
-        word_length++;
+        ++word_length;
     }
 
-    return 1;
+{
+    int i;
+    for (i = 0; i < word_length; i++){
+        word_backup[i] = *(word + i);
+    }
+}
+
+    while (*(str + str_count) != '\0') {
+        if (*(str + str_count) == word_backup[check_count]) {
+            check_count++;
+            if (is_check) {
+                check_first_word_count = str_count;
+                is_check = 0;
+            }
+            if (check_count == 5) {
+                goto label1;
+            }
+        } else {
+            check_count = 0;
+            is_check = 1;
+        }
+        str_count++;
+    }
+
+label1:
+    return check_first_word_count;
 }
 
 void reverse_by_words(char* str)
