@@ -49,7 +49,7 @@ void reverse(char* str)
 int index_of(const char* str, const char* word) {
     int word_length = 0;
     int str_count = 0;
-    char word_backup[100] = { 0, };
+    char word_backup[100] = {0, };
     int check_count = 0;
     int check_first_word_count = 0;
     int is_check = 1;
@@ -65,16 +65,15 @@ int index_of(const char* str, const char* word) {
         goto label1;
     }
 
+{
+    int i;
+    for (i = 0; i < word_length; i++)
     {
-        int i;
-        for (i = 0; i < word_length; i++)
-        {
-            word_backup[i] = *(word + i);
-        }
+        word_backup[i] = *(word + i);
     }
+}
 
-    while (*(str + str_count) != '\0')
-    {
+    while (*(str + str_count) != '\0') {
         if (*(str + str_count) == word_backup[check_count]) {
             check_count++;
             if (is_check) {
@@ -86,16 +85,19 @@ int index_of(const char* str, const char* word) {
                 is_truly_end = 1;
                 goto label1;
             }
-        }
-        else {
+        } else {
             check_count = 0;
             is_check = 1;
         }
         str_count++;
     }
 
+
+
 label1:
-    if (is_truly_end) {
+    if (check_count == word_length) {
+        return check_first_word_count;
+    } if (is_truly_end) {
         return check_first_word_count;
     } else if (word_length == 0) {
         return 0;
