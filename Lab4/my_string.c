@@ -98,8 +98,7 @@ void reverse_by_words(char* str)
 
     {
         int i;
-        for (i = 0; i < str_length; i++)
-        {
+        for (i = 0; i < str_length; i++) {
             *(str + i) = backup[i];
         }
     }
@@ -165,7 +164,7 @@ label1:
     return str_or_null;
 }
 
-char* reverse_tokenize (char* str_or_null, const char* delims)
+char* reverse_tokenize(char* str_or_null, const char* delims)
 {
     char* backup = tokenize(str_or_null, delims);
     reverse(backup);
