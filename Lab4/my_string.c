@@ -1,6 +1,6 @@
 #include "my_string.h"
 
-void reverse(char* str) {
+void reverse (char* str) {
     char backup[100] = { 0, };
     int str_length = 0;
     int space_count = 0;
@@ -41,7 +41,7 @@ void reverse(char* str) {
     }
 }
 
-int index_of(const char* str, const char* word) {
+int index_of (const char* str, const char* word) {
     int str_length = 0;
     int word_length = 0;
 
@@ -56,7 +56,7 @@ int index_of(const char* str, const char* word) {
     return 1;
 }
 
-void reverse_by_words(char* str) {
+void reverse_by_words (char* str) {
     char backup[100] = { 0, };
     int str_length = 0;
     int space_count = 0;
@@ -91,17 +91,16 @@ void reverse_by_words(char* str) {
 
     {
         int i;
-        for (i = 0; i < str_length; i++)
-        {
+        for (i = 0; i < str_length; i++) {
             *(str + i) = backup[i];
         }
     }
 }
 
-char* tokenize(char* str_or_null, const char* delims) {
+char* tokenize (char* str_or_null, const char* delims) {
     int delims_length = 0;
     int str_or_null_length = 0;
-    static char* str_or_null_backup_ptr;
+    char* static str_or_null_backup_ptr;
     int current_position = 0;
 
 
@@ -122,8 +121,7 @@ char* tokenize(char* str_or_null, const char* delims) {
 
     {
         int i;
-        for (i = 0; i < delims_length; i++)
-        {
+        for (i = 0; i < delims_length; i++) {
             if (*(str_or_null) == *(delims + i)) {
                 str_or_null = str_or_null + 1;
                 break;
@@ -153,7 +151,7 @@ label1:
     return str_or_null;
 }
 
-char* reverse_tokenize(char* str_or_null, const char* delims) {
+char* reverse_tokenize (char* str_or_null, const char* delims) {
 
 
     char* backup = tokenize(str_or_null, delims);
