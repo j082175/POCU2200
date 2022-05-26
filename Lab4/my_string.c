@@ -131,17 +131,17 @@ char* tokenize(char* str_or_null, const char* delims)
         int i;
         int j;
 
-		for (j = 0; j < delims_length; j++) {
-			do
-			{
-				for (i = 0; i < delims_length; i++) {
-					if (*(str_or_null) == *(delims + i)) {
-						str_or_null = str_or_null + 1;
-						break;
-					}
-				}
-			} while (*(str_or_null) == *(delims + j));
-		}
+        for (j = 0; j < delims_length; j++) {
+            do
+            {
+                for (i = 0; i < delims_length; i++) {
+                    if (*(str_or_null) == *(delims + i)) {
+                        str_or_null = str_or_null + 1;
+                        break;
+                    }
+                }
+            } while (*(str_or_null) == *(delims + j));
+        }
 
     }
 
