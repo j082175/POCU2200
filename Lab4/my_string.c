@@ -64,14 +64,13 @@ int index_of(const char* str, const char* word)
     while (count < str_length) {
         int i;
         for (i = 0; i < word_length; i++) {
-            if (*(str + count + i) == *(word + i)) {
-                correct_count++;
+            if (*(str + count + i) != '\0') {
+                if (*(str + count + i) == *(word + i)) {
+                    correct_count++;
+                }
             }
-
         }
-        if (correct_count == word_length)
-        {
-
+        if (correct_count == word_length) {
             goto label1;
         }
         correct_count = 0;
