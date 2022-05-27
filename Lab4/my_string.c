@@ -54,6 +54,7 @@ int index_of(const char* str, const char* word)
     int correct_count = 0;
     int backup[100] = { -1, };
     int word_backup[100] = { -1, };
+    int is_checked = 0;
 
     while (*(str + str_length) != '\0') {
         str_length++;
@@ -76,17 +77,18 @@ int index_of(const char* str, const char* word)
         }
     }
 
-    while (count < str_length) {
+    while (count <= str_length) {
         int i;
         for (i = 0; i < word_length; i++) {
             if (*(backup + count + i) == '\0') {
-                return 0;
+                return -1;
             }
             if (*(backup + count + i) == *(word + i)) {
                 correct_count++;
             }
         }
         if (correct_count == word_length) {
+            is_checked = 1;
             goto label1;
         }
         correct_count = 0;
@@ -94,7 +96,12 @@ int index_of(const char* str, const char* word)
     }
 
 label1:
-    return count;
+    if (is_checked) {
+        return count;
+    } else if (is_checked == 0) {
+        return -1;
+    }
+    return -1;
 }
 
 void reverse_by_words(char* str)
