@@ -52,8 +52,8 @@ int index_of(const char* str, const char* word)
     int word_length = 0;
     int count = 0;
     int correct_count = 0;
-    int backup[100] = { 0, };
-    int word_backup[100] = { 0, };
+    int backup[100] = { -1, };
+    int word_backup[100] = { -1, };
 
     while (*(str + str_length) != '\0') {
         str_length++;
