@@ -1,6 +1,6 @@
 #ifndef RECEIPTER_H
 #define RECEIPTER_H
-#define _CRT_SECURE_NO_WARNINGS
+
 #define TRUE (1)
 #define FALSE (0)
 #define ITEM_LENGTH 10
