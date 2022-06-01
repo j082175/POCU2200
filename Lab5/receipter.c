@@ -179,7 +179,7 @@ int print_receipt(const char* filename, time_t timestamp) {
 		{
 			for (j = 0; j < string_length(item_arr[i]); j++)
 			{
-				
+				buffer[j] = item_arr[i][j];
 			}
 		}
 	}
