@@ -95,7 +95,7 @@ void buffer_reset(char* buffer) {
 }
 
 int add_item(const char* name, double price) {
-    char* name_backup_buffer[10] = { 0, };
+    const char* name_backup_buffer[10] = { 0, };
 
     if (g_add_item_count >= ITEM_LENGTH)
     {
