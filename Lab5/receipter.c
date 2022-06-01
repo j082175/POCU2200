@@ -2,7 +2,7 @@
 
 static g_add_item_count = 0;
 
-static char* g_item_arr[ITEM_LENGTH] = { 0, };
+static const char* g_item_arr[ITEM_LENGTH] = { 0, };
 static double g_price_arr[ITEM_LENGTH] = { 0, };
 
 static int g_is_tip_exist = 0;
@@ -12,7 +12,7 @@ static double g_subtotal = 0;
 static double g_tip_count = 0;
 static double g_tax_count = 0;
 
-static char* g_message = 0;
+static const char* g_message = 0;
 
 int string_length(const char* name) {
     int length = 0;
@@ -94,7 +94,7 @@ void buffer_reset(char* buffer) {
 }
 
 int add_item(const char* name, double price) {
-    char buffer[100] = { 0, };
+
 
     if (g_add_item_count >= ITEM_LENGTH)
     {
@@ -106,14 +106,14 @@ int add_item(const char* name, double price) {
 
     }
 
-    //{
-    //	int i;
-    //	for (i = 0; i < string_length(name); i++)
-    //	{
-    //		buffer[i] = *(name + i);
-    //	}
-    //	buffer[string_length(name)] = '\0';
-    //}
+    /* {
+        int i;
+        for (i = 0; i < string_length(name); i++)
+        {
+            buffer[i] = *(name + i);
+        }
+        buffer[string_length(name)] = '\0';
+    }*/
 
     g_item_arr[g_add_item_count] = name;
 
@@ -180,7 +180,6 @@ int print_receipt(const char* filename, time_t timestamp) {
     }
 
     {
-        int i;
         sprintf(buffer2, "%05d\n", g_add_item_count);
         printf("%s", buffer2);
     }
@@ -188,7 +187,7 @@ int print_receipt(const char* filename, time_t timestamp) {
     printf("%s\n", buffer);
     string_concat(buffer, buffer2);
     fprintf(f1, "%s", buffer);
-    //fprintf(f1, "%d\n", add_item_count);
+    /*fprintf(f1, "%d\n", add_item_count);*/
     {
         int i;
         for (i = 0; i < MAX_LENGTH; i++)
@@ -205,7 +204,6 @@ int print_receipt(const char* filename, time_t timestamp) {
     /* add start*/
     {
         int i;
-        int j;
         for (i = 0; i < g_add_item_count; i++)
         {
             sprintf(buffer, "%s", g_item_arr[i]);
