@@ -1,6 +1,7 @@
 #include "receipter.h"
 
 static g_add_item_count = 0;
+static g_name_backup_count = 0;
 
 static const char* g_item_arr[ITEM_LENGTH] = { 0, };
 static double g_price_arr[ITEM_LENGTH] = { 0, };
@@ -94,7 +95,7 @@ void buffer_reset(char* buffer) {
 }
 
 int add_item(const char* name, double price) {
-
+    char* name_backup_buffer[10] = { 0, };
 
     if (g_add_item_count >= ITEM_LENGTH)
     {
@@ -103,7 +104,9 @@ int add_item(const char* name, double price) {
 
     if (string_length(name) > 25)
     {
+        name_backup_buffer[g_name_backup_count] = name;
 
+        g_name_backup_count++;
     }
 
     /* {
@@ -126,13 +129,39 @@ int add_item(const char* name, double price) {
 }
 
 void set_tip(double tip) {
+    if (tip > 999.99)
+    {
+        tip = 999.99;
+    }
     g_is_tip_exist = 1;
     g_tip_count = tip;
 }
 
 void set_message(const char* message) {
+    char buffer[76] = { 0, };
+    {
+        int i;
+        int j;
+        for (i = 0; i < string_length(message); i++)
+        {
+            buffer[i] = *(message + i);
+        }
+
+        if (string_length(message) > MAX_LENGTH)
+        {
+            buffer[MAX_LENGTH] = '\n';
+
+            for (j = 0; j < MAX_LENGTH - string_length(message); j++)
+            {
+                buffer[j + MAX_LENGTH + 1] = *(message + MAX_LENGTH + j);
+            }
+
+            buffer[string_length(message)] = '\0';
+        }
+
+    }
     g_is_message_exist = 1;
-    g_message = message;
+    g_message = buffer;
 }
 
 int print_receipt(const char* filename, time_t timestamp) {
@@ -249,6 +278,10 @@ int print_receipt(const char* filename, time_t timestamp) {
         for (i = 0; i < g_add_item_count; i++)
         {
             g_subtotal += g_price_arr[i];
+            if (g_subtotal > 999.99)
+            {
+                break;
+            }
         }
 
         sprintf(buffer2, "%.2lf", g_subtotal);
@@ -407,6 +440,9 @@ int print_receipt(const char* filename, time_t timestamp) {
     {
         return FALSE;
     }
+
+    g_add_item_count = 0;
+    
 
     return TRUE;
 }
