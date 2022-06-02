@@ -27,8 +27,7 @@ double round_by_two(double num)
     if (two_mantissa >= 0.4999999) {
         two_real++;
         backup_num = real + (double)(two_real / 100.0);
-    }
-    else {
+    } else {
         backup_num = real + (double)(two_real / 100.0);
     }
     return backup_num;
@@ -84,8 +83,7 @@ int add_item(const char* name, double price)
             }
             s_item_arr[s_add_item_count][string_length(name)] = '\0';
 
-        }
-        else {
+        } else {
             int i;
             for (i = 0; i < 25; i++) {
                 s_item_arr[s_add_item_count][i] = *(name + i);
@@ -131,8 +129,7 @@ void set_message(const char* message)
                 for (j = 0; j < 25; j++) {
                     buffer[j + MAX_LENGTH + 1] = message[MAX_LENGTH + j];
                 }
-            }
-            else {
+            } else {
                 int i;
                 int j;
                 for (i = 0; i < MAX_LENGTH; i++) {
@@ -144,8 +141,7 @@ void set_message(const char* message)
                     buffer[j + MAX_LENGTH + 1] = message[MAX_LENGTH + j];
                 }
             }
-        }
-        else {
+        } else {
             int i;
             for (i = 0; i < string_length(message); i++) {
                 buffer[i] = *(message + i);
@@ -167,7 +163,6 @@ int print_receipt(const char* filename, time_t timestamp)
 {
     FILE* f1 = 0;
     struct tm tm = *gmtime(&timestamp);
-    //struct tm tm = *localtime(&timestamp);
     char buffer[1024] = { 0, };
     char buffer2[1024] = { 0, };
     char buffer_space[1024] = { 0, };
