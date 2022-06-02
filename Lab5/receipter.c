@@ -342,28 +342,31 @@ int print_receipt(const char* filename, time_t timestamp) {
     {
         int j;
         int k;
-        sprintf(buffer, "%.2lf", g_tip_count);
+		if (!g_tip_count <= 0.00)
+		{
+			sprintf(buffer, "%.2lf", g_tip_count);
 
-        for (j = 0; j < MAX_NAME_LENGTH - string_length("Tip"); j++)
-        {
-            buffer_space[j] = ' ';
-        }
+			for (j = 0; j < MAX_NAME_LENGTH - string_length("Tip"); j++)
+			{
+				buffer_space[j] = ' ';
+			}
 
-        for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer); k++)
-        {
-            buffer_space2[k] = ' ';
-        }
+			for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer); k++)
+			{
+				buffer_space2[k] = ' ';
+			}
 
-        string_concat(buffer_space, "Tip");
-        string_concat(buffer_space2, buffer);
-        string_concat(buffer_space, buffer_space2);
+			string_concat(buffer_space, "Tip");
+			string_concat(buffer_space2, buffer);
+			string_concat(buffer_space, buffer_space2);
 
-        fprintf(f1, "%s\n", buffer_space);
+			fprintf(f1, "%s\n", buffer_space);
 
-        buffer_reset(buffer_space);
-        buffer_reset(buffer_space2);
-        buffer_reset(buffer);
-        buffer_reset(buffer2);
+			buffer_reset(buffer_space);
+			buffer_reset(buffer_space2);
+			buffer_reset(buffer);
+			buffer_reset(buffer2);
+		}
     }
     /* set tip end */
 
