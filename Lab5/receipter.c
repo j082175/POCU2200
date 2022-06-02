@@ -4,7 +4,7 @@
 static g_add_item_count = 0;
 
 
-static char g_item_arr[ITEM_LENGTH][1024] = {0,};
+static char g_item_arr[ITEM_LENGTH][1024] = { 0, };
 static double g_price_arr[ITEM_LENGTH] = { 0, };
 
 static int g_is_tip_exist = 0;
@@ -105,12 +105,12 @@ int add_item(const char* name, double price) {
     {
         if (string_length(name) < 25)
         {
-			int i;
-			for (i = 0; i < string_length(name); i++)
-			{
-				g_item_arr[g_add_item_count][i] = *(name + i);
-			}
-			g_item_arr[g_add_item_count][string_length(name)] = '\0';
+            int i;
+            for (i = 0; i < string_length(name); i++)
+            {
+                g_item_arr[g_add_item_count][i] = *(name + i);
+            }
+            g_item_arr[g_add_item_count][string_length(name)] = '\0';
 
         }
         else {
@@ -206,7 +206,7 @@ void set_message(const char* message) {
 
     }
     g_is_message_exist = 1;
-    
+
     {
         int i;
         for (i = 0; i < 75; i++)
@@ -225,11 +225,6 @@ int print_receipt(const char* filename, time_t timestamp) {
     char buffer_space[1024] = { 0, };
     char buffer_space2[1024] = { 0, };
     char* buffer_ptr = 0;
-
-    if (g_add_item_count == 0)
-    {
-        return FALSE;
-    }
 
     if ((f1 = fopen(filename, "w")) == 0)
     {
