@@ -265,7 +265,7 @@ int print_receipt(const char* filename, time_t timestamp) {
             check = 1;
             for (i = 0; i < g_add_item_count; i++)
             {
-                snprintf(buffer, 25, "%.25s", g_item_arr[i]);
+                snprintf(buffer, 26, "%.25s", g_item_arr[i]);
                 sprintf(buffer2, "%.2lf", round_by_two(g_price_arr[i]));
 
                 {
