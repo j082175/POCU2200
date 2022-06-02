@@ -219,7 +219,8 @@ void set_message(const char* message) {
 
 int print_receipt(const char* filename, time_t timestamp) {
     FILE* f1 = 0;
-    struct tm tm = *localtime(&timestamp);
+    struct tm tm = *gmtime(&timestamp);
+    //struct tm tm = *localtime(&timestamp);
     char buffer[1024] = { 0, };
     char buffer2[1024] = { 0, };
     char buffer_space[1024] = { 0, };
