@@ -1,6 +1,6 @@
 #include "receipter.h"
 
-static g_recipt_count = 1;
+static g_recipt_count = 0;
 static g_add_item_count = 0;
 
 
@@ -226,11 +226,6 @@ int print_receipt(const char* filename, time_t timestamp) {
     char buffer_space2[1024] = { 0, };
     char* buffer_ptr = 0;
     int check = 0;
-
-    //if (g_add_item_count == 0)
-    //{
-    //    return FALSE;
-    //}
 
     if ((f1 = fopen(filename, "w")) == 0)
     {
