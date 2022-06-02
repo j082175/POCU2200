@@ -14,335 +14,335 @@ static double g_subtotal = 0;
 static double g_tip_count = 0;
 static double g_tax_count = 0;
 
-static char g_message[76] = { 0, };
+static char g_message[77] = { 0, };
 
 double round_by_two(double num) {
-    double backup_num = 0;
-    int real = num / 1; //8
-    double mantissa = num - real; //0.985
-    double two = mantissa * 100; // 98.5
-    int two_real = two / 1; // 98
-    double two_mantissa = two - two_real; // 0.5
-    if (two_mantissa >= 0.4999999)
-    {
-        two_real++;
-        backup_num = real + (double)(two_real / 100.0);
-    }
-    else {
-        backup_num = real + (double)(two_real / 100.0);
-    }
-    return backup_num;
+	double backup_num = 0;
+	int real = num / 1; //8
+	double mantissa = num - real; //0.985
+	double two = mantissa * 100; // 98.5
+	int two_real = two / 1; // 98
+	double two_mantissa = two - two_real; // 0.5
+	if (two_mantissa >= 0.4999999)
+	{
+		two_real++;
+		backup_num = real + (double)(two_real / 100.0);
+	}
+	else {
+		backup_num = real + (double)(two_real / 100.0);
+	}
+	return backup_num;
 }
 
 int string_length(const char* name) {
-    int length = 0;
+	int length = 0;
 
-    while (*(name + length) != '\0')
-    {
-        length++;
-    }
+	while (*(name + length) != '\0')
+	{
+		length++;
+	}
 
-    return length;
+	return length;
 }
 
 char* string_concat(char* s1, char* s2) {
-    while (*s1 != '\0') {
-        s1++;
-    }
-    while (*s2 != '\0') {
-        *s1 = *s2;
-        s1++;
-        s2++;
-    }
-    *s1 = '\0';
+	while (*s1 != '\0') {
+		s1++;
+	}
+	while (*s2 != '\0') {
+		*s1 = *s2;
+		s1++;
+		s2++;
+	}
+	*s1 = '\0';
 
-    return s1;
+	return s1;
 }
 
 void buffer_reset(char* buffer) {
-    int i;
-    for (i = 0; i < MAX_LENGTH; i++)
-    {
-        buffer[i] = 0;
-    }
+	int i;
+	for (i = 0; i < MAX_LENGTH; i++)
+	{
+		buffer[i] = 0;
+	}
 }
 
 int add_item(const char* name, double price) {
 
-    if (g_add_item_count >= ITEM_LENGTH)
-    {
-        return FALSE;
-    }
+	if (g_add_item_count >= ITEM_LENGTH)
+	{
+		return FALSE;
+	}
 
-    {
-        if (string_length(name) < 25)
-        {
-            int i;
-            for (i = 0; i < string_length(name); i++)
-            {
-                g_item_arr[g_add_item_count][i] = *(name + i);
-            }
-            g_item_arr[g_add_item_count][string_length(name)] = '\0';
+	{
+		if (string_length(name) < 25)
+		{
+			int i;
+			for (i = 0; i < string_length(name); i++)
+			{
+				g_item_arr[g_add_item_count][i] = *(name + i);
+			}
+			g_item_arr[g_add_item_count][string_length(name)] = '\0';
 
-        }
-        else {
-            int i;
-            for (i = 0; i < 25; i++)
-            {
-                g_item_arr[g_add_item_count][i] = *(name + i);
-            }
-            g_item_arr[g_add_item_count][25] = '\0';
-        }
-    }
-
-
-    g_price_arr[g_add_item_count] = price;
-
-    printf("%s", g_item_arr[g_add_item_count]);
-    printf("%lf\n", g_price_arr[g_add_item_count]);
-
-    g_add_item_count++;
+		}
+		else {
+			int i;
+			for (i = 0; i < 25; i++)
+			{
+				g_item_arr[g_add_item_count][i] = *(name + i);
+			}
+			g_item_arr[g_add_item_count][25] = '\0';
+		}
+	}
 
 
-    return TRUE;
+	g_price_arr[g_add_item_count] = price;
+
+	printf("%s", g_item_arr[g_add_item_count]);
+	printf("%lf\n", g_price_arr[g_add_item_count]);
+
+	g_add_item_count++;
+
+
+	return TRUE;
 }
 
 void set_tip(double tip) {
-    if (tip > 999.99)
-    {
-        tip = 999.99;
-    }
-    g_is_tip_exist = 1;
-    g_tip_count = round_by_two(tip);
+	if (tip > 999.99)
+	{
+		tip = 999.99;
+	}
+	g_is_tip_exist = 1;
+	g_tip_count = round_by_two(tip);
 }
 
 void set_message(const char* message) {
-    char buffer[76] = { 0, };
-    {
-        if (string_length(message) > MAX_LENGTH)
-        {
-            if (string_length(message) > 75)
-            {
-                int i;
-                int j;
-                for (i = 0; i < MAX_LENGTH; i++)
-                {
-                    buffer[i] = *(message + i);
-                }
-                buffer[MAX_LENGTH] = '\n';
+	char buffer[76] = { 0, };
+	{
+		if (string_length(message) > MAX_LENGTH)
+		{
+			if (string_length(message) > 75)
+			{
+				int i;
+				int j;
+				for (i = 0; i < MAX_LENGTH; i++)
+				{
+					buffer[i] = *(message + i);
+				}
+				buffer[MAX_LENGTH] = '\n';
 
-                for (j = 0; j < 25; j++)
-                {
-                    buffer[j + MAX_LENGTH + 1] = message[MAX_LENGTH + j];
-                }
-            }
-            else {
-                int i;
-                int j;
-                for (i = 0; i < MAX_LENGTH; i++)
-                {
-                    buffer[i] = *(message + i);
-                }
-                buffer[MAX_LENGTH] = '\n';
+				for (j = 0; j < 25; j++)
+				{
+					buffer[j + MAX_LENGTH + 1] = message[MAX_LENGTH + j];
+				}
+			}
+			else {
+				int i;
+				int j;
+				for (i = 0; i < MAX_LENGTH; i++)
+				{
+					buffer[i] = *(message + i);
+				}
+				buffer[MAX_LENGTH] = '\n';
 
-                for (j = 0; j < string_length(message) - MAX_LENGTH; j++)
-                {
-                    buffer[j + MAX_LENGTH + 1] = message[MAX_LENGTH + j];
-                }
-            }
-        }
-        else {
-            int i;
-            for (i = 0; i < string_length(message); i++)
-            {
-                buffer[i] = *(message + i);
-            }
-        }
+				for (j = 0; j < string_length(message) - MAX_LENGTH; j++)
+				{
+					buffer[j + MAX_LENGTH + 1] = message[MAX_LENGTH + j];
+				}
+			}
+		}
+		else {
+			int i;
+			for (i = 0; i < string_length(message); i++)
+			{
+				buffer[i] = *(message + i);
+			}
+		}
 
-        /*for (i = 0; i < string_length(message); i++)
-        {
-            buffer[i] = *(message + i);
-        }
+		/*for (i = 0; i < string_length(message); i++)
+		{
+			buffer[i] = *(message + i);
+		}
 
-        if (string_length(message) > MAX_LENGTH)
-        {
-            buffer[MAX_LENGTH] = '\n';
+		if (string_length(message) > MAX_LENGTH)
+		{
+			buffer[MAX_LENGTH] = '\n';
 
-            for (j = 0; j < MAX_LENGTH - string_length(message); j++)
-            {
-                buffer[j + MAX_LENGTH + 1] = *(message + MAX_LENGTH + j);
-            }
+			for (j = 0; j < MAX_LENGTH - string_length(message); j++)
+			{
+				buffer[j + MAX_LENGTH + 1] = *(message + MAX_LENGTH + j);
+			}
 
-            buffer[string_length(message)] = '\0';
-        }*/
+			buffer[string_length(message)] = '\0';
+		}*/
 
-    }
-    g_is_message_exist = 1;
+	}
+	g_is_message_exist = 1;
 
-    {
-        int i;
-        for (i = 0; i < 75; i++)
-        {
-            g_message[i] = buffer[i];
-        }
-        g_message[75] = '\0';
-    }
+	{
+		int i;
+		for (i = 0; i < 76; i++)
+		{
+			g_message[i] = buffer[i];
+		}
+		g_message[76] = '\0';
+	}
 }
 
 int print_receipt(const char* filename, time_t timestamp) {
-    FILE* f1 = 0;
-    struct tm tm = *gmtime(&timestamp);
-    //struct tm tm = *localtime(&timestamp);
-    char buffer[1024] = { 0, };
-    char buffer2[1024] = { 0, };
-    char buffer_space[1024] = { 0, };
-    char buffer_space2[1024] = { 0, };
-    char* buffer_ptr = 0;
-    int check = 0;
+	FILE* f1 = 0;
+	struct tm tm = *gmtime(&timestamp);
+	//struct tm tm = *localtime(&timestamp);
+	char buffer[1024] = { 0, };
+	char buffer2[1024] = { 0, };
+	char buffer_space[1024] = { 0, };
+	char buffer_space2[1024] = { 0, };
+	char* buffer_ptr = 0;
+	int check = 0;
 
-    if (g_add_item_count == 0)
-    {
-        return FALSE;
-    }
+	if (g_add_item_count == 0)
+	{
+		return FALSE;
+	}
 
-    if ((f1 = fopen(filename, "w")) == 0)
-    {
-        return FALSE;
-    }
+	if ((f1 = fopen(filename, "w")) == 0)
+	{
+		return FALSE;
+	}
 
-    fprintf(f1, "%s\n", "Charles' Seafood");
+	fprintf(f1, "%s\n", "Charles' Seafood");
 
-    {
-        int i;
-        for (i = 0; i < MAX_LENGTH; i++)
-        {
-            buffer[i] = '-';
-        }
-    }
+	{
+		int i;
+		for (i = 0; i < MAX_LENGTH; i++)
+		{
+			buffer[i] = '-';
+		}
+	}
 
-    fprintf(f1, "%s\n", buffer);
-    buffer_reset(buffer);
-
-
-    sprintf(buffer, "%04d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-        tm.tm_hour, tm.tm_min, tm.tm_sec);
-
-    {
-        int i;
-        for (i = 19; i < 45; i++)
-        {
-            buffer[i] = ' ';
-        }
-    }
-
-    {
-        sprintf(buffer2, "%05d\n", g_recipt_count);
-        printf("%s", buffer2);
-    }
-
-    printf("%s\n", buffer);
-    string_concat(buffer, buffer2);
-    fprintf(f1, "%s", buffer);
-    /*fprintf(f1, "%d\n", add_item_count);*/
-    {
-        int i;
-        for (i = 0; i < MAX_LENGTH; i++)
-        {
-            buffer[i] = '-';
-        }
-    }
-
-    fprintf(f1, "%s", buffer);
-    buffer_reset(buffer);
-    buffer_reset(buffer2);
-    /* 기본 동작 끝 */
-
-    /* add start*/
-    {
-        int i;
-        if (g_add_item_count != 0)
-        {
-            check = 1;
-            for (i = 0; i < g_add_item_count; i++)
-            {
-                snprintf(buffer, 26, "%.25s", g_item_arr[i]);
-                sprintf(buffer2, "%.2lf", round_by_two(g_price_arr[i]));
-
-                {
-                    int j;
-                    int k;
-                    for (j = 0; j < MAX_NAME_LENGTH - string_length(buffer); j++)
-                    {
-                        buffer_space[j] = ' ';
-                    }
-
-                    for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer2); k++)
-                    {
-                        buffer_space2[k] = ' ';
-                    }
-                }
-                string_concat(buffer_space, buffer);
-                string_concat(buffer_space2, buffer2);
-                string_concat(buffer_space, buffer_space2);
-
-                fprintf(f1, "%s\n", buffer_space);
-
-                buffer_reset(buffer_space);
-                buffer_reset(buffer_space2);
-                buffer_reset(buffer);
-                buffer_reset(buffer2);
-            }
-        }
-    }
-    /* add end*/
+	fprintf(f1, "%s\n", buffer);
+	buffer_reset(buffer);
 
 
-    fputc('\n', f1);
+	sprintf(buffer, "%04d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
+		tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-    /* subtotal start */
-    {
-        int j;
-        int k;
-        int i;
+	{
+		int i;
+		for (i = 19; i < 45; i++)
+		{
+			buffer[i] = ' ';
+		}
+	}
 
-        for (i = 0; i < g_add_item_count; i++)
-        {
-            g_subtotal += round_by_two(g_price_arr[i]);
-        }
+	{
+		sprintf(buffer2, "%05d\n", g_recipt_count);
+		printf("%s", buffer2);
+	}
 
-        sprintf(buffer2, "%.2lf", g_subtotal);
+	printf("%s\n", buffer);
+	string_concat(buffer, buffer2);
+	fprintf(f1, "%s", buffer);
+	/*fprintf(f1, "%d\n", add_item_count);*/
+	{
+		int i;
+		for (i = 0; i < MAX_LENGTH; i++)
+		{
+			buffer[i] = '-';
+		}
+	}
 
-        for (j = 0; j < MAX_NAME_LENGTH - string_length("Subtotal"); j++)
-        {
-            buffer_space[j] = ' ';
-        }
+	fprintf(f1, "%s", buffer);
+	buffer_reset(buffer);
+	buffer_reset(buffer2);
+	/* 기본 동작 끝 */
+
+	/* add start*/
+	{
+		int i;
+		if (g_add_item_count != 0)
+		{
+			check = 1;
+			for (i = 0; i < g_add_item_count; i++)
+			{
+				snprintf(buffer, 26, "%.25s", g_item_arr[i]);
+				sprintf(buffer2, "%.2lf", round_by_two(g_price_arr[i]));
+
+				{
+					int j;
+					int k;
+					for (j = 0; j < MAX_NAME_LENGTH - string_length(buffer); j++)
+					{
+						buffer_space[j] = ' ';
+					}
+
+					for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer2); k++)
+					{
+						buffer_space2[k] = ' ';
+					}
+				}
+				string_concat(buffer_space, buffer);
+				string_concat(buffer_space2, buffer2);
+				string_concat(buffer_space, buffer_space2);
+
+				fprintf(f1, "%s\n", buffer_space);
+
+				buffer_reset(buffer_space);
+				buffer_reset(buffer_space2);
+				buffer_reset(buffer);
+				buffer_reset(buffer2);
+			}
+		}
+	}
+	/* add end*/
 
 
-        for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer2); k++)
-        {
-            buffer_space2[k] = ' ';
-        }
+	fputc('\n', f1);
 
-        string_concat(buffer_space, "Subtotal");
-        string_concat(buffer_space2, buffer2);
-        string_concat(buffer_space, buffer_space2);
+	/* subtotal start */
+	{
+		int j;
+		int k;
+		int i;
 
-        fprintf(f1, "%s\n", buffer_space);
+		for (i = 0; i < g_add_item_count; i++)
+		{
+			g_subtotal += round_by_two(g_price_arr[i]);
+		}
 
-        buffer_reset(buffer_space);
-        buffer_reset(buffer_space2);
-        buffer_reset(buffer);
-        buffer_reset(buffer2);
-    }
-    /* subtotal end */
+		sprintf(buffer2, "%.2lf", g_subtotal);
+
+		for (j = 0; j < MAX_NAME_LENGTH - string_length("Subtotal"); j++)
+		{
+			buffer_space[j] = ' ';
+		}
 
 
-    /* set tip start */
-    if (g_is_tip_exist)
-    {
-        int j;
-        int k;
-		if (!g_tip_count <= 0.00)
+		for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer2); k++)
+		{
+			buffer_space2[k] = ' ';
+		}
+
+		string_concat(buffer_space, "Subtotal");
+		string_concat(buffer_space2, buffer2);
+		string_concat(buffer_space, buffer_space2);
+
+		fprintf(f1, "%s\n", buffer_space);
+
+		buffer_reset(buffer_space);
+		buffer_reset(buffer_space2);
+		buffer_reset(buffer);
+		buffer_reset(buffer2);
+	}
+	/* subtotal end */
+
+
+	/* set tip start */
+	if (g_is_tip_exist)
+	{
+		int j;
+		int k;
+		if (!g_tip_count == 0.00)
 		{
 			sprintf(buffer, "%.2lf", g_tip_count);
 
@@ -367,117 +367,125 @@ int print_receipt(const char* filename, time_t timestamp) {
 			buffer_reset(buffer);
 			buffer_reset(buffer2);
 		}
-    }
-    /* set tip end */
+	}
+	/* set tip end */
 
-    /* Tax start */
-    {
-        int j;
-        int k;
-        g_tax_count = round_by_two(g_subtotal * 0.05);
-        sprintf(buffer, "%.2lf", g_tax_count);
+	/* Tax start */
+	{
+		int j;
+		int k;
+		g_tax_count = round_by_two(g_subtotal * 0.05);
+		sprintf(buffer, "%.2lf", g_tax_count);
 
-        for (j = 0; j < MAX_NAME_LENGTH - string_length("Tax"); j++)
-        {
-            buffer_space[j] = ' ';
-        }
+		for (j = 0; j < MAX_NAME_LENGTH - string_length("Tax"); j++)
+		{
+			buffer_space[j] = ' ';
+		}
 
-        for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer); k++)
-        {
-            buffer_space2[k] = ' ';
-        }
+		for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer); k++)
+		{
+			buffer_space2[k] = ' ';
+		}
 
-        string_concat(buffer_space, "Tax");
-        string_concat(buffer_space2, buffer);
-        string_concat(buffer_space, buffer_space2);
+		string_concat(buffer_space, "Tax");
+		string_concat(buffer_space2, buffer);
+		string_concat(buffer_space, buffer_space2);
 
-        fprintf(f1, "%s\n", buffer_space);
+		fprintf(f1, "%s\n", buffer_space);
 
-        buffer_reset(buffer_space);
-        buffer_reset(buffer_space2);
-        buffer_reset(buffer);
-        buffer_reset(buffer2);
-    }
-    /* Tax End */
+		buffer_reset(buffer_space);
+		buffer_reset(buffer_space2);
+		buffer_reset(buffer);
+		buffer_reset(buffer2);
+	}
+	/* Tax End */
 
-    /* Total Start */
-    {
-        int j;
-        int k;
-        double total_count = round_by_two(g_subtotal + g_tip_count + g_tax_count);
+	/* Total Start */
+	{
+		int j;
+		int k;
+		double total_count = round_by_two(g_subtotal + g_tip_count + g_tax_count);
 
-        sprintf(buffer, "%.2lf", total_count);
+		sprintf(buffer, "%.2lf", total_count);
 
-        for (j = 0; j < MAX_NAME_LENGTH - string_length("Total"); j++)
-        {
-            buffer_space[j] = ' ';
-        }
+		for (j = 0; j < MAX_NAME_LENGTH - string_length("Total"); j++)
+		{
+			buffer_space[j] = ' ';
+		}
 
-        for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer); k++)
-        {
-            buffer_space2[k] = ' ';
-        }
+		for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer); k++)
+		{
+			buffer_space2[k] = ' ';
+		}
 
-        string_concat(buffer_space, "Total");
-        string_concat(buffer_space2, buffer);
-        string_concat(buffer_space, buffer_space2);
+		string_concat(buffer_space, "Total");
+		string_concat(buffer_space2, buffer);
+		string_concat(buffer_space, buffer_space2);
 
-        fprintf(f1, "%s\n", buffer_space);
+		fprintf(f1, "%s\n", buffer_space);
 
-        buffer_reset(buffer_space);
-        buffer_reset(buffer_space2);
-        buffer_reset(buffer);
-        buffer_reset(buffer2);
-    }
-    /* Total End */
+		buffer_reset(buffer_space);
+		buffer_reset(buffer_space2);
+		buffer_reset(buffer);
+		buffer_reset(buffer2);
+	}
+	/* Total End */
 
-    fputc('\n', f1);
+	fputc('\n', f1);
 
-    /* message start */
-    if (g_is_message_exist)
-    {
-        fprintf(f1, "%s\n", g_message);
-    }
-    /* message end */
+	/* message start */
+	if (g_is_message_exist)
+	{
+		fprintf(f1, "%s\n", g_message);
+	}
+	/* message end */
 
-    {
-        int i;
-        for (i = 0; i < MAX_LENGTH; i++)
-        {
-            fputc('=', f1);
-        }
-    }
-    fputc('\n', f1);
+	{
+		int i;
+		for (i = 0; i < MAX_LENGTH; i++)
+		{
+			fputc('=', f1);
+		}
+	}
+	fputc('\n', f1);
 
-    /* Tax# start */
-    {
-        int i;
-        for (i = 0; i < MAX_LENGTH - 10; i++)
-        {
-            buffer[i] = ' ';
-        }
+	/* Tax# start */
+	{
+		int i;
+		for (i = 0; i < MAX_LENGTH - 10; i++)
+		{
+			buffer[i] = ' ';
+		}
 
-        buffer_ptr = "Tax#-51234";
+		buffer_ptr = "Tax#-51234";
 
-        string_concat(buffer, buffer_ptr);
+		string_concat(buffer, buffer_ptr);
 
-        fprintf(f1, "%s", buffer);
-    }
-    /* Tax# end */
+		fprintf(f1, "%s", buffer);
+	}
+	/* Tax# end */
 
-    if (fclose(f1) == EOF)
-    {
-        return FALSE;
-    }
+	if (fclose(f1) == EOF)
+	{
+		return FALSE;
+	}
 
-    if (!check)
-    {
-        return FALSE;
-    }
-    g_add_item_count = 0;
-    g_recipt_count++;
-    g_subtotal = 0;
-    g_tip_count = 0;
-    g_tax_count = 0;
-    return TRUE;
+	if (!check)
+	{
+		return FALSE;
+	}
+	g_add_item_count = 0;
+	g_recipt_count++;
+	g_subtotal = 0;
+	g_tip_count = 0;
+	g_tax_count = 0;
+
+	{
+		int i;
+		for (i = 0; i < 77; i++)
+		{
+			g_message[i] = 0;
+		}
+	}
+	return TRUE;
 }
