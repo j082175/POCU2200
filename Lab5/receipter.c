@@ -16,6 +16,24 @@ static double g_tax_count = 0;
 
 static char g_message[76] = { 0, };
 
+double round_by_two(double num) {
+    double backup_num = 0;
+    int real = num / 1; //8
+    double mantissa = num - real; //0.985
+    double two = mantissa * 100; // 98.5
+    int two_real = two / 1; // 98
+    double two_mantissa = two - two_real; // 0.5
+    if (two_mantissa >= 0.4999999)
+    {
+        two_real++;
+        backup_num = real + (double)(two_real / 100.0);
+    }
+    else {
+        backup_num = real + (double)(two_real / 100.0);
+    }
+    return backup_num;
+}
+
 int string_length(const char* name) {
     int length = 0;
 
@@ -39,52 +57,6 @@ char* string_concat(char* s1, char* s2) {
     *s1 = '\0';
 
     return s1;
-}
-
-void reverse(char* str)
-{
-    char backup[100] = { 0, };
-    int str_length = 0;
-    int space_count = 0;
-    int current_position = 0;
-    int current_space_position = -1;
-    int count = 0;
-
-    if (str == 0) {
-        return;
-    }
-
-    while (*(str + str_length) != '\0') {
-        if (*(str + str_length) == ' ') {
-            space_count++;
-        }
-        str_length++;
-    }
-
-    {
-        int i;
-        int j;
-        for (i = 0; i < str_length + 1; i++) {
-
-            if (*(str + i) == '0' || *(str + i) == '\0') {
-                for (j = current_position - 1; j >= current_space_position + 1; j--) {
-                    backup[count] = *(str + j);
-                    count++;
-                }
-                backup[current_position] = ' ';
-                current_space_position = current_position;
-                count = current_space_position + 1;
-            }
-            current_position++;
-        }
-    }
-
-    {
-        int i;
-        for (i = 0; i < str_length; i++) {
-            *(str + i) = backup[i];
-        }
-    }
 }
 
 void buffer_reset(char* buffer) {
@@ -141,7 +113,7 @@ void set_tip(double tip) {
         tip = 999.99;
     }
     g_is_tip_exist = 1;
-    g_tip_count = tip;
+    g_tip_count = round_by_two(tip);
 }
 
 void set_message(const char* message) {
@@ -294,7 +266,7 @@ int print_receipt(const char* filename, time_t timestamp) {
             for (i = 0; i < g_add_item_count; i++)
             {
                 snprintf(buffer, 25, "%.25s", g_item_arr[i]);
-                sprintf(buffer2, "%.2lf", g_price_arr[i]);
+                sprintf(buffer2, "%.2lf", round_by_two(g_price_arr[i]));
 
                 {
                     int j;
@@ -335,7 +307,7 @@ int print_receipt(const char* filename, time_t timestamp) {
 
         for (i = 0; i < g_add_item_count; i++)
         {
-            g_subtotal += g_price_arr[i];
+            g_subtotal += round_by_two(g_price_arr[i]);
             if (g_subtotal > 999.99)
             {
                 break;
@@ -403,7 +375,7 @@ int print_receipt(const char* filename, time_t timestamp) {
     {
         int j;
         int k;
-        g_tax_count = g_subtotal * 0.05;
+        g_tax_count = round_by_two(g_subtotal * 0.05);
         sprintf(buffer, "%.2lf", g_tax_count);
 
         for (j = 0; j < MAX_NAME_LENGTH - string_length("Tax"); j++)
@@ -433,7 +405,7 @@ int print_receipt(const char* filename, time_t timestamp) {
     {
         int j;
         int k;
-        double total_count = g_subtotal + g_tip_count + g_tax_count;
+        double total_count = round_by_two(g_subtotal + g_tip_count + g_tax_count);
 
         sprintf(buffer, "%.2lf", total_count);
 
