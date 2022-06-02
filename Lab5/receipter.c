@@ -477,5 +477,8 @@ int print_receipt(const char* filename, time_t timestamp) {
     }
     g_add_item_count = 0;
     g_recipt_count++;
+    g_subtotal = 0;
+    g_tip_count = 0;
+    g_tax_count = 0;
     return TRUE;
 }
