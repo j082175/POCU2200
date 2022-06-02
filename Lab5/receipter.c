@@ -225,11 +225,12 @@ int print_receipt(const char* filename, time_t timestamp) {
     char buffer_space[1024] = { 0, };
     char buffer_space2[1024] = { 0, };
     char* buffer_ptr = 0;
+    int check = 0;
 
-    if (g_add_item_count == 0)
-    {
-        return TRUE;
-    }
+    //if (g_add_item_count == 0)
+    //{
+    //    return FALSE;
+    //}
 
     if ((f1 = fopen(filename, "w")) == 0)
     {
@@ -285,38 +286,41 @@ int print_receipt(const char* filename, time_t timestamp) {
 
     /* add start*/
     {
-        int i;
-        for (i = 0; i < g_add_item_count; i++)
-        {
-            snprintf(buffer, 25, "%.25s", g_item_arr[i]);
-            sprintf(buffer2, "%.2lf", g_price_arr[i]);
+		int i;
+		if (g_add_item_count != 0)
+		{
+            check = 1;
+			for (i = 0; i < g_add_item_count; i++)
+			{
+				snprintf(buffer, 25, "%.25s", g_item_arr[i]);
+				sprintf(buffer2, "%.2lf", g_price_arr[i]);
 
-            {
-                int j;
-                int k;
-                for (j = 0; j < MAX_NAME_LENGTH - string_length(buffer); j++)
-                {
-                    buffer_space[j] = ' ';
-                }
+				{
+					int j;
+					int k;
+					for (j = 0; j < MAX_NAME_LENGTH - string_length(buffer); j++)
+					{
+						buffer_space[j] = ' ';
+					}
 
-                for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer2); k++)
-                {
-                    buffer_space2[k] = ' ';
-                }
-            }
-            string_concat(buffer_space, buffer);
-            string_concat(buffer_space2, buffer2);
-            string_concat(buffer_space, buffer_space2);
+					for (k = 0; k < MAX_PRICE_LENGTH - string_length(buffer2); k++)
+					{
+						buffer_space2[k] = ' ';
+					}
+				}
+				string_concat(buffer_space, buffer);
+				string_concat(buffer_space2, buffer2);
+				string_concat(buffer_space, buffer_space2);
 
-            fprintf(f1, "%s\n", buffer_space);
+				fprintf(f1, "%s\n", buffer_space);
 
-            buffer_reset(buffer_space);
-            buffer_reset(buffer_space2);
-            buffer_reset(buffer);
-            buffer_reset(buffer2);
-        }
-
-    }
+				buffer_reset(buffer_space);
+				buffer_reset(buffer_space2);
+				buffer_reset(buffer);
+				buffer_reset(buffer2);
+			}
+		}
+	}
     /* add end*/
 
 
@@ -496,6 +500,9 @@ int print_receipt(const char* filename, time_t timestamp) {
     g_recipt_count++;
     g_add_item_count = 0;
 
-
+    if (!check)
+    {
+        return FALSE;
+    }
     return TRUE;
 }
