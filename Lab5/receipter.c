@@ -1,9 +1,10 @@
 #include "receipter.h"
 
-static g_add_item_count = 0;
-static g_name_backup_count = 0;
 
-static const char* g_item_arr[ITEM_LENGTH] = { 0, };
+static g_add_item_count = 0;
+
+
+static char g_item_arr[ITEM_LENGTH][1024] = {0,};
 static double g_price_arr[ITEM_LENGTH] = { 0, };
 
 static int g_is_tip_exist = 0;
@@ -13,7 +14,7 @@ static double g_subtotal = 0;
 static double g_tip_count = 0;
 static double g_tax_count = 0;
 
-static char g_message[75] = { 0, };
+static char g_message[76] = { 0, };
 
 int string_length(const char* name) {
     int length = 0;
@@ -95,35 +96,41 @@ void buffer_reset(char* buffer) {
 }
 
 int add_item(const char* name, double price) {
-    const char* name_backup_buffer[10] = { 0, };
 
     if (g_add_item_count >= ITEM_LENGTH)
     {
         return FALSE;
     }
 
-    if (string_length(name) > 25)
     {
-        name_backup_buffer[g_name_backup_count] = name;
+        if (string_length(name) < 25)
+        {
+			int i;
+			for (i = 0; i < string_length(name); i++)
+			{
+				g_item_arr[g_add_item_count][i] = *(name + i);
+			}
+			g_item_arr[g_add_item_count][string_length(name)] = '\0';
 
-        g_name_backup_count++;
+        }
+        else {
+            int i;
+            for (i = 0; i < 25; i++)
+            {
+                g_item_arr[g_add_item_count][i] = *(name + i);
+            }
+            g_item_arr[g_add_item_count][25] = '\0';
+        }
     }
 
-    /* {
-        int i;
-        for (i = 0; i < string_length(name); i++)
-        {
-            buffer[i] = *(name + i);
-        }
-        buffer[string_length(name)] = '\0';
-    }*/
 
-    g_item_arr[g_add_item_count] = name;
-
-    printf("%s\n", g_item_arr[g_add_item_count]);
     g_price_arr[g_add_item_count] = price;
 
+    printf("%s", g_item_arr[g_add_item_count]);
+    printf("%lf\n", g_price_arr[g_add_item_count]);
+
     g_add_item_count++;
+
 
     return TRUE;
 }
@@ -206,6 +213,7 @@ void set_message(const char* message) {
         {
             g_message[i] = buffer[i];
         }
+        g_message[75] = '\0';
     }
 }
 
