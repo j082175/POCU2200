@@ -308,10 +308,6 @@ int print_receipt(const char* filename, time_t timestamp) {
         for (i = 0; i < g_add_item_count; i++)
         {
             g_subtotal += round_by_two(g_price_arr[i]);
-            if (g_subtotal > 999.99)
-            {
-                break;
-            }
         }
 
         sprintf(buffer2, "%.2lf", g_subtotal);
