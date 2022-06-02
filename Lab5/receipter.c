@@ -1,38 +1,41 @@
 #include "receipter.h"
 
-static g_recipt_count = 0;
-static g_add_item_count = 0;
+static s_recipt_count = 0;
+static s_add_item_count = 0;
 
 
-static char g_item_arr[ITEM_LENGTH][1024] = { 0, };
-static double g_price_arr[ITEM_LENGTH] = { 0, };
+static char s_item_arr[ITEM_LENGTH][1024] = { 0, };
+static double s_price_arr[ITEM_LENGTH] = { 0, };
 
-static int g_is_tip_exist = 0;
-static int g_is_message_exist = 0;
+static int s_is_tip_exist = 0;
+static int s_is_message_exist = 0;
 
-static double g_subtotal = 0;
-static double g_tip_count = 0;
-static double g_tax_count = 0;
+static double s_subtotal = 0;
+static double s_tip_count = 0;
+static double s_tax_count = 0;
 
-static char g_message[77] = { 0, };
+static char s_message[77] = { 0, };
 
-double round_by_two(double num) {
+double round_by_two(double num)
+{
     double backup_num = 0;
     int real = num / 1;
     double mantissa = num - real;
     double two = mantissa * 100;
-    int two_real = two / 1; // 98
+    int two_real = two / 1;
     double two_mantissa = two - two_real;
     if (two_mantissa >= 0.4999999) {
         two_real++;
         backup_num = real + (double)(two_real / 100.0);
-    } else {
+    }
+    else {
         backup_num = real + (double)(two_real / 100.0);
     }
     return backup_num;
 }
 
-int string_length(const char* name) {
+int string_length(const char* name)
+{
     int length = 0;
 
     while (*(name + length) != '\0') {
@@ -42,7 +45,8 @@ int string_length(const char* name) {
     return length;
 }
 
-char* string_concat(char* s1, char* s2) {
+char* string_concat(char* s1, char* s2)
+{
     while (*s1 != '\0') {
         s1++;
     }
@@ -57,16 +61,18 @@ char* string_concat(char* s1, char* s2) {
     return s1;
 }
 
-void buffer_reset(char* buffer) {
+void buffer_reset(char* buffer)
+{
     int i;
     for (i = 0; i < MAX_LENGTH; i++) {
         buffer[i] = 0;
     }
 }
 
-int add_item(const char* name, double price) {
+int add_item(const char* name, double price)
+{
 
-    if (g_add_item_count >= ITEM_LENGTH) {
+    if (s_add_item_count >= ITEM_LENGTH) {
         return FALSE;
     }
 
@@ -74,40 +80,43 @@ int add_item(const char* name, double price) {
         if (string_length(name) < 25) {
             int i;
             for (i = 0; i < string_length(name); i++) {
-                g_item_arr[g_add_item_count][i] = *(name + i);
+                s_item_arr[s_add_item_count][i] = *(name + i);
             }
-            g_item_arr[g_add_item_count][string_length(name)] = '\0';
+            s_item_arr[s_add_item_count][string_length(name)] = '\0';
 
-        } else {
+        }
+        else {
             int i;
             for (i = 0; i < 25; i++) {
-                g_item_arr[g_add_item_count][i] = *(name + i);
+                s_item_arr[s_add_item_count][i] = *(name + i);
             }
-            g_item_arr[g_add_item_count][25] = '\0';
+            s_item_arr[s_add_item_count][25] = '\0';
         }
     }
 
 
-    g_price_arr[g_add_item_count] = price;
+    s_price_arr[s_add_item_count] = price;
 
-    printf("%s", g_item_arr[g_add_item_count]);
-    printf("%lf\n", g_price_arr[g_add_item_count]);
+    printf("%s", s_item_arr[s_add_item_count]);
+    printf("%lf\n", s_price_arr[s_add_item_count]);
 
-    g_add_item_count++;
+    s_add_item_count++;
 
 
     return TRUE;
 }
 
-void set_tip(double tip) {
+void set_tip(double tip)
+{
     if (tip > 999.99) {
         tip = 999.99;
     }
-    g_is_tip_exist = 1;
-    g_tip_count = round_by_two(tip);
+    s_is_tip_exist = 1;
+    s_tip_count = round_by_two(tip);
 }
 
-void set_message(const char* message) {
+void set_message(const char* message)
+{
     char buffer[76] = { 0, };
     {
         if (string_length(message) > MAX_LENGTH) {
@@ -122,7 +131,8 @@ void set_message(const char* message) {
                 for (j = 0; j < 25; j++) {
                     buffer[j + MAX_LENGTH + 1] = message[MAX_LENGTH + j];
                 }
-            } else {
+            }
+            else {
                 int i;
                 int j;
                 for (i = 0; i < MAX_LENGTH; i++) {
@@ -134,25 +144,27 @@ void set_message(const char* message) {
                     buffer[j + MAX_LENGTH + 1] = message[MAX_LENGTH + j];
                 }
             }
-        } else {
+        }
+        else {
             int i;
             for (i = 0; i < string_length(message); i++) {
                 buffer[i] = *(message + i);
             }
         }
     }
-    g_is_message_exist = 1;
+    s_is_message_exist = 1;
 
     {
         int i;
         for (i = 0; i < 76; i++) {
-            g_message[i] = buffer[i];
+            s_message[i] = buffer[i];
         }
-        g_message[76] = '\0';
+        s_message[76] = '\0';
     }
 }
 
-int print_receipt(const char* filename, time_t timestamp) {
+int print_receipt(const char* filename, time_t timestamp)
+{
     FILE* f1 = 0;
     struct tm tm = *gmtime(&timestamp);
     //struct tm tm = *localtime(&timestamp);
@@ -163,7 +175,7 @@ int print_receipt(const char* filename, time_t timestamp) {
     char* buffer_ptr = 0;
     int check = 0;
 
-    if (g_add_item_count == 0) {
+    if (s_add_item_count == 0) {
         return FALSE;
     }
 
@@ -184,8 +196,7 @@ int print_receipt(const char* filename, time_t timestamp) {
     buffer_reset(buffer);
 
 
-    sprintf(buffer, "%04d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-        tm.tm_hour, tm.tm_min, tm.tm_sec);
+    sprintf(buffer, "%04d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
     {
         int i;
@@ -195,7 +206,7 @@ int print_receipt(const char* filename, time_t timestamp) {
     }
 
     {
-        sprintf(buffer2, "%05d\n", g_recipt_count);
+        sprintf(buffer2, "%05d\n", s_recipt_count);
         printf("%s", buffer2);
     }
 
@@ -217,11 +228,11 @@ int print_receipt(const char* filename, time_t timestamp) {
     /* add start*/
     {
         int i;
-        if (g_add_item_count != 0) {
+        if (s_add_item_count != 0) {
             check = 1;
-            for (i = 0; i < g_add_item_count; i++) {
-                snprintf(buffer, 26, "%.25s", g_item_arr[i]);
-                sprintf(buffer2, "%.2lf", round_by_two(g_price_arr[i]));
+            for (i = 0; i < s_add_item_count; i++) {
+                snprintf(buffer, 26, "%.25s", s_item_arr[i]);
+                sprintf(buffer2, "%.2lf", round_by_two(s_price_arr[i]));
 
                 {
                     int j;
@@ -258,11 +269,11 @@ int print_receipt(const char* filename, time_t timestamp) {
         int k;
         int i;
 
-        for (i = 0; i < g_add_item_count; i++) {
-            g_subtotal += round_by_two(g_price_arr[i]);
+        for (i = 0; i < s_add_item_count; i++) {
+            s_subtotal += round_by_two(s_price_arr[i]);
         }
 
-        sprintf(buffer2, "%.2lf", g_subtotal);
+        sprintf(buffer2, "%.2lf", s_subtotal);
 
         for (j = 0; j < MAX_NAME_LENGTH - string_length("Subtotal"); j++) {
             buffer_space[j] = ' ';
@@ -288,11 +299,11 @@ int print_receipt(const char* filename, time_t timestamp) {
 
 
     /* set tip start */
-    if (g_is_tip_exist) {
+    if (s_is_tip_exist) {
         int j;
         int k;
-        if (!(g_tip_count == 0.00)) {
-            sprintf(buffer, "%.2lf", g_tip_count);
+        if (!(s_tip_count == 0.00)) {
+            sprintf(buffer, "%.2lf", s_tip_count);
 
             for (j = 0; j < MAX_NAME_LENGTH - string_length("Tip"); j++) {
                 buffer_space[j] = ' ';
@@ -320,8 +331,8 @@ int print_receipt(const char* filename, time_t timestamp) {
     {
         int j;
         int k;
-        g_tax_count = round_by_two(g_subtotal * 0.05);
-        sprintf(buffer, "%.2lf", g_tax_count);
+        s_tax_count = round_by_two(s_subtotal * 0.05);
+        sprintf(buffer, "%.2lf", s_tax_count);
 
         for (j = 0; j < MAX_NAME_LENGTH - string_length("Tax"); j++) {
             buffer_space[j] = ' ';
@@ -348,7 +359,7 @@ int print_receipt(const char* filename, time_t timestamp) {
     {
         int j;
         int k;
-        double total_count = round_by_two(g_subtotal + g_tip_count + g_tax_count);
+        double total_count = round_by_two(s_subtotal + s_tip_count + s_tax_count);
 
         sprintf(buffer, "%.2lf", total_count);
 
@@ -376,8 +387,8 @@ int print_receipt(const char* filename, time_t timestamp) {
     fputc('\n', f1);
 
     /* message start */
-    if (g_is_message_exist) {
-        fprintf(f1, "%s\n", g_message);
+    if (s_is_message_exist) {
+        fprintf(f1, "%s\n", s_message);
     }
     /* message end */
 
@@ -411,16 +422,16 @@ int print_receipt(const char* filename, time_t timestamp) {
     if (!check) {
         return FALSE;
     }
-    g_add_item_count = 0;
-    g_recipt_count++;
-    g_subtotal = 0;
-    g_tip_count = 0;
-    g_tax_count = 0;
+    s_add_item_count = 0;
+    s_recipt_count++;
+    s_subtotal = 0;
+    s_tip_count = 0;
+    s_tax_count = 0;
 
     {
         int i;
         for (i = 0; i < 77; i++) {
-            g_message[i] = 0;
+            s_message[i] = 0;
         }
     }
     return TRUE;
