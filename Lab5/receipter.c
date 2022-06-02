@@ -13,7 +13,7 @@ static double g_subtotal = 0;
 static double g_tip_count = 0;
 static double g_tax_count = 0;
 
-static const char* g_message = 0;
+static char g_message[75] = { 0, };
 
 int string_length(const char* name) {
     int length = 0;
@@ -140,9 +140,47 @@ void set_tip(double tip) {
 void set_message(const char* message) {
     char buffer[76] = { 0, };
     {
-        int i;
-        int j;
-        for (i = 0; i < string_length(message); i++)
+        if (string_length(message) > MAX_LENGTH)
+        {
+            if (string_length(message) > 75)
+            {
+                int i;
+                int j;
+                for (i = 0; i < MAX_LENGTH; i++)
+                {
+                    buffer[i] = *(message + i);
+                }
+                buffer[MAX_LENGTH] = '\n';
+
+                for (j = 0; j < 25; j++)
+                {
+                    buffer[j + MAX_LENGTH + 1] = message[MAX_LENGTH + j];
+                }
+            }
+            else {
+                int i;
+                int j;
+                for (i = 0; i < MAX_LENGTH; i++)
+                {
+                    buffer[i] = *(message + i);
+                }
+                buffer[MAX_LENGTH] = '\n';
+
+                for (j = 0; j < string_length(message) - MAX_LENGTH; j++)
+                {
+                    buffer[j + MAX_LENGTH + 1] = message[MAX_LENGTH + j];
+                }
+            }
+        }
+        else {
+            int i;
+            for (i = 0; i < string_length(message); i++)
+            {
+                buffer[i] = *(message + i);
+            }
+        }
+
+        /*for (i = 0; i < string_length(message); i++)
         {
             buffer[i] = *(message + i);
         }
@@ -157,11 +195,18 @@ void set_message(const char* message) {
             }
 
             buffer[string_length(message)] = '\0';
-        }
+        }*/
 
     }
     g_is_message_exist = 1;
-    g_message = buffer;
+    
+    {
+        int i;
+        for (i = 0; i < 75; i++)
+        {
+            g_message[i] = buffer[i];
+        }
+    }
 }
 
 int print_receipt(const char* filename, time_t timestamp) {
@@ -235,7 +280,7 @@ int print_receipt(const char* filename, time_t timestamp) {
         int i;
         for (i = 0; i < g_add_item_count; i++)
         {
-            sprintf(buffer, "%s", g_item_arr[i]);
+            snprintf(buffer, 25, "%.25s", g_item_arr[i]);
             sprintf(buffer2, "%.2lf", g_price_arr[i]);
 
             {
@@ -442,7 +487,7 @@ int print_receipt(const char* filename, time_t timestamp) {
     }
 
     g_add_item_count = 0;
-    
+
 
     return TRUE;
 }
