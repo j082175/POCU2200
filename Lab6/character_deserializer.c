@@ -65,26 +65,40 @@ int isdigit_ft(int c)
     return (0);
 }
 
-int atoi_ft(char* str) {
-    int result, positive;
-    char* ptr = 0;
-    ptr = str;
+int atoi_ft(char* pointer)
+{
+    int result = 0;
+    char* pointer1;
+    multiplier = 1;
+    char sign = 1;
 
-    result = 0;
-    positive = 1;
-    while ((9 <= *ptr && *ptr <= 13) || *ptr == ' ')
-        ptr++;
-    if (*ptr == '+' || *ptr == '-') {
-        if (*ptr == '-')
-            positive = -1;
-        ptr++;
+    if(*pointer == '-')
+    sign =- 1;  
+
+    pointer1 = pointer;
+
+    while(*pointer != '\0')
+    {
+        if(*pointer >= '0' && *pointer <= '9')
+            multiplier = multiplier * 10;
+
+        pointer = pointer + 1;  
     }
-    while ('0' <= *ptr && *ptr <= '9') {
-        result *= 10;
-        result += (*ptr - '0') * positive;
-        ptr++;
+
+    pointer = pointer1;
+
+    while(*pointer != '\0')
+    {       
+        if(*pointer >= '0' && *pointer <= '9')
+        {
+            result = result + ( (*pointer%48)  * multiplier);
+            multiplier = multiplier / 10;       
+        }
+
+        pointer = pointer+1;
     }
-    return result;
+
+    return (result * sign) / 10;
 }
 
 
