@@ -1,7 +1,6 @@
 #ifndef CHARACTER_DESERIALIZER_H
 #define CHARACTER_DESERIALIZER_H
 
-
 #define TRUE 1
 #define FALSE 0
 
@@ -59,6 +58,8 @@ int string_compare(const char* str1, const char* str2);
 
 char* tokenize(char* str_or_null, const char* delims);
 
+int ft_isspace(const char* str);
 
+int ft_isdigit(int c);
 
 #endif /* CHARACTER_DESERIALIZER_H */
