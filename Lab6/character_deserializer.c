@@ -21,10 +21,12 @@ char* string_concat(char* s1, char* s2)
 
 void itoa_ft(int num, char* str)
 {
+    char buf[10] = { 0, };
     int i = 0;
     int radix = 10;
     int deg = 1;
     int cnt = 0;
+    strcpy(buf, str);
 
     while (1) {
         if ((num / deg) > 0) {
@@ -41,7 +43,7 @@ void itoa_ft(int num, char* str)
         num -= ((num / deg) * deg);
         deg /= radix;
     }
-    /**(str + i) = '\0';*/
+    *(str + i) = '\0';
 }
 
 int isspace_ft(const char* str)
@@ -65,20 +67,22 @@ int isdigit_ft(int c)
 
 int atoi_ft(char* str) {
     int result, positive;
+    char* ptr = 0;
+    ptr = str;
 
     result = 0;
     positive = 1;
-    while ((9 <= *str && *str <= 13) || *str == ' ')
-        str++;
-    if (*str == '+' || *str == '-') {
-        if (*str == '-')
+    while ((9 <= *ptr && *ptr <= 13) || *ptr == ' ')
+        ptr++;
+    if (*ptr == '+' || *ptr == '-') {
+        if (*ptr == '-')
             positive = -1;
-        str++;
+        ptr++;
     }
-    while ('0' <= *str && *str <= '9') {
+    while ('0' <= *ptr && *ptr <= '9') {
         result *= 10;
-        result += (*str - '0') * positive;
-        str++;
+        result += (*ptr - '0') * positive;
+        ptr++;
     }
     return result;
 }
@@ -816,7 +820,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                         for (k = 0; k < 4; k++) {
                             switch (k) {
                             case 0:
-                                //string_copy(out_character->minions[i].name, values_backup[values_check1[k]]);
+                                /*string_copy(out_character->minions[i].name, values_backup[values_check1[k]]);*/
                                 strcpy(out_character->minions[i].name, values_backup[values_check[k]]);
                                 break;
                             case 1:
