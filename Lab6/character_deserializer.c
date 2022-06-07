@@ -636,14 +636,14 @@ int get_character(const char* filename, character_v3_t* out_character)
                         char buf[40] = { 0, };
                         strcpy(buf, "player_");
                         strcat(buf, values_backup[values_check[i]]);
-                        strcpy_s(out_character->name, 50, buf);
+                        strcpy(out_character->name, buf);
                         
                         //string_copy(buf, "player_");
                         //string_concat(buf, values_backup[values_check[i]]);
                         //buffer_clear(out_character->name);
                         //string_copy(out_character->name, buf);
                     } else {
-                        strcpy_s(out_character->name,50, values_backup[values_check[i]]);
+                        strcpy(out_character->name, values_backup[values_check[i]]);
                         //string_copy(out_character->name, values_backup[values_check[i]]);
 
                     }
