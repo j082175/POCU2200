@@ -1,5 +1,11 @@
 #ifndef CHARACTER_DESERIALIZER_H
 #define CHARACTER_DESERIALIZER_H
+#define _CRT_SECURE_NO_WARNINGS
+
+#define TRUE 1
+#define FALSE 0
+
+#include <stdio.h>
 
 typedef struct {
     char name[50];
