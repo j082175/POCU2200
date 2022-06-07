@@ -4,7 +4,8 @@
 
 int string_length(const char* str);
 
-char* string_concat(char* s1, char* s2) {
+char* string_concat(char* s1, char* s2)
+{
     while (*s1 != '\0') {
         s1++;
     }
@@ -18,7 +19,8 @@ char* string_concat(char* s1, char* s2) {
     return s1;
 }
 
-void ft_itoa(int num, char* str) {
+void ft_itoa(int num, char* str)
+{
     int i = 0;
     int radix = 10;
     int deg = 1;
@@ -38,7 +40,7 @@ void ft_itoa(int num, char* str) {
         num -= ((num / deg) * deg);
         deg /= radix;
     }
-    /**(str + i) = '\0';*/
+    /*(str + i) = '\0';*/
 }
 
 int ft_isspace(const char* str)
@@ -74,29 +76,28 @@ int ft_atoi(const char* str)
     return (sign * res);
 }
 
-void buffer_clear(char* buffer) {
+void buffer_clear(char* buffer)
+{
     int i;
-    for (i = 0; i < string_length(buffer); i++)
-    {
+    for (i = 0; i < string_length(buffer); i++) {
         buffer[i] = 0;
     }
 }
 
-int string_length(const char* str) {
+int string_length(const char* str)
+{
     int str_length = 0;
-    while (*(str + str_length) != '\0')
-    {
+    while (*(str + str_length) != '\0') {
         str_length++;
     }
     return str_length;
 }
 
-int string_length_before_carriage_return(const char* str) {
+int string_length_before_carriage_return(const char* str)
+{
     int str_length = 0;
-    while (*(str + str_length) != '\n')
-    {
-        if (*(str + str_length) == '\0')
-        {
+    while (*(str + str_length) != '\n') {
+        if (*(str + str_length) == '\0') {
             break;
         }
         str_length++;
@@ -104,22 +105,21 @@ int string_length_before_carriage_return(const char* str) {
     return str_length;
 }
 
-void string_copy(char* dst, const char* source) {
+void string_copy(char* dst, const char* source)
+{
     int i;
-    for (i = 0; i < string_length(source); i++)
-    {
+    for (i = 0; i < string_length(source); i++) {
         dst[i] = source[i];
     }
     dst[i + 1] = '\0';
 }
 
-int token_count(const char* str, const char delim) {
+int token_count(const char* str, const char delim)
+{
     int str_length = 0;
     int delim_count = 0;
-    while ((*(str + str_length) != '\n') && (*(str + str_length) != '\0'))
-    {
-        if (*(str + str_length) == delim)
-        {
+    while ((*(str + str_length) != '\n') && (*(str + str_length) != '\0')) {
+        if (*(str + str_length) == delim) {
             delim_count++;
         }
         str_length++;
@@ -127,24 +127,21 @@ int token_count(const char* str, const char delim) {
     return delim_count;
 }
 
-int string_compare(const char* str1, const char* str2) {
+int string_compare(const char* str1, const char* str2)
+{
     int is_same = FALSE;
 
-    if (str2 == NULL)
-    {
+    if (str2 == NULL) {
         return 0;
     }
 
     {
         int i;
-        for (i = 0; i < string_length(str1); i++)
-        {
-            if (*(str1 + i) == *(str2 + i))
-            {
+        for (i = 0; i < string_length(str1); i++) {
+            if (*(str1 + i) == *(str2 + i)) {
                 is_same = TRUE;
                 continue;
-            }
-            else {
+            } else {
                 is_same = FALSE;
                 break;
             }
@@ -220,7 +217,8 @@ label1:
     return str_or_null;
 }
 
-int get_character(const char* filename, character_v3_t* out_character) {
+int get_character(const char* filename, character_v3_t* out_character)
+{
     /* , 인지 : 인지, | 인지 먼저 검사 */
     /*const int version1_size = 8;*/
     /*const int version2_size = 10;*/
@@ -242,8 +240,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
     int values_check[20] = { 0, };
 
     int version_check = 0;
-    if ((fp = (fopen(filename, "r"))) == NULL)
-    {
+    if ((fp = (fopen(filename, "r"))) == NULL) {
         return 0;
     }
 
@@ -251,11 +248,9 @@ int get_character(const char* filename, character_v3_t* out_character) {
     {
         int count = 0;
         char c = 0;
-        while (1)
-        {
+        while (1) {
             c = fgetc(fp);
-            switch (c)
-            {
+            switch (c) {
             case ':':
                 version_check = 1;
                 break;
@@ -269,8 +264,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
                 break;
             }
 
-            if (c == EOF)
-            {
+            if (c == EOF) {
                 break;
             }
             buffer[count] = c;
@@ -281,8 +275,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
 
     printf("%s\nversion : %d\n", buffer, version_check);
 
-    switch (version_check)
-    {
+    switch (version_check) {
     case 1:
     {
         int count = 0;
@@ -291,13 +284,10 @@ int get_character(const char* filename, character_v3_t* out_character) {
         char* ptr = buffer;
         char* temp = NULL;
         char* backup_temp = NULL;
-        while (TRUE)
-        {
-            if (count % 2 == 0)
-            {
+        while (TRUE) {
+            if (count % 2 == 0) {
                 temp = tokenize(ptr, ":,");
-                if (string_compare(temp, backup_temp))
-                {
+                if (string_compare(temp, backup_temp)) {
                     break;
                 }
                 if (string_compare(temp, "lvl")) {
@@ -352,8 +342,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
                 words_backup[word_count] = temp;
                 backup_temp = temp;
                 word_count++;
-            }
-            else {
+            } else {
                 temp = tokenize(ptr, ":,");
                 values_backup[value_count] = temp;
                 backup_temp = temp;
@@ -373,20 +362,16 @@ int get_character(const char* filename, character_v3_t* out_character) {
             int j;
             char buf[10];
             char buf2[10];
-            for (i = 0; i < 10; i++)
-            {
-                if (string_compare(words_backup[i], "dexterity"))
-                {
+            for (i = 0; i < 10; i++) {
+                if (string_compare(words_backup[i], "dexterity")) {
                     num = ft_atoi(values_backup[i]) / 2;
                     ft_itoa(num, buf);
                     values_backup[value_count++] = buf;
                     break;
                 }
             }
-            for (j = 0; j < 11; j++)
-            {
-                if (string_compare(words_backup[j], "armour"))
-                {
+            for (j = 0; j < 11; j++) {
+                if (string_compare(words_backup[j], "armour")) {
                     num = ft_atoi(values_backup[j]) / 4;
                     ft_itoa(num, buf2);
                     values_backup[value_count++] = buf2;
@@ -413,8 +398,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
         limit = token_count(backup_buffer, ',') + 1;
         {
             int i;
-            for (i = 0; i < limit; i++)
-            {
+            for (i = 0; i < limit; i++) {
                 temp = tokenize(ptr, ",\n");
                 if (string_compare(temp, "magic_resistance")) {
                     words_backup[word_count] = "fire_res";
@@ -440,8 +424,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
             word_count = 12;
             value_count = 12;
 
-            for (i = 0; i < 12; i++)
-            {
+            for (i = 0; i < 12; i++) {
                 if (string_compare(words_backup[i], "magic_resistance")) {
                     words_backup[i] = "fire_res";
                     words_backup[i + 1] = "cold_res";
@@ -475,12 +458,9 @@ int get_character(const char* filename, character_v3_t* out_character) {
             int i;
             int j;
             int count1 = 0;
-            for (i = 0; i < 14; i++)
-            {
-                for (j = 0; j < version3_size; j++)
-                {
-                    if (string_compare(version3_out_character_arr[i], words_backup[j]))
-                    {
+            for (i = 0; i < 14; i++) {
+                for (j = 0; j < version3_size; j++) {
+                    if (string_compare(version3_out_character_arr[i], words_backup[j])) {
                         values_check[count1] = j;
                         count1++;
                         break;
@@ -497,8 +477,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
             int limit = token_count(backup_buffer, ',') + 1;
             ptr = backup_buffer + string_length_before_carriage_return(buffer) + 1;
 
-            for (i = 0; i < limit; i++)
-            {
+            for (i = 0; i < limit; i++) {
                 temp = tokenize(ptr, ",\n");
                 if (i == 7) {
                     values_backup[value_count] = temp;
@@ -515,17 +494,14 @@ int get_character(const char* filename, character_v3_t* out_character) {
             }
         }
 
-        if (version_check == 1)
-        {
+        if (version_check == 1) {
         version1_next:
             {
                 int num = 0;
                 int i;
                 char buf[10];
-                for (i = 0; i < 14; i++)
-                {
-                    if (string_compare(words_backup[i], "level"))
-                    {
+                for (i = 0; i < 14; i++) {
+                    if (string_compare(words_backup[i], "level")) {
                         num = ft_atoi(values_backup[i]);
                         ft_itoa(num / 10, buf);
                         values_backup[value_count++] = buf;
@@ -541,12 +517,9 @@ int get_character(const char* filename, character_v3_t* out_character) {
                 int i;
                 int j;
                 int count1 = 0;
-                for (i = 0; i < 14; i++)
-                {
-                    for (j = 0; j < version3_size; j++)
-                    {
-                        if (string_compare(version3_out_character_arr[i], words_backup[j]))
-                        {
+                for (i = 0; i < 14; i++) {
+                    for (j = 0; j < version3_size; j++) {
+                        if (string_compare(version3_out_character_arr[i], words_backup[j])) {
                             values_check[count1] = j;
                             count1++;
                             break;
@@ -563,10 +536,8 @@ int get_character(const char* filename, character_v3_t* out_character) {
             int i;
             int num;
             char buf1[3];
-            for (i = 0; i < 14; i++)
-            {
-                if (string_compare(version3_out_character_arr[i], "level"))
-                {
+            for (i = 0; i < 14; i++) {
+                if (string_compare(version3_out_character_arr[i], "level")) {
                     num = ft_atoi(values_backup[i]);
                     ft_itoa(num / 10, buf1);
                     values_backup[value_count++] = buf1;
@@ -602,8 +573,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
         limit = token_count(backup_buffer, '|') + 1;
         {
             int i;
-            for (i = 0; i < limit; i++)
-            {
+            for (i = 0; i < limit; i++) {
                 temp = tokenize(ptr, "|  \n");
                 words_backup[word_count] = temp;
                 word_count++;
@@ -616,12 +586,9 @@ int get_character(const char* filename, character_v3_t* out_character) {
             int i;
             int j;
             int count1 = 0;
-            for (i = 0; i < limit; i++)
-            {
-                for (j = 0; j < version3_size; j++)
-                {
-                    if (string_compare(version3_out_character_arr[i], words_backup[j]))
-                    {
+            for (i = 0; i < limit; i++) {
+                for (j = 0; j < version3_size; j++) {
+                    if (string_compare(version3_out_character_arr[i], words_backup[j])) {
                         values_check[count1] = j;
                         count1++;
                         break;
@@ -644,8 +611,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
             total_count += string_length_before_carriage_return(buffer + total_count + 1) + 1;
 
 
-            for (i = 0; i < limit; i++)
-            {
+            for (i = 0; i < limit; i++) {
                 temp = tokenize(ptr, "|  \n");
                 values_backup[value_count] = temp;
                 value_count++;
@@ -662,26 +628,23 @@ int get_character(const char* filename, character_v3_t* out_character) {
 
         deserializer:
 
-            for (i = 0; i < version3_size; i++)
-            {
+            for (i = 0; i < version3_size; i++) {
                 switch (i)
                 {
                 case 0:
-                    if (version_check == 1)
-                    {
+                    if (version_check == 1) {
                         char buf[40] = { 0, };
                         strcpy(buf, "player_");
                         strcat(buf, values_backup[values_check[i]]);
-                        strcpy(out_character->name, buf);
-
-                        /*string_copy(buf, "player_");
-                        string_concat(buf, values_backup[values_check[i]]);
-                        buffer_clear(out_character->name);
-                        string_copy(out_character->name, buf);*/
-                    }
-                    else {
-                        strcpy(out_character->name, values_backup[values_check[i]]);
-                        /*string_copy(out_character->name, values_backup[values_check[i]]);*/
+                        strcpy_s(out_character->name, 50, buf);
+                        
+                        //string_copy(buf, "player_");
+                        //string_concat(buf, values_backup[values_check[i]]);
+                        //buffer_clear(out_character->name);
+                        //string_copy(out_character->name, buf);
+                    } else {
+                        strcpy_s(out_character->name,50, values_backup[values_check[i]]);
+                        //string_copy(out_character->name, values_backup[values_check[i]]);
 
                     }
                     break;
@@ -710,11 +673,9 @@ int get_character(const char* filename, character_v3_t* out_character) {
                     out_character->evasion = ft_atoi(values_backup[values_check[i]]);
                     break;
                 case 9:
-                    if (version_check == 4)
-                    {
+                    if (version_check == 4) {
                         out_character->leadership = ft_atoi(values_backup[values_check[i]]) / 10;
-                    }
-                    else {
+                    } else {
                         out_character->leadership = ft_atoi(values_backup[values_check[i]]);
                     }
                     break;
@@ -722,31 +683,25 @@ int get_character(const char* filename, character_v3_t* out_character) {
                     out_character->minion_count = ft_atoi(values_backup[values_check[i]]);
                     break;
                 case 11:
-                    if (version_check == 2)
-                    {
+                    if (version_check == 2) {
                         out_character->elemental_resistance.fire = ft_atoi(values_backup[values_check[i]]) / 3;
-                    }
-                    else {
+                    } else {
                         out_character->elemental_resistance.fire = ft_atoi(values_backup[values_check[i]]);
 
                     }
                     break;
                 case 12:
-                    if (version_check == 2)
-                    {
+                    if (version_check == 2) {
                         out_character->elemental_resistance.cold = ft_atoi(values_backup[values_check[i]]) / 3;
-                    }
-                    else {
+                    } else {
                         out_character->elemental_resistance.cold = ft_atoi(values_backup[values_check[i]]);
 
                     }
                     break;
                 case 13:
-                    if (version_check == 2)
-                    {
+                    if (version_check == 2) {
                         out_character->elemental_resistance.lightning = ft_atoi(values_backup[values_check[i]]) / 3;
-                    }
-                    else {
+                    } else {
                         out_character->elemental_resistance.lightning = ft_atoi(values_backup[values_check[i]]);
 
                     }
@@ -760,8 +715,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
         temp = NULL;
 
 
-        if (out_character->minion_count)
-        {
+        if (out_character->minion_count) {
             int count = out_character->minion_count;
             int values_check1[4] = { 0, };
             word_count = 0;
@@ -770,8 +724,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
             string_copy(backup_buffer, buffer + total_count + 1);
             total_count += string_length_before_carriage_return(buffer + total_count + 1) + 1;
             /*char* b = backup_buffer + total_count + 1;*/
-            if (*(backup_buffer + total_count + 1) != '\0')
-            {
+            if (*(backup_buffer + total_count + 1) != '\0') {
                 {
                     int i;
                     int limit = token_count(backup_buffer, '|') + 1;
@@ -781,8 +734,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
 
                     /*backup_ptr = ptr;*/
                     /*buffer_clear(words_backup);*/
-                    for (i = 0; i < limit; i++)
-                    {
+                    for (i = 0; i < limit; i++) {
                         temp = tokenize(ptr, "|  \n");
                         words_backup[word_count] = temp;
                         word_count++;
@@ -800,12 +752,9 @@ int get_character(const char* filename, character_v3_t* out_character) {
                     int j;
                     int count1 = 0;
 
-                    for (i = 0; i < 4; i++)
-                    {
-                        for (j = 0; j < 4; j++)
-                        {
-                            if (string_compare(minions_out_arr[i], words_backup[j]))
-                            {
+                    for (i = 0; i < 4; i++) {
+                        for (j = 0; j < 4; j++) {
+                            if (string_compare(minions_out_arr[i], words_backup[j])) {
                                 values_check1[count1] = j;
                                 count1++;
                                 break;
@@ -824,8 +773,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
 
                     string_copy(backup_buffer, buffer + total_count + 1);
                     /*b = backup_buffer + total_count;*/
-                    while (*backup_buffer != '\0')
-                    {
+                    while (*backup_buffer != '\0') {
 
                         {
                             int j;
@@ -835,11 +783,9 @@ int get_character(const char* filename, character_v3_t* out_character) {
                             total_count += string_length_before_carriage_return(backup_buffer + total_count + 1) + 1;
 
                             /*backup_ptr = ptr;*/
-                            for (j = 0; j < limit; j++)
-                            {
+                            for (j = 0; j < limit; j++) {
                                 temp = tokenize(ptr, "|  \n");
-                                if (temp == 0)
-                                {
+                                if (temp == 0) {
                                     break;
                                 }
                                 values_backup[value_count] = temp;
@@ -859,12 +805,10 @@ int get_character(const char* filename, character_v3_t* out_character) {
 
 
 
-                        for (k = 0; k < 4; k++)
-                        {
-                            switch (k)
-                            {
+                        for (k = 0; k < 4; k++) {
+                            switch (k) {
                             case 0:
-                                /*string_copy(out_character->minions[i].name, values_backup[values_check1[k]]);*/
+                                //string_copy(out_character->minions[i].name, values_backup[values_check1[k]]);
                                 strcpy(out_character->minions[i].name, values_backup[values_check[k]]);
                                 break;
                             case 1:
@@ -897,11 +841,9 @@ int get_character(const char* filename, character_v3_t* out_character) {
                         buffer_clear(backup_buffer);
                         string_copy(backup_buffer, buffer + total_count + 1);
 
-                        if (i >= count)
-                        {
+                        if (i >= count) {
                             return version_check;
-                        }
-                        else {
+                        } else {
                             i++;
                         }
                     }
@@ -920,9 +862,8 @@ int get_character(const char* filename, character_v3_t* out_character) {
         break;
     }
 
-
-    if (fclose(fp) == EOF)
-    {
+    
+    if (fclose(fp) == EOF) {
         return 0;
     }
 
