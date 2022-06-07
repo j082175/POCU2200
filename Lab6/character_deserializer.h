@@ -45,7 +45,7 @@ char* string_concat(char* s1, char* s2);
 
 void ft_itoa(int num, char* str);
 
-int ft_atoi(char* str);
+int ft_atoi(const char* str);
 
 void buffer_clear(char* buffer);
 

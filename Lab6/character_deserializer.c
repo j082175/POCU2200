@@ -41,17 +41,17 @@ void ft_itoa(int num, char* str) {
     /**(str + i) = '\0';*/
 }
 
-int ft_isspace(const char* str)    //공백문자인 문자를 skip해주는 함수
+int ft_isspace(const char* str)
 {
     int i;
 
     i = 0;
     while ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32))
         i++;
-    return (i); //공백문자를 지나간 i번째를 return해준다.
+    return (i);
 }
 
-int ft_isdigit(int c)    //c가 '0'~'9'면 1, 아니면 0
+int ft_isdigit(int c)
 {
     if (c >= '0' && c <= '9')
         return (1);
@@ -67,10 +67,10 @@ int ft_atoi(const char* str)
     sign = 1;
     i = ft_isspace(str);
     res = 0;
-    if (str[i] == '-' || str[i] == '+')    // -이거나 + 인경우
-        sign = (str[i++] == '-') ? -1 : 1;    // '-'(true)라면 -1, '+'(false)라면 1을 sign에 저장
-    while (ft_isdigit(str[i]))    //문자가 숫자 0~9라면 1을 반환
-        res = (res * 10) + (str[i++] - '0');    //594라면 res에 594가 저장이 된다.
+    if (str[i] == '-' || str[i] == '+')
+        sign = (str[i++] == '-') ? -1 : 1;
+    while (ft_isdigit(str[i]))
+        res = (res * 10) + (str[i++] - '0');
     return (sign * res);
 }
 
