@@ -1,5 +1,7 @@
+#define _CRT_SECURE_NO_WARNINGS
 #ifndef CHARACTER_DESERIALIZER_H
 #define CHARACTER_DESERIALIZER_H
+
 
 #define TRUE 1
 #define FALSE 0
@@ -42,9 +44,9 @@ int string_length(const char* str);
 
 char* string_concat(char* s1, char* s2);
 
-void ft_itoa(int num, char* str);
+void itoa_a(int num, char* str);
 
-int ft_atoi(const char* str);
+int atoi_ft(const char* str);
 
 void buffer_clear(char* buffer);
 
@@ -52,14 +54,14 @@ int string_length_before_carriage_return(const char* str);
 
 void string_copy(char* dst, const char* source);
 
-int token_count(const char* str, const char delim);
+int count_token(const char* str, const char delim);
 
 int string_compare(const char* str1, const char* str2);
 
 char* tokenize(char* str_or_null, const char* delims);
 
-int ft_isspace(const char* str);
+int isspace_ft(const char* str);
 
-int ft_isdigit(int c);
+int isdigit_ft(int c);
 
 #endif /* CHARACTER_DESERIALIZER_H */
