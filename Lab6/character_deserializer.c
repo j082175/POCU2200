@@ -38,7 +38,7 @@ void ft_itoa(int num, char* str) {
         num -= ((num / deg) * deg);
         deg /= radix;
     }
-    *(str + i) = '\0';
+    //*(str + i) = '\0';
 }
 
 int ft_atoi(char* str) {
@@ -444,10 +444,10 @@ int get_character(const char* filename, character_v3_t* out_character) {
                     break;
                 }
             }
-			words_backup[word_count++] = "leadership";
-			words_backup[word_count] = "minion_count";
+            words_backup[word_count++] = "leadership";
+            words_backup[word_count] = "minion_count";
 
-			goto version1_next;
+            goto version1_next;
         }
 
         words_backup[word_count++] = "leadership";
@@ -516,7 +516,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
                         num = ft_atoi(values_backup[i]);
                         ft_itoa(num / 10, buf);
                         values_backup[value_count++] = buf;
-						values_backup[value_count] = "0";
+                        values_backup[value_count] = "0";
                         break;
                     }
                 }
@@ -657,9 +657,9 @@ int get_character(const char* filename, character_v3_t* out_character) {
                     if (version_check == 1)
                     {
                         char buf[40] = { 0, };
-                        string_copy(buf, "player_<");
+                        string_copy(buf, "player_");
                         string_concat(buf, values_backup[values_check[i]]);
-                        string_concat(buf, ">");
+                        buffer_clear(out_character->name);
                         string_copy(out_character->name, buf);
                     }
                     else {
@@ -697,7 +697,7 @@ int get_character(const char* filename, character_v3_t* out_character) {
                         out_character->leadership = ft_atoi(values_backup[values_check[i]]) / 10;
                     }
                     else {
-						out_character->leadership = ft_atoi(values_backup[values_check[i]]);
+                        out_character->leadership = ft_atoi(values_backup[values_check[i]]);
                     }
                     break;
                 case 10:
@@ -748,149 +748,149 @@ int get_character(const char* filename, character_v3_t* out_character) {
             int values_check1[4] = { 0, };
             word_count = 0;
             value_count = 0;
-            
-				string_copy(backup_buffer, buffer + total_count + 1);
-				total_count += string_length_before_carriage_return(buffer + total_count + 1) + 1;
-				/*char* b = backup_buffer + total_count + 1;*/
-				if (*(backup_buffer + total_count + 1) != '\0')
-				{
-					{
-						int i;
-						int limit = token_count(backup_buffer, '|') + 1;
-						ptr = backup_buffer;
 
-						/*total_count += string_length_before_carriage_return(backup_buffer + total_count + 1) + 1;*/
+            string_copy(backup_buffer, buffer + total_count + 1);
+            total_count += string_length_before_carriage_return(buffer + total_count + 1) + 1;
+            /*char* b = backup_buffer + total_count + 1;*/
+            if (*(backup_buffer + total_count + 1) != '\0')
+            {
+                {
+                    int i;
+                    int limit = token_count(backup_buffer, '|') + 1;
+                    ptr = backup_buffer;
 
-						/*backup_ptr = ptr;*/
-                        /*buffer_clear(words_backup);*/
-						for (i = 0; i < limit; i++)
-						{
-							temp = tokenize(ptr, "|  \n");
-							words_backup[word_count] = temp;
-							word_count++;
-							ptr = NULL;
-						}
-					}
+                    /*total_count += string_length_before_carriage_return(backup_buffer + total_count + 1) + 1;*/
 
-					temp = NULL;
-					/*b = backup_buffer + total_count;*/
-
-
-                            /* 순서 세팅 작업 */
+                    /*backup_ptr = ptr;*/
+                    /*buffer_clear(words_backup);*/
+                    for (i = 0; i < limit; i++)
                     {
-                        int i;
-                        int j;
-                        int count1 = 0;
-                        
-                        for (i = 0; i < 4; i++)
+                        temp = tokenize(ptr, "|  \n");
+                        words_backup[word_count] = temp;
+                        word_count++;
+                        ptr = NULL;
+                    }
+                }
+
+                temp = NULL;
+                /*b = backup_buffer + total_count;*/
+
+
+                        /* 순서 세팅 작업 */
+                {
+                    int i;
+                    int j;
+                    int count1 = 0;
+
+                    for (i = 0; i < 4; i++)
+                    {
+                        for (j = 0; j < 4; j++)
                         {
-                            for (j = 0; j < 4; j++)
+                            if (string_compare(minions_out_arr[i], words_backup[j]))
                             {
-                                if (string_compare(minions_out_arr[i], words_backup[j]))
-                                {
-                                    values_check1[count1] = j;
-                                    count1++;
-                                    break;
-                                }
+                                values_check1[count1] = j;
+                                count1++;
+                                break;
                             }
                         }
                     }
-
-
-
-					/* 4열 */
-
-                    {
-                        int i = 0;
-                        int k;
-
-							string_copy(backup_buffer, buffer + total_count + 1);
-							/*b = backup_buffer + total_count;*/
-							while (*backup_buffer != '\0')
-							{
-
-								{
-									int j;
-									int limit = token_count(backup_buffer, '|') + 1;
-									ptr = backup_buffer;
-
-									total_count += string_length_before_carriage_return(backup_buffer + total_count + 1) + 1;
-
-									/*backup_ptr = ptr;*/
-									for (j = 0; j < limit; j++)
-									{
-										temp = tokenize(ptr, "|  \n");
-										if (temp == 0)
-										{
-											break;
-										}
-										values_backup[value_count] = temp;
-										value_count++;
-										ptr = NULL;
-									}
-								}
-
-
-
-
-
-
-
-
-
-
-
-
-                                for (k = 0; k < 4; k++)
-                                {
-                                    switch (k)
-                                    {
-                                    case 0:
-                                        string_copy(out_character->minions[i].name, values_backup[values_check1[k]]);
-
-                                        break;
-                                    case 1:
-                                        out_character->minions[i].health = ft_atoi(values_backup[values_check1[k]]);
-                                        break;
-                                    case 2:
-                                        out_character->minions[i].strength = ft_atoi(values_backup[values_check1[k]]);
-                                        break;
-                                    case 3:
-                                        out_character->minions[i].defence = ft_atoi(values_backup[values_check1[k]]);
-                                        break;
-                                    
-                                    default:
-                                        break;
-                                    }
-                                }
-
-
-
-
-
-
-
-
-
-
-
-
-
-								buffer_clear(backup_buffer);
-								string_copy(backup_buffer, buffer + total_count + 1);
-
-                                if (i >= count)
-                                {
-                                    return version_check;
-                                }
-                                else {
-                                    i++;
-                                }
-							}
-						
-                    }
                 }
-            
+
+
+
+                /* 4열 */
+
+                {
+                    int i = 0;
+                    int k;
+
+                    string_copy(backup_buffer, buffer + total_count + 1);
+                    /*b = backup_buffer + total_count;*/
+                    while (*backup_buffer != '\0')
+                    {
+
+                        {
+                            int j;
+                            int limit = token_count(backup_buffer, '|') + 1;
+                            ptr = backup_buffer;
+
+                            total_count += string_length_before_carriage_return(backup_buffer + total_count + 1) + 1;
+
+                            /*backup_ptr = ptr;*/
+                            for (j = 0; j < limit; j++)
+                            {
+                                temp = tokenize(ptr, "|  \n");
+                                if (temp == 0)
+                                {
+                                    break;
+                                }
+                                values_backup[value_count] = temp;
+                                value_count++;
+                                ptr = NULL;
+                            }
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+                        for (k = 0; k < 4; k++)
+                        {
+                            switch (k)
+                            {
+                            case 0:
+                                string_copy(out_character->minions[i].name, values_backup[values_check1[k]]);
+
+                                break;
+                            case 1:
+                                out_character->minions[i].health = ft_atoi(values_backup[values_check1[k]]);
+                                break;
+                            case 2:
+                                out_character->minions[i].strength = ft_atoi(values_backup[values_check1[k]]);
+                                break;
+                            case 3:
+                                out_character->minions[i].defence = ft_atoi(values_backup[values_check1[k]]);
+                                break;
+
+                            default:
+                                break;
+                            }
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        buffer_clear(backup_buffer);
+                        string_copy(backup_buffer, buffer + total_count + 1);
+
+                        if (i >= count)
+                        {
+                            return version_check;
+                        }
+                        else {
+                            i++;
+                        }
+                    }
+
+                }
+            }
+
         }
 
 
