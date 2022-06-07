@@ -38,7 +38,7 @@ void ft_itoa(int num, char* str) {
         num -= ((num / deg) * deg);
         deg /= radix;
     }
-    //*(str + i) = '\0';
+    /**(str + i) = '\0';*/
 }
 
 int ft_atoi(char* str) {
@@ -657,13 +657,18 @@ int get_character(const char* filename, character_v3_t* out_character) {
                     if (version_check == 1)
                     {
                         char buf[40] = { 0, };
-                        string_copy(buf, "player_");
+                        strcpy(buf, "player_");
+                        strcat(buf, values_backup[values_check[i]]);
+                        strcpy(out_character->name, buf);
+
+                        /*string_copy(buf, "player_");
                         string_concat(buf, values_backup[values_check[i]]);
                         buffer_clear(out_character->name);
-                        string_copy(out_character->name, buf);
+                        string_copy(out_character->name, buf);*/
                     }
                     else {
-                        string_copy(out_character->name, values_backup[values_check[i]]);
+                        strcpy(out_character->name, values_backup[values_check[i]]);
+                        /*string_copy(out_character->name, values_backup[values_check[i]]);*/
 
                     }
                     break;
@@ -846,8 +851,8 @@ int get_character(const char* filename, character_v3_t* out_character) {
                             switch (k)
                             {
                             case 0:
-                                string_copy(out_character->minions[i].name, values_backup[values_check1[k]]);
-
+                                /*string_copy(out_character->minions[i].name, values_backup[values_check1[k]]);*/
+                                strcpy(out_character->minions[i].name, values_backup[values_check[k]]);
                                 break;
                             case 1:
                                 out_character->minions[i].health = ft_atoi(values_backup[values_check1[k]]);
@@ -902,25 +907,12 @@ int get_character(const char* filename, character_v3_t* out_character) {
         break;
     }
 
-    switch (version_check)
-    {
-    case 1:
-
-        break;
-    case 2:
-        break;
-    case 3:
-        break;
-    default:
-        break;
-    }
-
 
     if (fclose(fp) == EOF)
     {
         return 0;
     }
 
-    return 1;
+    return version_check;
 }
 
