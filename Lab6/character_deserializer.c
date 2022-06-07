@@ -63,23 +63,26 @@ int isdigit_ft(int c)
     return (0);
 }
 
-int atoi_ft(const char* str)
-{
-    int sign;
-    int i;
-    int res;
+int atoi_ft(const char* str) {
+    int result, positive;
 
-    sign = 1;
-    i = isspace_ft(str);
-    res = 0;
-    if (str[i] == '-' || str[i] == '+') {
-        sign = (str[i++] == '-') ? -1 : 1;
+    result = 0;
+    positive = 1;
+    while ((9 <= *str && *str <= 13) || *str == ' ')
+        str++;
+    if (*str == '+' || *str == '-') {
+        if (*str == '-')
+            positive = -1;
+        str++;
     }
-    while (isdigit_ft(str[i])) {
-        res = (res * 10) + (str[i++] - '0');
+    while ('0' <= *str && *str <= '9') {
+        result *= 10;
+        result += (*str - '0') * positive;
+        str++;
     }
-    return (sign * res);
+    return result;
 }
+
 
 void buffer_clear(char* buffer)
 {
