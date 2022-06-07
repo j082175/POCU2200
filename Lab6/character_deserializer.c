@@ -41,7 +41,7 @@ void itoa_ft(int num, char* str)
         num -= ((num / deg) * deg);
         deg /= radix;
     }
-    (str + i) = '\0';
+    *(str + i) = '\0';
 }
 
 int isspace_ft(const char* str)
@@ -646,15 +646,9 @@ int get_character(const char* filename, character_v3_t* out_character)
                         strcpy(buf, "player_");
                         strcat(buf, values_backup[values_check[i]]);
                         strcpy(out_character->name, buf);
-
-                        //string_copy(buf, "player_");
-                        //string_concat(buf, values_backup[values_check[i]]);
-                        //buffer_clear(out_character->name);
-                        //string_copy(out_character->name, buf);
                     }
                     else {
                         strcpy(out_character->name, values_backup[values_check[i]]);
-                        //string_copy(out_character->name, values_backup[values_check[i]]);
 
                     }
                     break;
