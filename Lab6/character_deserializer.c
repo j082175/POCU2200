@@ -745,7 +745,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     if (version_check == 1) {
                         char buf[50] = { 0, };
                         strncpy(buf, "player_", 50);
-                        strncat(buf, values_backup[values_check[i]], 50 - strlen("player_"));
+                        strncat(buf, values_backup[values_check[i]], 42);
                         //check_name(buf);
 
                         strncpy(out_character->name, buf, 50);
