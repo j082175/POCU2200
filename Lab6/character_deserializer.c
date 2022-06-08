@@ -923,9 +923,9 @@ int get_character(const char* filename, character_v3_t* out_character)
                             case 0:
                             {
                                 char buf[50] = { 0, };
-                                strncpy(buf, values_backup[values_check[k]], 49);
+                                strncpy(buf, values_backup[values_check[k]], 50);
                                 //check_name(buf);
-                                strncpy(out_character->minions[i].name, buf, 49);
+                                strncpy(out_character->minions[i].name, buf, 50);
                             }
                             break;
                             case 1:
