@@ -30,7 +30,6 @@ char* itoa_ft(int value, char* buffer, int base, int buf_size)
 
     if (buf_size <= num_size)
     {
-        buffer = 0;
         return 0;
     }
 
