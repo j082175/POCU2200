@@ -70,42 +70,52 @@ int isdigit_ft(int c)
     return (0);
 }
 
-// int atoi_ft(char* str) {
-//    int result, positive;
-
-//    result = 0;
-//    positive = 1;
-//    while ((9 <= *str && *str <= 13) || *str == ' ')
-//        str++;
-//    if (*str == '+' || *str == '-') {
-//        if (*str == '-')
-//            positive = -1;
-//        str++;
-//    }
-//    while ('0' <= *str && *str <= '9') {
-//        result *= 10;
-//        result += (*str - '0') * positive;
-//        str++;
-//    }
-//    return result;
-// }
-
 int atoi_ft(char* str) {
-    int a = 0;
-    int i = -1;
-    while (1) {
-        if (str[++i] > 47 && str[i] < 58) {
-            a = a * 10 + (str[i] - '0');
-        }
-        else if (str[i] == '\0') {
-            break;
-        }
-        else {
-            a = 0;
-        }
+    int result, positive;
+    char buf[20] = { 0, };
+
+    if (strlen(str) > 9)
+    {
+        strncpy(buf, str, 9);
     }
-    return a;
+    else {
+        strcpy(buf, str);
+    }
+    str = buf;
+
+    result = 0;
+    positive = 1;
+    while ((9 <= *str && *str <= 13) || *str == ' ')
+        str++;
+    if (*str == '+' || *str == '-') {
+        if (*str == '-')
+            positive = -1;
+        str++;
+    }
+    while ('0' <= *str && *str <= '9') {
+        result *= 10;
+        result += (*str - '0') * positive;
+        str++;
+    }
+    return result;
 }
+
+// int atoi_ft(char* str) {
+//     int a = 0;
+//     int i = -1;
+//     while (1) {
+//         if (str[++i] > 47 && str[i] < 58) {
+//             a = a * 10 + (str[i] - '0');
+//         }
+//         else if (str[i] == '\0') {
+//             break;
+//         }
+//         else {
+//             a = 0;
+//         }
+//     }
+//     return a;
+// }
 
 
 void buffer_clear(char* buffer)
