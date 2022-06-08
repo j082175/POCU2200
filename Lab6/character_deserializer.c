@@ -2,6 +2,8 @@
 /* 이 실습에서 계산을 할 때 소수점 이하는 무시하세요. 즉, 모든 결과는 무조건 내림을 합니다.
 이 실습에서 전역(global) 변수와 정적(static) 변수의 사용을 금합니다. 전역/정적 변수 없이도 이 실습을 끝낼 수 있으니 저를 믿으세요. :)*/
 
+
+
 void swap(char* x, char* y) {
     char t = *x; *x = *y; *y = t;
 }
@@ -108,7 +110,7 @@ char* string_concat(char* s1, char* s2)
 //    *(str + i) = '\0';
 //}
 
-void itoa_ft(int num, char* str, int base, int buf_size)
+char* itoa_ft(int num, char* str, int base, int buf_size)
 {
     const int MAX_VALUE = 999999999;
     int i = 0;
@@ -756,14 +758,70 @@ int get_character(const char* filename, character_v3_t* out_character)
                 {
                 case 0:
                     if (version_check == 1) {
-                        char buf[40] = { 0, };
-                        strcpy(buf, "player_");
+                        char buf[50] = { 0, };
+                        strncpy(buf, "player_", 49);
                         strcat(buf, values_backup[values_check[i]]);
-                        strcpy(out_character->name, buf);
+
+
+                        strncpy(out_character->name, buf, 49);
                     }
                     else {
-                        strncpy(out_character->name, values_backup[values_check[i]], 49);
+                        char buf[50] = { 0, };
+                        strncpy(buf, values_backup[values_check[i]], 49);
 
+                        {
+                            int i;
+                            int j;
+                            int k;
+                            int l;
+                            int check = 0;
+                            for (i = 0; i < strlen(buf); i++)
+                            {
+                                for (j = 'A'; j < 'Z' + 1; j++)
+                                {
+                                    if (j == buf[i] || '_' == buf[i])
+                                    {
+                                        check = 1;
+                                        goto end;
+                                    }
+                                    else {
+                                        check = 0;
+                                    }
+                                }
+
+                                for (k = 'a'; k < 'z' + 1; k++)
+                                {
+                                    if (k == buf[i] || '_' == buf[i])
+                                    {
+                                        check = 1;
+                                        goto end;
+                                    }
+                                    else {
+                                        check = 0;
+                                    }
+                                }
+
+                                for (l = '1'; l < '9' + 1; l++)
+                                {
+                                    if (l == buf[i] || '_' == buf[i])
+                                    {
+                                        check = 1;
+                                        goto end;
+                                    }
+                                    else {
+                                        check = 0;
+                                    }
+                                }
+
+							end:
+                                if (check == 0)
+                                {
+                                    return version_check;
+                                }
+                            }
+                        }
+						strncpy(out_character->name, values_backup[values_check[i]], 49);
+                        int r = 4;
                     }
                     break;
                 case 1:
