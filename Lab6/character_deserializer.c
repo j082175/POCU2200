@@ -15,49 +15,49 @@ char* reverse(char* buffer, int i, int j)
     return buffer;
 }
 
-char* itoa_ft(int value, char* buffer, int base, int buf_size)
-{
-    int n = abs(value);
-    int i = 0;
-    int num_size = 0;
-    int check = value;
-
-    while (check != 0)
-    {
-        check = check / 10;
-        ++num_size;
-    }
-
-    if (buf_size <= num_size)
-    {
-        return 0;
-    }
-
-    if (base < 2 || base > 32) {
-        return buffer;
-    }
-    while (n)
-    {
-        int r = n % base;
-
-        if (r >= 10) {
-            buffer[i++] = 65 + (r - 10);
-        }
-        else {
-            buffer[i++] = 48 + r;
-        }
-
-        n = n / base;
-    }
-    if (i == 0) {
-        buffer[i++] = '0';
-    }
-    if (value < 0 && base == 10) {
-        buffer[i++] = '-';
-    }
-    buffer[i] = '\0';
-    return reverse(buffer, 0, i - 1);
-}
+//char* itoa_ft(int value, char* buffer, int base, int buf_size)
+//{
+//    int n = abs(value);
+//    int i = 0;
+//    int num_size = 0;
+//    int check = value;
+//
+//    while (check != 0)
+//    {
+//        check = check / 10;
+//        ++num_size;
+//    }
+//
+//    if (buf_size <= num_size)
+//    {
+//        return 0;
+//    }
+//
+//    if (base < 2 || base > 32) {
+//        return buffer;
+//    }
+//    while (n)
+//    {
+//        int r = n % base;
+//
+//        if (r >= 10) {
+//            buffer[i++] = 65 + (r - 10);
+//        }
+//        else {
+//            buffer[i++] = 48 + r;
+//        }
+//
+//        n = n / base;
+//    }
+//    if (i == 0) {
+//        buffer[i++] = '0';
+//    }
+//    if (value < 0 && base == 10) {
+//        buffer[i++] = '-';
+//    }
+//    buffer[i] = '\0';
+//    return reverse(buffer, 0, i - 1);
+//}
 
 int string_length(const char* str);
 
@@ -108,49 +108,49 @@ char* string_concat(char* s1, char* s2)
 //    *(str + i) = '\0';
 //}
 
-//void itoa_ft1(int num, char* str, unsigned int buf_size)
-//{
-//    const int MAX_VALUE = 999999999;
-//    int i = 0;
-//    int radix = 10;
-//    int deg = 1;
-//    int cnt = 0;
-//    int num_size = 0;
-//    int check = num;
-//    while (check != 0)
-//    {
-//        check = check / 10;
-//        ++num_size;
-//    }
-//
-//    if (num >= MAX_VALUE)
-//    {
-//        num = MAX_VALUE;
-//    }
-//
-//    if (buf_size <= num_size)
-//    {
-//        return;
-//    }
-//
-//    while (1) {
-//        if ((num / deg) > 0) {
-//            cnt++;
-//        }
-//        else {
-//            break;
-//        }
-//        deg *= radix;
-//    }
-//    deg /= radix;
-//
-//    for (i = 0; i < cnt; i++) {
-//        *(str + i) = num / deg + '0';
-//        num -= ((num / deg) * deg);
-//        deg /= radix;
-//    }
-//    *(str + i) = '\0';
-//}
+void itoa_ft(int num, char* str, int base, int buf_size)
+{
+    const int MAX_VALUE = 999999999;
+    int i = 0;
+    int radix = 10;
+    int deg = 1;
+    int cnt = 0;
+    int num_size = 0;
+    int check = num;
+    while (check != 0)
+    {
+        check = check / 10;
+        ++num_size;
+    }
+
+    if (num >= MAX_VALUE)
+    {
+        num = MAX_VALUE;
+    }
+
+    if (buf_size <= num_size)
+    {
+        return;
+    }
+
+    while (1) {
+        if ((num / deg) > 0) {
+            cnt++;
+        }
+        else {
+            break;
+        }
+        deg *= radix;
+    }
+    deg /= radix;
+
+    for (i = 0; i < cnt; i++) {
+        *(str + i) = num / deg + '0';
+        num -= ((num / deg) * deg);
+        deg /= radix;
+    }
+    *(str + i) = '\0';
+}
 
 int isspace_ft(const char* str)
 {
@@ -196,24 +196,6 @@ int atoi_ft(char* str) {
 
     return result;
 }
-
-//int atoi_ft(char* str) {
-//    int a = 0;
-//    int i = -1;
-//    while (1) {
-//        if (str[++i] > 47 && str[i] < 58) {
-//            a = a * 10 + (str[i] - '0');
-//        }
-//        else if (str[i] == '\0') {
-//            break;
-//        }
-//        else {
-//            a = 0;
-//        }
-//    }
-//    return a;
-//}
-
 
 void buffer_clear(char* buffer)
 {

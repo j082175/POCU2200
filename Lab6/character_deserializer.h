@@ -1,4 +1,4 @@
-/*#define _CRT_SECURE_NO_WARNINGS*/
+//#define _CRT_SECURE_NO_WARNINGS
 #ifndef CHARACTER_DESERIALIZER_H
 #define CHARACTER_DESERIALIZER_H
 
@@ -46,7 +46,7 @@ int string_length(const char* str);
 
 char* string_concat(char* s1, char* s2);
 
-char* itoa_ft(int value, char* buffer, int base, int buf_size);
+void itoa_ft(int num, char* str, int base, int buf_size);
 
 int atoi_ft(char* str);
 
