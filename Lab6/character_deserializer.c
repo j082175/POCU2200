@@ -2,7 +2,61 @@
 /* 이 실습에서 계산을 할 때 소수점 이하는 무시하세요. 즉, 모든 결과는 무조건 내림을 합니다.
 이 실습에서 전역(global) 변수와 정적(static) 변수의 사용을 금합니다. 전역/정적 변수 없이도 이 실습을 끝낼 수 있으니 저를 믿으세요. :)*/
 
+void check_name(char* buf)
+{
+    {
+        size_t i;
+        int j;
+        int k;
+        int l;
+        int check = 0;
+        for (i = 0; i < strlen(buf); i++)
+        {
+            for (j = 'A'; j < 'Z' + 1; j++)
+            {
+                if (j == buf[i] || '_' == buf[i])
+                {
+                    check = 1;
+                    goto end;
+                }
+                else {
+                    check = 0;
+                }
+            }
 
+            for (k = 'a'; k < 'z' + 1; k++)
+            {
+                if (k == buf[i] || '_' == buf[i])
+                {
+                    check = 1;
+                    goto end;
+                }
+                else {
+                    check = 0;
+                }
+            }
+
+            for (l = '1'; l < '9' + 1; l++)
+            {
+                if (l == buf[i] || '_' == buf[i])
+                {
+                    check = 1;
+                    goto end;
+                }
+                else {
+                    check = 0;
+                }
+            }
+
+        end:
+            if (check == 0)
+            {
+                *buf = 0;
+                return;
+            }
+        }
+    }
+}
 
 void swap(char* x, char* y) {
     char t = *x; *x = *y; *y = t;
@@ -760,67 +814,16 @@ int get_character(const char* filename, character_v3_t* out_character)
                     if (version_check == 1) {
                         char buf[50] = { 0, };
                         strncpy(buf, "player_", 49);
-                        strcat(buf, values_backup[values_check[i]]);
-
+                        strncat(buf, values_backup[values_check[i]], 49 - strlen("player_"));
+                        check_name(buf);
 
                         strncpy(out_character->name, buf, 49);
                     }
                     else {
                         char buf[50] = { 0, };
                         strncpy(buf, values_backup[values_check[i]], 49);
-
-                        {
-                            size_t i;
-                            int j;
-                            int k;
-                            int l;
-                            int check = 0;
-                            for (i = 0; i < strlen(buf); i++)
-                            {
-                                for (j = 'A'; j < 'Z' + 1; j++)
-                                {
-                                    if (j == buf[i] || '_' == buf[i])
-                                    {
-                                        check = 1;
-                                        goto end;
-                                    }
-                                    else {
-                                        check = 0;
-                                    }
-                                }
-
-                                for (k = 'a'; k < 'z' + 1; k++)
-                                {
-                                    if (k == buf[i] || '_' == buf[i])
-                                    {
-                                        check = 1;
-                                        goto end;
-                                    }
-                                    else {
-                                        check = 0;
-                                    }
-                                }
-
-                                for (l = '1'; l < '9' + 1; l++)
-                                {
-                                    if (l == buf[i] || '_' == buf[i])
-                                    {
-                                        check = 1;
-                                        goto end;
-                                    }
-                                    else {
-                                        check = 0;
-                                    }
-                                }
-
-							end:
-                                if (check == 0)
-                                {
-                                    return version_check;
-                                }
-                            }
-                        }
-						strncpy(out_character->name, values_backup[values_check[i]], 49);
+                        check_name(buf);
+                        strncpy(out_character->name, buf, 49);
                     }
                     break;
                 case 1:
@@ -987,8 +990,12 @@ int get_character(const char* filename, character_v3_t* out_character)
                         for (k = 0; k < 4; k++) {
                             switch (k) {
                             case 0:
-                                //string_copy(out_character->minions[i].name, values_backup[values_check1[k]]);
-                                strcpy(out_character->minions[i].name, values_backup[values_check[k]]);
+							{
+								char buf[50] = { 0, };
+								strncpy(buf, values_backup[values_check[k]], 49);
+								check_name(buf);
+								strncpy(out_character->minions[i].name, buf, 49);
+							}
                                 break;
                             case 1:
                                 out_character->minions[i].health = atoi_ft(values_backup[values_check1[k]]);
