@@ -716,7 +716,13 @@ int get_character(const char* filename, character_v3_t* out_character)
 
 
             for (i = 0; i < limit; i++) {
-                temp = tokenize(ptr, "|  \n");
+                temp = tokenize(ptr, "|\n");
+                if (strlen(temp) > 49)
+                {
+                    char buf[50] = { 0, };
+                    strncpy(buf, temp, 49);
+                    temp = buf;
+                }
                 values_backup[value_count] = temp;
                 value_count++;
                 ptr = NULL;
@@ -747,7 +753,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     else {
                         char buf[50] = { 0, };
                         strncpy(buf, values_backup[values_check[i]], 49);
-                        check_name(buf);
+                        //check_name(buf);
                         strncpy(out_character->name, buf, 49);
                     }
                     break;
