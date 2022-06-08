@@ -725,7 +725,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 if (atoi_ft(temp) > INT_MAX)
                 {
                     temp = "2147483647";
-                    //*(temp + 49) = '\0';
+                    /**(temp + 49) = '\0';*/
                     /*char* buf[50] = {0,};
                     buf[i] = temp;
                     strncpy(buf[i], temp, 49);
