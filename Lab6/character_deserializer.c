@@ -762,7 +762,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                         strcpy(out_character->name, buf);
                     }
                     else {
-                        strcpy(out_character->name, values_backup[values_check[i]]);
+                        strncpy(out_character->name, values_backup[values_check[i]], 49);
 
                     }
                     break;
