@@ -615,7 +615,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 }
             }
 
-
+            
             /* 순서 세팅 작업 */
             {
                 int i;
@@ -740,7 +740,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                         char buf[50] = { 0, };
                         strncpy(buf, "player_", 49);
                         strncat(buf, values_backup[values_check[i]], 49 - strlen("player_"));
-                        check_name(buf);
+                        //check_name(buf);
 
                         strncpy(out_character->name, buf, 49);
                     }
@@ -918,7 +918,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 							{
 								char buf[50] = { 0, };
 								strncpy(buf, values_backup[values_check[k]], 49);
-								check_name(buf);
+								//check_name(buf);
 								strncpy(out_character->minions[i].name, buf, 49);
 							}
                                 break;
