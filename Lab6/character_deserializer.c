@@ -21,17 +21,16 @@ char* string_concat(char* s1, char* s2)
 
 void itoa_ft(int num, char* str)
 {
-    char buf[10] = { 0, };
     int i = 0;
     int radix = 10;
     int deg = 1;
     int cnt = 0;
-    strcpy(buf, str);
 
     while (1) {
         if ((num / deg) > 0) {
             cnt++;
-        } else {
+        }
+        else {
             break;
         }
         deg *= radix;
@@ -65,40 +64,41 @@ int isdigit_ft(int c)
     return (0);
 }
 
-int atoi_ft(char* pointer)
-{
-    int result = 0;
-    char* pointer1;
-    int multiplier = 1;
-    char sign = 1;
+//int atoi_ft(char* str) {
+//    int result, positive;
+//
+//    result = 0;
+//    positive = 1;
+//    while ((9 <= *str && *str <= 13) || *str == ' ')
+//        str++;
+//    if (*str == '+' || *str == '-') {
+//        if (*str == '-')
+//            positive = -1;
+//        str++;
+//    }
+//    while ('0' <= *str && *str <= '9') {
+//        result *= 10;
+//        result += (*str - '0') * positive;
+//        str++;
+//    }
+//    return result;
+//}
 
-    if (*pointer == '-')
-        sign = -1;
-
-    pointer1 = pointer;
-
-    while (*pointer != '\0')
-    {
-        if (*pointer >= '0' && *pointer <= '9')
-            multiplier = multiplier * 10;
-
-        pointer = pointer + 1;
-    }
-
-    pointer = pointer1;
-
-    while (*pointer != '\0')
-    {
-        if (*pointer >= '0' && *pointer <= '9')
-        {
-            result = result + ((*pointer % 48) * multiplier);
-            multiplier = multiplier / 10;
+int atoi_ft(char* str) {
+    int a = 0;
+    int i = -1;
+    while (1) {
+        if (str[++i] > 47 && str[i] < 58) {
+            a = a * 10 + (str[i] - '0');
         }
-
-        pointer = pointer + 1;
+        else if (str[i] == '\0') {
+            break;
+        }
+        else {
+            a = 0;
+        }
     }
-
-    return (result * sign) / 10;
+    return a;
 }
 
 
@@ -167,7 +167,8 @@ int string_compare(const char* str1, const char* str2)
             if (*(str1 + i) == *(str2 + i)) {
                 is_same = TRUE;
                 continue;
-            } else {
+            }
+            else {
                 is_same = FALSE;
                 break;
             }
@@ -303,7 +304,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
     switch (version_check) {
     case 1:
-        {
+    {
         int count = 0;
         int word_count = 0;
         int value_count = 0;
@@ -410,8 +411,8 @@ int get_character(const char* filename, character_v3_t* out_character)
         goto label2;
 
 
-        }
-        break;
+    }
+    break;
     case 2:
     {
         int word_count = 0;
@@ -578,9 +579,9 @@ int get_character(const char* filename, character_v3_t* out_character)
         goto deserializer;
 
     }
-        break;
+    break;
     case 3:
-        {
+    {
         int word_count = 0;
         int value_count = 0;
 
@@ -834,7 +835,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                         for (k = 0; k < 4; k++) {
                             switch (k) {
                             case 0:
-                                /*string_copy(out_character->minions[i].name, values_backup[values_check1[k]]);*/
+                                //string_copy(out_character->minions[i].name, values_backup[values_check1[k]]);
                                 strcpy(out_character->minions[i].name, values_backup[values_check[k]]);
                                 break;
                             case 1:
@@ -884,7 +885,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
 
     }
-        break;
+    break;
     default:
         break;
     }
