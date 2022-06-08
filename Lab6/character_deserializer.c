@@ -475,7 +475,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 }
             }
             for (j = 0; j < 11; j++) {
-                if (string_compare(words_backup[j], "armour")) {
+                if (!strcmp(words_backup[j], "armour")) {
                     num = atoi_ft(values_backup[j]) / 4;
                     itoa_ft(num, buf2, 10, sizeof(buf2));
                     values_backup[value_count++] = buf2;
