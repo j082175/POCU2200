@@ -46,7 +46,7 @@ int string_length(const char* str);
 
 char* string_concat(char* s1, char* s2);
 
-char* itoa_ft(int value, char* buffer, int base);
+char* itoa_ft(int value, char* buffer, int base, int buf_size);
 
 int atoi_ft(char* str);
 

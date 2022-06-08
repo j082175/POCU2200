@@ -15,10 +15,25 @@ char* reverse(char* buffer, int i, int j)
     return buffer;
 }
 
-char* itoa_ft(int value, char* buffer, int base)
+char* itoa_ft(int value, char* buffer, int base, int buf_size)
 {
     int n = abs(value);
     int i = 0;
+    int num_size = 0;
+    int check = value;
+
+    while (check != 0)
+    {
+        check = check / 10;
+        ++num_size;
+    }
+
+    if (buf_size <= num_size)
+    {
+        buffer = 0;
+        return 0;
+    }
+
     if (base < 2 || base > 32) {
         return buffer;
     }
@@ -94,7 +109,7 @@ char* string_concat(char* s1, char* s2)
 //    *(str + i) = '\0';
 //}
 
-//void itoa_ft(int num, char* str, unsigned int buf_size)
+//void itoa_ft1(int num, char* str, unsigned int buf_size)
 //{
 //    const int MAX_VALUE = 999999999;
 //    int i = 0;
@@ -492,7 +507,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             for (i = 0; i < 10; i++) {
                 if (string_compare(words_backup[i], "dexterity")) {
                     num = atoi_ft(values_backup[i]) / 2;
-                    itoa_ft(num, buf, 10);
+                    itoa_ft(num, buf, 10, sizeof(buf));
                     values_backup[value_count++] = buf;
                     break;
                 }
@@ -500,7 +515,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             for (j = 0; j < 11; j++) {
                 if (string_compare(words_backup[j], "armour")) {
                     num = atoi_ft(values_backup[j]) / 4;
-                    itoa_ft(num, buf2, 10);
+                    itoa_ft(num, buf2, 10, sizeof(buf2));
                     values_backup[value_count++] = buf2;
                     break;
                 }
@@ -558,7 +573,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     words_backup[i + 2] = "lightning_res";
 
                     num = atoi_ft(values_backup[i]);
-                    itoa_ft(num / 3, buf1, 10);
+                    itoa_ft(num / 3, buf1, 10, sizeof(buf1));
 
                     values_backup[i] = buf1;
                     values_backup[i + 1] = buf1;
@@ -630,7 +645,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 for (i = 0; i < 14; i++) {
                     if (string_compare(words_backup[i], "level")) {
                         num = atoi_ft(values_backup[i]);
-                        itoa_ft(num / 10, buf, 10);
+                        itoa_ft(num / 10, buf, 10, sizeof(buf));
                         values_backup[value_count++] = buf;
                         values_backup[value_count] = "0";
                         break;
@@ -666,7 +681,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             for (i = 0; i < 14; i++) {
                 if (string_compare(version3_out_character_arr[i], "level")) {
                     num = atoi_ft(values_backup[i]);
-                    itoa_ft(num / 10, buf1, 10);
+                    itoa_ft(num / 10, buf1, 10, sizeof(buf1));
                     values_backup[value_count++] = buf1;
                     break;
                 }
