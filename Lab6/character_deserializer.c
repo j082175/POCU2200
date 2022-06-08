@@ -114,14 +114,9 @@ int isdigit_ft(int c)
     return (0);
 }
 
-int atoi_ft(char* str, unsigned int buf_size) {
+int atoi_ft(char* str) {
     int result, positive;
     char buf[20] = { 0, };
-    int count = 0;
-    if (*(str + buf_size - 1) != '\0')
-    {
-        *(str + buf_size - 1) = '\0';
-    }
 
     if (strlen(str) > 9)
     {
@@ -147,7 +142,7 @@ int atoi_ft(char* str, unsigned int buf_size) {
         str++;
     }
     return result;
- }
+}
 
 //int atoi_ft(char* str) {
 //    int a = 0;
