@@ -753,6 +753,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     else {
                         char buf[50] = { 0, };
                         strncpy(buf, values_backup[values_check[i]], 49);
+                        strtok(buf, "  ");
                         //check_name(buf);
                         strncpy(out_character->name, buf, 49);
                     }
