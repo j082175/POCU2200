@@ -1,5 +1,4 @@
 /*#define _CRT_SECURE_NO_WARNINGS*/
-
 #ifndef CHARACTER_DESERIALIZER_H
 #define CHARACTER_DESERIALIZER_H
 
@@ -9,6 +8,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <limits.h>
 
 typedef struct {
     char name[50];
@@ -45,7 +45,7 @@ int string_length(const char* str);
 
 char* string_concat(char* s1, char* s2);
 
-void itoa_a(int num, char* str,  unsigned int buf_size);
+char* itoa_ft(int value, char* buffer, int base);
 
 int atoi_ft(char* str);
 

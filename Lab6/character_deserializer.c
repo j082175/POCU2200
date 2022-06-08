@@ -2,6 +2,49 @@
 /* 이 실습에서 계산을 할 때 소수점 이하는 무시하세요. 즉, 모든 결과는 무조건 내림을 합니다.
 이 실습에서 전역(global) 변수와 정적(static) 변수의 사용을 금합니다. 전역/정적 변수 없이도 이 실습을 끝낼 수 있으니 저를 믿으세요. :)*/
 
+void swap(char* x, char* y) {
+    char t = *x; *x = *y; *y = t;
+}
+
+char* reverse(char* buffer, int i, int j)
+{
+    while (i < j) {
+        swap(&buffer[i++], &buffer[j--]);
+    }
+
+    return buffer;
+}
+
+char* itoa_ft(int value, char* buffer, int base)
+{
+    int n = abs(value);
+    int i = 0;
+    if (base < 2 || base > 32) {
+        return buffer;
+    }
+    while (n)
+    {
+        int r = n % base;
+
+        if (r >= 10) {
+            buffer[i++] = 65 + (r - 10);
+        }
+        else {
+            buffer[i++] = 48 + r;
+        }
+
+        n = n / base;
+    }
+    if (i == 0) {
+        buffer[i++] = '0';
+    }
+    if (value < 0 && base == 10) {
+        buffer[i++] = '-';
+    }
+    buffer[i] = '\0';
+    return reverse(buffer, 0, i - 1);
+}
+
 int string_length(const char* str);
 
 char* string_concat(char* s1, char* s2)
@@ -51,49 +94,49 @@ char* string_concat(char* s1, char* s2)
 //    *(str + i) = '\0';
 //}
 
-void itoa_ft(int num, char* str, unsigned int buf_size)
-{
-    const int MAX_VALUE = 999999999;
-    int i = 0;
-    int radix = 10;
-    int deg = 1;
-    int cnt = 0;
-    unsigned int num_size = 0;
-    int check = num;
-    while (check != 0)
-    {
-        check = check / 10;
-        ++num_size;
-    }
-
-    if (num >= MAX_VALUE)
-    {
-        num = MAX_VALUE;
-    }
-
-    if (buf_size <= num_size)
-    {
-        return;
-    }
-
-    while (1) {
-        if ((num / deg) > 0) {
-            cnt++;
-        }
-        else {
-            break;
-        }
-        deg *= radix;
-    }
-    deg /= radix;
-
-    for (i = 0; i < cnt; i++) {
-        *(str + i) = num / deg + '0';
-        num -= ((num / deg) * deg);
-        deg /= radix;
-    }
-    *(str + i) = '\0';
-}
+//void itoa_ft(int num, char* str, unsigned int buf_size)
+//{
+//    const int MAX_VALUE = 999999999;
+//    int i = 0;
+//    int radix = 10;
+//    int deg = 1;
+//    int cnt = 0;
+//    int num_size = 0;
+//    int check = num;
+//    while (check != 0)
+//    {
+//        check = check / 10;
+//        ++num_size;
+//    }
+//
+//    if (num >= MAX_VALUE)
+//    {
+//        num = MAX_VALUE;
+//    }
+//
+//    if (buf_size <= num_size)
+//    {
+//        return;
+//    }
+//
+//    while (1) {
+//        if ((num / deg) > 0) {
+//            cnt++;
+//        }
+//        else {
+//            break;
+//        }
+//        deg *= radix;
+//    }
+//    deg /= radix;
+//
+//    for (i = 0; i < cnt; i++) {
+//        *(str + i) = num / deg + '0';
+//        num -= ((num / deg) * deg);
+//        deg /= radix;
+//    }
+//    *(str + i) = '\0';
+//}
 
 int isspace_ft(const char* str)
 {
@@ -116,16 +159,6 @@ int isdigit_ft(int c)
 
 int atoi_ft(char* str) {
     int result, positive;
-    char buf[20] = { 0, };
-
-    if (strlen(str) > 9)
-    {
-        strncpy(buf, str, 9);
-    }
-    else {
-        strcpy(buf, str);
-    }
-    str = buf;
 
     result = 0;
     positive = 1;
@@ -141,6 +174,12 @@ int atoi_ft(char* str) {
         result += (*str - '0') * positive;
         str++;
     }
+
+    if (result < 0)
+    {
+        result = INT_MAX;
+    }
+
     return result;
 }
 
@@ -453,7 +492,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             for (i = 0; i < 10; i++) {
                 if (string_compare(words_backup[i], "dexterity")) {
                     num = atoi_ft(values_backup[i]) / 2;
-                    itoa_ft(num, buf, sizeof(buf));
+                    itoa_ft(num, buf, 10);
                     values_backup[value_count++] = buf;
                     break;
                 }
@@ -461,7 +500,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             for (j = 0; j < 11; j++) {
                 if (string_compare(words_backup[j], "armour")) {
                     num = atoi_ft(values_backup[j]) / 4;
-                    itoa_ft(num, buf2, sizeof(buf2));
+                    itoa_ft(num, buf2, 10);
                     values_backup[value_count++] = buf2;
                     break;
                 }
@@ -519,7 +558,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     words_backup[i + 2] = "lightning_res";
 
                     num = atoi_ft(values_backup[i]);
-                    itoa_ft(num / 3, buf1, sizeof(buf1));
+                    itoa_ft(num / 3, buf1, 10);
 
                     values_backup[i] = buf1;
                     values_backup[i + 1] = buf1;
@@ -591,7 +630,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 for (i = 0; i < 14; i++) {
                     if (string_compare(words_backup[i], "level")) {
                         num = atoi_ft(values_backup[i]);
-                        itoa_ft(num / 10, buf, sizeof(buf));
+                        itoa_ft(num / 10, buf, 10);
                         values_backup[value_count++] = buf;
                         values_backup[value_count] = "0";
                         break;
@@ -627,7 +666,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             for (i = 0; i < 14; i++) {
                 if (string_compare(version3_out_character_arr[i], "level")) {
                     num = atoi_ft(values_backup[i]);
-                    itoa_ft(num / 10, buf1, sizeof(buf1));
+                    itoa_ft(num / 10, buf1, 10);
                     values_backup[value_count++] = buf1;
                     break;
                 }
