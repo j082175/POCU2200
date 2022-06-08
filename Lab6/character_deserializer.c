@@ -165,6 +165,11 @@ int atoi_ft(char* str) {
         str++;
     }
     while ('0' <= *str && *str <= '9') {
+        if (result > INT_MAX || result < 0)
+        {
+            result = INT_MAX;
+            return result;
+        }
         result *= 10;
         result += (*str - '0') * positive;
         str++;
@@ -717,11 +722,14 @@ int get_character(const char* filename, character_v3_t* out_character)
 
             for (i = 0; i < limit; i++) {
                 temp = tokenize(ptr, "|  \n");
-                if (strlen(temp) > 49)
+                if (atoi_ft(temp) > INT_MAX)
                 {
-                    char buf[50] = { 0, };
-                    strncpy(buf, temp, 49);
-                    temp = buf;
+                    temp = "2147483647";
+                    //*(temp + 49) = '\0';
+                    /*char* buf[50] = {0,};
+                    buf[i] = temp;
+                    strncpy(buf[i], temp, 49);
+                    temp = buf[i];*/
                 }
                 values_backup[value_count] = temp;
                 value_count++;
@@ -752,7 +760,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     }
                     else {
                         char buf[50] = { 0, };
-                        strncpy(buf, values_backup[values_check[i]], 50);
+                        strncpy(buf, values_backup[values_check[i]], 49);
                         //check_name(buf);
                         strncpy(out_character->name, buf, 50);
                     }
