@@ -42,7 +42,7 @@ void itoa_ft(int num, char* str)
         num -= ((num / deg) * deg);
         deg /= radix;
     }
-    /**(str + i) = '\0';*/
+    *(str + i) = '\0';
 }
 
 int isspace_ft(const char* str)
@@ -64,9 +64,9 @@ int isdigit_ft(int c)
     return (0);
 }
 
-//int atoi_ft(char* str) {
+// int atoi_ft(char* str) {
 //    int result, positive;
-//
+
 //    result = 0;
 //    positive = 1;
 //    while ((9 <= *str && *str <= 13) || *str == ' ')
@@ -82,7 +82,7 @@ int isdigit_ft(int c)
 //        str++;
 //    }
 //    return result;
-//}
+// }
 
 int atoi_ft(char* str) {
     int a = 0;
