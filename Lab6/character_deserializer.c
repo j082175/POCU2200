@@ -110,7 +110,7 @@ char* string_concat(char* s1, char* s2)
 //    *(str + i) = '\0';
 //}
 
-char* itoa_ft(int num, char* str, int base, int buf_size)
+void itoa_ft(int num, char* str, int base, int buf_size)
 {
     const int MAX_VALUE = 999999999;
     int i = 0;
@@ -770,7 +770,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                         strncpy(buf, values_backup[values_check[i]], 49);
 
                         {
-                            int i;
+                            size_t i;
                             int j;
                             int k;
                             int l;
@@ -821,7 +821,6 @@ int get_character(const char* filename, character_v3_t* out_character)
                             }
                         }
 						strncpy(out_character->name, values_backup[values_check[i]], 49);
-                        int r = 4;
                     }
                     break;
                 case 1:
