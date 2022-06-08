@@ -10,47 +10,36 @@ void check_name(char* buf)
         int k;
         int l;
         int check = 0;
-        for (i = 0; i < strlen(buf); i++)
-        {
-            for (j = 'A'; j < 'Z' + 1; j++)
-            {
-                if (j == buf[i] || '_' == buf[i])
-                {
+        for (i = 0; i < strlen(buf); i++) {
+            for (j = 'A'; j < 'Z' + 1; j++) {
+                if (j == buf[i] || '_' == buf[i]) {
                     check = 1;
                     goto end;
-                }
-                else {
+                } else {
                     check = 0;
                 }
             }
 
-            for (k = 'a'; k < 'z' + 1; k++)
-            {
-                if (k == buf[i] || '_' == buf[i])
-                {
+            for (k = 'a'; k < 'z' + 1; k++) {
+                if (k == buf[i] || '_' == buf[i]) {
                     check = 1;
                     goto end;
-                }
-                else {
+                } else {
                     check = 0;
                 }
             }
 
-            for (l = '1'; l < '9' + 1; l++)
-            {
-                if (l == buf[i] || '_' == buf[i])
-                {
+            for (l = '1'; l < '9' + 1; l++) {
+                if (l == buf[i] || '_' == buf[i]) {
                     check = 1;
                     goto end;
-                }
-                else {
+                } else {
                     check = 0;
                 }
             }
 
         end:
-            if (check == 0)
-            {
+            if (check == 0) {
                 *buf = 0;
                 return;
             }
@@ -71,50 +60,6 @@ char* reverse(char* buffer, int i, int j)
     return buffer;
 }
 
-//char* itoa_ft(int value, char* buffer, int base, int buf_size)
-//{
-//    int n = abs(value);
-//    int i = 0;
-//    int num_size = 0;
-//    int check = value;
-//
-//    while (check != 0)
-//    {
-//        check = check / 10;
-//        ++num_size;
-//    }
-//
-//    if (buf_size <= num_size)
-//    {
-//        return 0;
-//    }
-//
-//    if (base < 2 || base > 32) {
-//        return buffer;
-//    }
-//    while (n)
-//    {
-//        int r = n % base;
-//
-//        if (r >= 10) {
-//            buffer[i++] = 65 + (r - 10);
-//        }
-//        else {
-//            buffer[i++] = 48 + r;
-//        }
-//
-//        n = n / base;
-//    }
-//    if (i == 0) {
-//        buffer[i++] = '0';
-//    }
-//    if (value < 0 && base == 10) {
-//        buffer[i++] = '-';
-//    }
-//    buffer[i] = '\0';
-//    return reverse(buffer, 0, i - 1);
-//}
-
 int string_length(const char* str);
 
 char* string_concat(char* s1, char* s2)
@@ -132,38 +77,6 @@ char* string_concat(char* s1, char* s2)
     return s1;
 }
 
-//void itoa_ft(int num, char* str)
-//{
-//    const int MAX_VALUE = 999999999;
-//    int i = 0;
-//    int radix = 10;
-//    int deg = 1;
-//    int cnt = 0;
-//
-//    if (num >= MAX_VALUE)
-//    {
-//        num = MAX_VALUE;
-//    }
-//
-//    while (1) {
-//        if ((num / deg) > 0) {
-//            cnt++;
-//        }
-//        else {
-//            break;
-//        }
-//        deg *= radix;
-//    }
-//    deg /= radix;
-//
-//    for (i = 0; i < cnt; i++) {
-//        *(str + i) = num / deg + '0';
-//        num -= ((num / deg) * deg);
-//        deg /= radix;
-//    }
-//    *(str + i) = '\0';
-//}
-
 void itoa_ft(int num, char* str, int base, int buf_size)
 {
     const int MAX_VALUE = 999999999;
@@ -173,27 +86,23 @@ void itoa_ft(int num, char* str, int base, int buf_size)
     int cnt = 0;
     int num_size = 0;
     int check = num;
-    while (check != 0)
-    {
+    while (check != 0) {
         check = check / 10;
         ++num_size;
     }
 
-    if (num >= MAX_VALUE)
-    {
+    if (num >= MAX_VALUE) {
         num = MAX_VALUE;
     }
 
-    if (buf_size <= num_size)
-    {
+    if (buf_size <= num_size) {
         return;
     }
 
     while (1) {
         if ((num / deg) > 0) {
             cnt++;
-        }
-        else {
+        } else {
             break;
         }
         deg *= radix;
@@ -245,8 +154,7 @@ int atoi_ft(char* str) {
         str++;
     }
 
-    if (result < 0)
-    {
+    if (result < 0) {
         result = INT_MAX;
     }
 
@@ -318,8 +226,7 @@ int string_compare(const char* str1, const char* str2)
             if (*(str1 + i) == *(str2 + i)) {
                 is_same = TRUE;
                 continue;
-            }
-            else {
+            } else {
                 is_same = FALSE;
                 break;
             }
@@ -990,12 +897,12 @@ int get_character(const char* filename, character_v3_t* out_character)
                         for (k = 0; k < 4; k++) {
                             switch (k) {
                             case 0:
-							{
-								char buf[50] = { 0, };
-								strncpy(buf, values_backup[values_check[k]], 49);
-								check_name(buf);
-								strncpy(out_character->minions[i].name, buf, 49);
-							}
+                            {
+                                char buf[50] = { 0, };
+                                strncpy(buf, values_backup[values_check[k]], 49);
+                                check_name(buf);
+                                strncpy(out_character->minions[i].name, buf, 49);
+                            }
                                 break;
                             case 1:
                                 out_character->minions[i].health = atoi_ft(values_backup[values_check1[k]]);
