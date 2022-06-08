@@ -92,7 +92,7 @@ void itoa_ft(int num, char* str, unsigned int buf_size)
         num -= ((num / deg) * deg);
         deg /= radix;
     }
-    *(str + i) = '\0';
+    /**(str + i) = '\0';*/
 }
 
 int isspace_ft(const char* str)
