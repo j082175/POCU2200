@@ -21,10 +21,16 @@ char* string_concat(char* s1, char* s2)
 
 void itoa_ft(int num, char* str)
 {
+    const int MAX_VALUE = 999999999;
     int i = 0;
     int radix = 10;
     int deg = 1;
     int cnt = 0;
+
+    if (num >= MAX_VALUE)
+    {
+        num = MAX_VALUE;
+    }
 
     while (1) {
         if ((num / deg) > 0) {
