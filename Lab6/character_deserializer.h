@@ -42,28 +42,13 @@ typedef struct {
 
 int get_character(const char* filename, character_v3_t* out_character);
 
-int string_length(const char* str);
-
-char* string_concat(char* s1, char* s2);
-
 void itoa_ft(int num, char* str, int base, int buf_size);
 
 int atoi_ft(char* str);
 
-void buffer_clear(char* buffer);
-
 int string_length_before_carriage_return(const char* str);
-
-void string_copy(char* dst, const char* source);
 
 int count_token(const char* str, const char delim);
 
-int string_compare(const char* str1, const char* str2);
-
-char* tokenize(char* str_or_null, const char* delims);
-
-int isspace_ft(const char* str);
-
-int isdigit_ft(int c);
 
 #endif /* CHARACTER_DESERIALIZER_H */
