@@ -122,7 +122,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
     char* minions_out_arr[] = { "name", "health", "strength", "defence" };
 
-    int values_check[20] = { 0, };
+    int values_check[128] = { 0, };
 
     int version_check = 0;
     if ((fp = (fopen(filename, "r"))) == NULL) {
@@ -536,7 +536,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 {
                 case 0:
                     if (version_check == 1) {
-                        char buf[51] = { 0, };
+                        char buf[128] = { 0, };
                         strncpy(buf, "player_", 50);
                         strncat(buf, values_backup[values_check[i]], 50 - strlen("player_"));
                         //check_name(buf);
@@ -544,7 +544,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                         strncpy(out_character->name, buf, 50);
                     }
                     else {
-                        char buf[51] = { 0, };
+                        char buf[128] = { 0, };
                         strncpy(buf, values_backup[values_check[i]], 50);
                         //check_name(buf);
                         strncpy(out_character->name, buf, 50);
@@ -623,7 +623,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
         if (out_character->minion_count) {
             int count = out_character->minion_count;
-            int values_check1[4] = { 0, };
+            int values_check1[128] = { 0, };
             word_count = 0;
             value_count = 0;
 
@@ -715,7 +715,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                             switch (k) {
                             case 0:
                             {
-                                char buf[50] = { 0, };
+                                char buf[128] = { 0, };
                                 strncpy(buf, values_backup[values_check[k]], 50);
                                 //check_name(buf);
                                 strncpy(out_character->minions[i].name, buf, 50);
