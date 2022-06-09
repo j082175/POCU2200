@@ -187,7 +187,7 @@ int atoi_ft(char* str) {
 void buffer_clear(char* buffer)
 {
     int i;
-    for (i = 0; i < string_length(buffer); i++) {
+    for (i = 0; i < strlen(buffer); i++) {
         buffer[i] = 0;
     }
 }
@@ -216,7 +216,7 @@ int string_length_before_carriage_return(const char* str)
 void string_copy(char* dst, const char* source)
 {
     int i;
-    for (i = 0; i < string_length(source); i++) {
+    for (i = 0; i < strlen(source); i++) {
         dst[i] = source[i];
     }
     dst[i + 1] = '\0';
@@ -245,7 +245,7 @@ int string_compare(const char* str1, const char* str2)
 
     {
         int i;
-        for (i = 0; i < string_length(str1); i++) {
+        for (i = 0; i < strlen(str1); i++) {
             if (*(str1 + i) == *(str2 + i)) {
                 is_same = TRUE;
                 continue;
@@ -374,6 +374,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             }
 
             if (c == EOF) {
+                buffer[count] = '\0';
                 break;
             }
             buffer[count] = c;
@@ -387,6 +388,7 @@ int get_character(const char* filename, character_v3_t* out_character)
     switch (version_check) {
     case 1:
     {
+        int check = 0;
         int count = 0;
         int word_count = 0;
         int value_count = 0;
@@ -395,53 +397,58 @@ int get_character(const char* filename, character_v3_t* out_character)
         char* backup_temp = NULL;
         while (TRUE) {
             if (count % 2 == 0) {
-                temp = tokenize(ptr, ":,");
-                if (string_compare(temp, backup_temp)) {
-                    break;
+                temp = strtok(ptr, ":,");
+                if (check == 1)
+                {
+					if (temp == NULL || !strcmp(temp, backup_temp)) {
+						break;
+					}
+                } else {
+                    check++;
                 }
-                if (string_compare(temp, "lvl")) {
+                if (!strcmp(temp, "lvl")) {
                     words_backup[word_count++] = "level";
                     ptr = NULL;
                     count++;
                     continue;
                 }
-                if (string_compare(temp, "str")) {
+                if (!strcmp(temp, "str")) {
                     words_backup[word_count++] = "strength";
                     ptr = NULL;
                     count++;
                     continue;
                 }
-                if (string_compare(temp, "dex")) {
+                if (!strcmp(temp, "dex")) {
                     words_backup[word_count++] = "dexterity";
                     ptr = NULL;
                     count++;
                     continue;
                 }
-                if (string_compare(temp, "intel")) {
+                if (!strcmp(temp, "intel")) {
                     words_backup[word_count++] = "intelligence";
                     ptr = NULL;
                     count++;
                     continue;
                 }
-                if (string_compare(temp, "def")) {
+                if (!strcmp(temp, "def")) {
                     words_backup[word_count++] = "armour";
                     ptr = NULL;
                     count++;
                     continue;
                 }
-                if (string_compare(temp, "hp")) {
+                if (!strcmp(temp, "hp")) {
                     words_backup[word_count++] = "health";
                     ptr = NULL;
                     count++;
                     continue;
                 }
-                if (string_compare(temp, "mp")) {
+                if (!strcmp(temp, "mp")) {
                     words_backup[word_count++] = "mana";
                     ptr = NULL;
                     count++;
                     continue;
                 }
-                if (string_compare(temp, "id")) {
+                if (!strcmp(temp, "id")) {
                     words_backup[word_count++] = "name";
 
                     ptr = NULL;
@@ -453,7 +460,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 word_count++;
             }
             else {
-                temp = tokenize(ptr, ":,");
+                temp = strtok(ptr, ":,");
                 values_backup[value_count] = temp;
                 backup_temp = temp;
                 value_count++;
@@ -473,7 +480,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             char buf[10];
             char buf2[10];
             for (i = 0; i < 10; i++) {
-                if (string_compare(words_backup[i], "dexterity")) {
+                if (!strcmp(words_backup[i], "dexterity")) {
                     num = atoi_ft(values_backup[i]) / 2;
                     itoa_ft(num, buf, 10, sizeof(buf));
                     values_backup[value_count++] = buf;
@@ -504,13 +511,13 @@ int get_character(const char* filename, character_v3_t* out_character)
         char* temp = NULL;
         int limit = 0;
 
-        string_copy(backup_buffer, buffer);
+        strcpy(backup_buffer, buffer);
         limit = count_token(backup_buffer, ',') + 1;
         {
             int i;
             for (i = 0; i < limit; i++) {
-                temp = tokenize(ptr, ",\n");
-                if (string_compare(temp, "magic_resistance")) {
+                temp = strtok(ptr, ",\n");
+                if (!strcmp(temp, "magic_resistance")) {
                     words_backup[word_count] = "fire_res";
                     word_count++;
                     words_backup[word_count] = "cold_res";
@@ -535,7 +542,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             value_count = 12;
 
             for (i = 0; i < 12; i++) {
-                if (string_compare(words_backup[i], "magic_resistance")) {
+                if (!strcmp(words_backup[i], "magic_resistance")) {
                     words_backup[i] = "fire_res";
                     words_backup[i + 1] = "cold_res";
                     words_backup[i + 2] = "lightning_res";
@@ -570,7 +577,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             int count1 = 0;
             for (i = 0; i < 14; i++) {
                 for (j = 0; j < VERSION3_SIZE; j++) {
-                    if (string_compare(version3_out_character_arr[i], words_backup[j])) {
+                    if (!strcmp(version3_out_character_arr[i], words_backup[j])) {
                         values_check[count1] = j;
                         count1++;
                         break;
@@ -580,7 +587,7 @@ int get_character(const char* filename, character_v3_t* out_character)
         }
 
 
-        string_copy(backup_buffer, buffer);
+        strcpy(backup_buffer, buffer);
         temp = NULL;
         {
             int i;
@@ -588,7 +595,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             ptr = backup_buffer + string_length_before_carriage_return(buffer) + 1;
 
             for (i = 0; i < limit; i++) {
-                temp = tokenize(ptr, ",\n");
+                temp = strtok(ptr, ",\n");
                 if (i == 7) {
                     values_backup[value_count] = temp;
                     value_count++;
@@ -611,7 +618,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 int i;
                 char buf[10];
                 for (i = 0; i < 14; i++) {
-                    if (string_compare(words_backup[i], "level")) {
+                    if (!strcmp(words_backup[i], "level")) {
                         num = atoi_ft(values_backup[i]);
                         itoa_ft(num / 10, buf, 10, sizeof(buf));
                         values_backup[value_count++] = buf;
@@ -629,7 +636,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 int count1 = 0;
                 for (i = 0; i < 14; i++) {
                     for (j = 0; j < VERSION3_SIZE; j++) {
-                        if (string_compare(version3_out_character_arr[i], words_backup[j])) {
+                        if (!strcmp(version3_out_character_arr[i], words_backup[j])) {
                             values_check[count1] = j;
                             count1++;
                             break;
@@ -647,7 +654,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             int num;
             char buf1[3];
             for (i = 0; i < 14; i++) {
-                if (string_compare(version3_out_character_arr[i], "level")) {
+                if (!strcmp(version3_out_character_arr[i], "level")) {
                     num = atoi_ft(values_backup[i]);
                     itoa_ft(num / 10, buf1, 10, sizeof(buf1));
                     values_backup[value_count++] = buf1;
@@ -678,13 +685,13 @@ int get_character(const char* filename, character_v3_t* out_character)
         int limit = 0;
 
         /* 1열  토큰화 */
-        string_copy(backup_buffer, buffer);
+        strcpy(backup_buffer, buffer);
 
         limit = count_token(backup_buffer, '|') + 1;
         {
             int i;
             for (i = 0; i < limit; i++) {
-                temp = tokenize(ptr, "|  \n");
+                temp = strtok(ptr, "|  \n");
                 words_backup[word_count] = temp;
                 word_count++;
                 ptr = NULL;
@@ -698,7 +705,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             int count1 = 0;
             for (i = 0; i < limit; i++) {
                 for (j = 0; j < VERSION3_SIZE; j++) {
-                    if (string_compare(version3_out_character_arr[i], words_backup[j])) {
+                    if (!strcmp(version3_out_character_arr[i], words_backup[j])) {
                         values_check[count1] = j;
                         count1++;
                         break;
@@ -711,7 +718,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
         /* 2열 (데이터) 토큰화 */
 
-        string_copy(backup_buffer, buffer + total_count);
+        strcpy(backup_buffer, buffer + total_count);
         temp = NULL;
         {
             int i;
@@ -722,7 +729,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
 
             for (i = 0; i < limit; i++) {
-                temp = tokenize(ptr, "|  \n");
+                temp = strtok(ptr, "|  \n");
                 //if (strlen(temp) > 49)
                 //{
                 //    char buf[50] = { 0, };
@@ -840,7 +847,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             word_count = 0;
             value_count = 0;
 
-            string_copy(backup_buffer, buffer + total_count + 1);
+            strcpy(backup_buffer, buffer + total_count + 1);
             total_count += string_length_before_carriage_return(buffer + total_count + 1) + 1;
             /*char* b = backup_buffer + total_count + 1;*/
             if (*(backup_buffer + total_count + 1) != '\0') {
@@ -854,7 +861,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     /*backup_ptr = ptr;*/
                     /*buffer_clear(words_backup);*/
                     for (i = 0; i < limit; i++) {
-                        temp = tokenize(ptr, "|  \n");
+                        temp = strtok(ptr, "|  \n");
                         words_backup[word_count] = temp;
                         word_count++;
                         ptr = NULL;
@@ -873,7 +880,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
                     for (i = 0; i < 4; i++) {
                         for (j = 0; j < 4; j++) {
-                            if (string_compare(minions_out_arr[i], words_backup[j])) {
+                            if (!strcmp(minions_out_arr[i], words_backup[j])) {
                                 values_check1[count1] = j;
                                 count1++;
                                 break;
@@ -890,7 +897,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     int i = 0;
                     int k;
 
-                    string_copy(backup_buffer, buffer + total_count + 1);
+                    strcpy(backup_buffer, buffer + total_count + 1);
                     /*b = backup_buffer + total_count;*/
                     while (*backup_buffer != '\0') {
 
@@ -903,7 +910,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
                             /*backup_ptr = ptr;*/
                             for (j = 0; j < limit; j++) {
-                                temp = tokenize(ptr, "|  \n");
+                                temp = strtok(ptr, "|  \n");
                                 if (temp == 0) {
                                     break;
                                 }
@@ -962,7 +969,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
 
                         buffer_clear(backup_buffer);
-                        string_copy(backup_buffer, buffer + total_count + 1);
+                        strcpy(backup_buffer, buffer + total_count + 1);
 
                         if (i >= count) {
                             return version_check;
