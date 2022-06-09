@@ -237,6 +237,10 @@ int get_character(const char* filename, character_v3_t* out_character)
             }
             else {
                 temp = strtok(ptr, ":,");
+                if (strlen(temp) > 10)
+                {
+                    *(temp + 10) = '\0';
+                }
                 values_backup[value_count] = temp;
                 backup_temp = temp;
                 value_count++;
