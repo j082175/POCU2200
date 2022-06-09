@@ -2,93 +2,6 @@
 /* 이 실습에서 계산을 할 때 소수점 이하는 무시하세요. 즉, 모든 결과는 무조건 내림을 합니다.
 이 실습에서 전역(global) 변수와 정적(static) 변수의 사용을 금합니다. 전역/정적 변수 없이도 이 실습을 끝낼 수 있으니 저를 믿으세요. :)*/
 
-void check_name(char* buf)
-{
-    {
-        size_t i;
-        int j;
-        int k;
-        int l;
-        int check = 0;
-        for (i = 0; i < strlen(buf); i++)
-        {
-            for (j = 'A'; j < 'Z' + 1; j++)
-            {
-                if (j == buf[i] || '_' == buf[i])
-                {
-                    check = 1;
-                    goto end;
-                }
-                else {
-                    check = 0;
-                }
-            }
-
-            for (k = 'a'; k < 'z' + 1; k++)
-            {
-                if (k == buf[i] || '_' == buf[i])
-                {
-                    check = 1;
-                    goto end;
-                }
-                else {
-                    check = 0;
-                }
-            }
-
-            for (l = '1'; l < '9' + 1; l++)
-            {
-                if (l == buf[i] || '_' == buf[i])
-                {
-                    check = 1;
-                    goto end;
-                }
-                else {
-                    check = 0;
-                }
-            }
-
-        end:
-            if (check == 0)
-            {
-                *buf = 0;
-                return;
-            }
-        }
-    }
-}
-
-void swap(char* x, char* y)
-{
-    char t = *x; *x = *y; *y = t;
-}
-
-char* reverse(char* buffer, int i, int j)
-{
-    while (i < j) {
-        swap(&buffer[i++], &buffer[j--]);
-    }
-
-    return buffer;
-}
-
-int string_length(const char* str);
-
-char* string_concat(char* s1, char* s2)
-{
-    while (*s1 != '\0') {
-        s1++;
-    }
-    while (*s2 != '\0') {
-        *s1 = *s2;
-        s1++;
-        s2++;
-    }
-    *s1 = '\0';
-
-    return s1;
-}
-
 void itoa_ft(int num, char* str, int base, int buf_size)
 {
     const int MAX_VALUE = 999999999;
@@ -133,25 +46,6 @@ void itoa_ft(int num, char* str, int base, int buf_size)
     *(str + i) = '\0';
 }
 
-int isspace_ft(const char* str)
-{
-    int i;
-
-    i = 0;
-    while ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32)) {
-        i++;
-    }
-    return (i);
-}
-
-int isdigit_ft(int c)
-{
-    if (c >= '0' && c <= '9') {
-        return (1);
-    }
-    return (0);
-}
-
 int atoi_ft(char* str) {
     int result, positive;
 
@@ -183,24 +77,6 @@ int atoi_ft(char* str) {
     return result;
 }
 
-
-void buffer_clear(char* buffer)
-{
-    int i;
-    for (i = 0; i < strlen(buffer); i++) {
-        buffer[i] = 0;
-    }
-}
-
-int string_length(const char* str)
-{
-    int str_length = 0;
-    while (*(str + str_length) != '\0') {
-        str_length++;
-    }
-    return str_length;
-}
-
 int string_length_before_carriage_return(const char* str)
 {
     int str_length = 0;
@@ -211,15 +87,6 @@ int string_length_before_carriage_return(const char* str)
         str_length++;
     }
     return str_length;
-}
-
-void string_copy(char* dst, const char* source)
-{
-    int i;
-    for (i = 0; i < strlen(source); i++) {
-        dst[i] = source[i];
-    }
-    dst[i + 1] = '\0';
 }
 
 int count_token(const char* str, const char delim)
@@ -233,97 +100,6 @@ int count_token(const char* str, const char delim)
         str_length++;
     }
     return delim_count;
-}
-
-int string_compare(const char* str1, const char* str2)
-{
-    int is_same = FALSE;
-
-    if (str2 == NULL) {
-        return 0;
-    }
-
-    {
-        int i;
-        for (i = 0; i < strlen(str1); i++) {
-            if (*(str1 + i) == *(str2 + i)) {
-                is_same = TRUE;
-                continue;
-            }
-            else {
-                is_same = FALSE;
-                break;
-            }
-        }
-    }
-    return is_same;
-}
-
-char* tokenize(char* str_or_null, const char* delims)
-{
-    int delims_length = 0;
-    int str_or_null_length = 0;
-    static char* s_str_or_null_backup_ptr;
-    int current_position = 0;
-
-
-    if (str_or_null == 0) {
-        if (s_str_or_null_backup_ptr == 0) {
-            return 0;
-        }
-        str_or_null = s_str_or_null_backup_ptr;
-    }
-
-    while (*(delims + delims_length) != '\0') {
-        delims_length++;
-    }
-
-    while (*(str_or_null + str_or_null_length) != '\0') {
-        str_or_null_length++;
-    }
-
-    {
-        int i;
-        int j;
-
-        for (j = 0; j < delims_length; j++) {
-            do {
-                for (i = 0; i < delims_length; i++) {
-                    if (*(str_or_null) == *(delims + i)) {
-                        str_or_null = str_or_null + 1;
-                        break;
-                    }
-                }
-            } while (*(str_or_null) == *(delims + j));
-        }
-
-    }
-
-
-    {
-        int i;
-        int j;
-        for (i = 0; i < str_or_null_length; i++) {
-            for (j = 0; j < delims_length; j++) {
-                if (*(str_or_null + current_position) == *(delims + j)) {
-                    *(str_or_null + current_position) = '\0';
-
-                    s_str_or_null_backup_ptr = str_or_null + current_position + 1;
-
-                    goto label1;
-
-                }
-            }
-            current_position++;
-        }
-    }
-
-
-label1:
-    if (str_or_null_length == 0) {
-        str_or_null = 0;
-    }
-    return str_or_null;
 }
 
 int get_character(const char* filename, character_v3_t* out_character)
@@ -968,7 +744,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
 
 
-                        buffer_clear(backup_buffer);
+
                         strcpy(backup_buffer, buffer + total_count + 1);
 
                         if (i >= count) {
