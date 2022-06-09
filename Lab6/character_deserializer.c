@@ -183,6 +183,7 @@ int atoi_ft(char* str) {
     return result;
 }
 
+
 void buffer_clear(char* buffer)
 {
     int i;
@@ -722,14 +723,11 @@ int get_character(const char* filename, character_v3_t* out_character)
 
             for (i = 0; i < limit; i++) {
                 temp = tokenize(ptr, "|  \n");
-                if (atoi_ft(temp) > INT_MAX)
+                if (strlen(temp) > 49)
                 {
-                    temp = "2147483647";
-                    /**(temp + 49) = '\0';*/
-                    /*char* buf[50] = {0,};
-                    buf[i] = temp;
-                    strncpy(buf[i], temp, 49);
-                    temp = buf[i];*/
+                    char buf[50] = { 0, };
+                    strncpy(buf, temp, 49);
+                    temp = buf;
                 }
                 values_backup[value_count] = temp;
                 value_count++;
@@ -751,18 +749,18 @@ int get_character(const char* filename, character_v3_t* out_character)
                 {
                 case 0:
                     if (version_check == 1) {
-                        char buf[60] = { 0, };
-                        strncpy(buf, "player_", 49);
-                        strncat(buf, values_backup[values_check[i]], 50 - strlen("player_"));
+                        char buf[50] = { 0, };
+                        strncpy(buf, "player_", 50);
+                        strncat(buf, values_backup[values_check[i]], 42);
                         //check_name(buf);
 
-                        strncpy(out_character->name, buf, 49);
+                        strncpy(out_character->name, buf, 50);
                     }
                     else {
-                        char buf[60] = { 0, };
+                        char buf[50] = { 0, };
                         strncpy(buf, values_backup[values_check[i]], 50);
                         //check_name(buf);
-                        strncpy(out_character->name, buf, 49);
+                        strncpy(out_character->name, buf, 50);
                     }
                     break;
                 case 1:
