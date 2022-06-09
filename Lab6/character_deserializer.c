@@ -257,8 +257,8 @@ int get_character(const char* filename, character_v3_t* out_character)
             int num = 0;
             int i;
             int j;
-            char buf[10];
-            char buf2[10];
+            char buf[16] = { 0, };
+            char buf2[16] = { 0, };
             for (i = 0; i < 10; i++) {
                 if (!strcmp(words_backup[i], "dexterity")) {
                     num = atoi_ft(values_backup[i]) / 2;
@@ -317,7 +317,7 @@ int get_character(const char* filename, character_v3_t* out_character)
         {
             int i;
             int num;
-            char buf1[3];
+            char buf1[16] = { 0, };
             word_count = 12;
             value_count = 12;
 
@@ -396,7 +396,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             {
                 int num = 0;
                 int i;
-                char buf[10];
+                char buf[16] = { 0, };
                 for (i = 0; i < 14; i++) {
                     if (!strcmp(words_backup[i], "level")) {
                         num = atoi_ft(values_backup[i]);
@@ -432,7 +432,7 @@ int get_character(const char* filename, character_v3_t* out_character)
         {
             int i;
             int num;
-            char buf1[3];
+            char buf1[16] = { 0, };
             for (i = 0; i < 14; i++) {
                 if (!strcmp(version3_out_character_arr[i], "level")) {
                     num = atoi_ft(values_backup[i]);
