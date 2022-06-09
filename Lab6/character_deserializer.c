@@ -751,18 +751,18 @@ int get_character(const char* filename, character_v3_t* out_character)
                 {
                 case 0:
                     if (version_check == 1) {
-                        char buf[50] = { 0, };
-                        strncpy(buf, "player_", 50);
-                        strncat(buf, values_backup[values_check[i]], 42);
+                        char buf[60] = { 0, };
+                        strncpy(buf, "player_", 49);
+                        strncat(buf, values_backup[values_check[i]], 50 - strlen("player_"));
                         //check_name(buf);
 
-                        strncpy(out_character->name, buf, 50);
+                        strncpy(out_character->name, buf, 49);
                     }
                     else {
-                        char buf[50] = { 0, };
-                        strncpy(buf, values_backup[values_check[i]], 49);
+                        char buf[60] = { 0, };
+                        strncpy(buf, values_backup[values_check[i]], 50);
                         //check_name(buf);
-                        strncpy(out_character->name, buf, 50);
+                        strncpy(out_character->name, buf, 49);
                     }
                     break;
                 case 1:
