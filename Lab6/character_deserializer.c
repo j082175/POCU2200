@@ -11,19 +11,16 @@ void itoa_ft(int num, char* str, int base, int buf_size)
     int cnt = 0;
     int num_size = 0;
     int check = num;
-    while (check != 0)
-    {
+    while (check != 0) {
         check = check / 10;
         ++num_size;
     }
 
-    if (num >= MAX_VALUE)
-    {
+    if (num >= MAX_VALUE) {
         num = MAX_VALUE;
     }
 
-    if (buf_size <= num_size)
-    {
+    if (buf_size <= num_size) {
         return;
     }
 
@@ -59,8 +56,7 @@ int atoi_ft(char* str) {
         str++;
     }
     while ('0' <= *str && *str <= '9') {
-        if (result > INT_MAX || result < 0)
-        {
+        if (result > INT_MAX || result < 0) {
             result = INT_MAX;
             return result;
         }
@@ -69,8 +65,7 @@ int atoi_ft(char* str) {
         str++;
     }
 
-    if (result < 0)
-    {
+    if (result < 0) {
         result = INT_MAX;
     }
 
@@ -174,14 +169,14 @@ int get_character(const char* filename, character_v3_t* out_character)
         while (TRUE) {
             if (count % 2 == 0) {
                 temp = strtok(ptr, ":,");
-                if (check == 1)
-                {
-					if (temp == NULL || !strcmp(temp, backup_temp)) {
-						break;
-					}
+                if (check == 1) {
+                    if (temp == NULL || !strcmp(temp, backup_temp)) {
+                        break;
+                    }
                 } else {
                     check++;
                 }
+
                 if (!strcmp(temp, "lvl")) {
                     words_backup[word_count++] = "level";
                     ptr = NULL;
@@ -234,11 +229,9 @@ int get_character(const char* filename, character_v3_t* out_character)
                 words_backup[word_count] = temp;
                 backup_temp = temp;
                 word_count++;
-            }
-            else {
+            } else {
                 temp = strtok(ptr, ":,");
-                if (strlen(temp) > 10)
-                {
+                if (strlen(temp) > 10) {
                     *(temp + 10) = '\0';
                 }
                 values_backup[value_count] = temp;
@@ -267,6 +260,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     break;
                 }
             }
+
             for (j = 0; j < 11; j++) {
                 if (!strcmp(words_backup[j], "armour")) {
                     num = atoi_ft(values_backup[j]) / 4;
@@ -313,8 +307,7 @@ int get_character(const char* filename, character_v3_t* out_character)
         }
 
     label2:
-        if (version_check == 1)
-        {
+        if (version_check == 1) {
             int i;
             int num;
             char buf1[16] = { 0, };
@@ -510,12 +503,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
             for (i = 0; i < limit; i++) {
                 temp = strtok(ptr, "|  \n");
-                //if (strlen(temp) > 49)
-                //{
-                //    char buf[50] = { 0, };
-                //    strncpy(buf, temp, 49);
-                //    temp = buf;
-                //}
+
                 values_backup[value_count] = temp;
                 value_count++;
                 ptr = NULL;
@@ -542,8 +530,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                         //check_name(buf);
 
                         strncpy(out_character->name, buf, 50);
-                    }
-                    else {
+                    } else {
                         char buf[128] = { 0, };
                         strncpy(buf, values_backup[values_check[i]], 50);
                         //check_name(buf);
@@ -577,8 +564,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 case 9:
                     if (version_check == 4) {
                         out_character->leadership = atoi_ft(values_backup[values_check[i]]) / 10;
-                    }
-                    else {
+                    } else {
                         out_character->leadership = atoi_ft(values_backup[values_check[i]]);
                     }
                     break;
@@ -588,8 +574,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 case 11:
                     if (version_check == 2) {
                         out_character->elemental_resistance.fire = atoi_ft(values_backup[values_check[i]]) / 3;
-                    }
-                    else {
+                    } else {
                         out_character->elemental_resistance.fire = atoi_ft(values_backup[values_check[i]]);
 
                     }
@@ -597,8 +582,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 case 12:
                     if (version_check == 2) {
                         out_character->elemental_resistance.cold = atoi_ft(values_backup[values_check[i]]) / 3;
-                    }
-                    else {
+                    } else {
                         out_character->elemental_resistance.cold = atoi_ft(values_backup[values_check[i]]);
 
                     }
@@ -606,8 +590,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 case 13:
                     if (version_check == 2) {
                         out_character->elemental_resistance.lightning = atoi_ft(values_backup[values_check[i]]) / 3;
-                    }
-                    else {
+                    } else {
                         out_character->elemental_resistance.lightning = atoi_ft(values_backup[values_check[i]]);
 
                     }
@@ -680,7 +663,6 @@ int get_character(const char* filename, character_v3_t* out_character)
                     strcpy(backup_buffer, buffer + total_count + 1);
                     /*b = backup_buffer + total_count;*/
                     while (*backup_buffer != '\0') {
-
                         {
                             int j;
                             int limit = count_token(backup_buffer, '|') + 1;
@@ -753,8 +735,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
                         if (i >= count) {
                             return version_check;
-                        }
-                        else {
+                        } else {
                             i++;
                         }
                     }
