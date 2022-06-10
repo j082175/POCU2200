@@ -2,6 +2,8 @@
 
 int check_range(char* argv, int* total_range_ch_count, int* check);
 
+
+
 int check_range_total(char* first_argv, char* second_argv, int* total_range_ch_count_a, int* total_range_ch_count_b)
 {
     /* total range count 세기 end*/
@@ -435,13 +437,13 @@ int translate(int argc, const char** argv)
                     {
                         if (first_argv[i - 1] == first_argv[i + 1])
                         {
-							is_check_range_total = TRUE;
-							error_code = check_range_total(first_argv, second_argv, &total_range_ch_count1, &total_range_ch_count2);
+                            is_check_range_total = TRUE;
+                            error_code = check_range_total(first_argv, second_argv, &total_range_ch_count1, &total_range_ch_count2);
                             if (error_code > 0)
                             {
                                 return error_code;
                             }
-							break;
+                            break;
                         }
                     }
                 }
@@ -486,72 +488,81 @@ int translate(int argc, const char** argv)
                 int i;
                 for (i = 0; i < total_count; i++)
                 {
-                    buffer_overlap_second[i] = second_argv[index_arr_backup[i] - 1];
                     buffer_overlap_first[i] = first_argv[index_arr_backup[i] - 1];
                 }
             }
         }
 
-        strcpy(second_argv, buffer_overlap_second);
         strcpy(first_argv, buffer_overlap_first);
         /* first argv 중복 check end */
+
+
+
+         /* second argv 중복 check start */
+        {
+            int total_count = 0;
+
+
+            {
+                size_t i;
+                size_t j;
+                int index = 0;
+                for (i = 0; i < strlen(second_argv); i++)
+                {
+                    for (j = 0; j < strlen(second_argv); j++)
+                    {
+                        if (second_argv[i] == second_argv[j])
+                        {
+                            index = j;
+                        }
+                        if (second_argv[i] == '-')
+                        {
+                            index_arr[index] = index + 1;
+                        }
+                    }
+                    index_arr[index] = index + 1;
+                }
+            }
+
+            {
+                size_t i;
+                int count = 0;
+                for (i = 0; i < strlen(second_argv); i++)
+                {
+                    if (index_arr[i] != 0)
+                    {
+                        index_arr_backup[count] = index_arr[i];
+                        count++;
+                    }
+                }
+                total_count = count;
+            }
+
+            {
+                int i;
+                for (i = 0; i < total_count; i++)
+                {
+                    buffer_overlap_second[i] = second_argv[index_arr_backup[i] - 1];
+                }
+            }
+        }
+
+        strcpy(second_argv, buffer_overlap_second);
+        /* second argv 중복 check end */
 
 
 
         if (!is_check_range_total)
         {
             int error_code = 0;
-			error_code = check_range_total(first_argv, second_argv, &total_range_ch_count1, &total_range_ch_count2);
+            error_code = check_range_total(first_argv, second_argv, &total_range_ch_count1, &total_range_ch_count2);
             if (error_code > 0)
             {
                 return error_code;
             }
         }
 
-        /* total range count 세기 end*/
-
-        //{
-        //    int i;
-        //    int check = 0;
-        //    for (i = 0; i < total_range_ch_count1; i++)
-        //    {
-
-        //        /* ASCII 코드의 오름차순을 기준으로함 개행문자가 들어오는 경우는 없는 걸로 치고 작성 */
-        //        /* check range */
-        //        if (strlen(first_argv) >= 3)
-        //        {
-        //            int error_code = 0;
-        //            error_code = check_range(first_argv, &total_range_ch_count1, &check);
-        //            if (error_code > 0)
-        //            {
-        //                return error_code;
-        //            }
-        //            if (error_code == -1)
-        //            {
-        //                break;
-        //            }
-        //        }
-        //    }
-
-        //    check = 0;
-        //    for (i = 0; i < total_range_ch_count2; i++)
-        //    {
-        //        if (strlen(second_argv) >= 3)
-        //        {
-        //            int error_code = 0;
-        //            error_code = check_range(second_argv, &total_range_ch_count2, &check);
-        //            if (error_code > 0)
-        //            {
-        //                return error_code;
-        //            }
-        //            if (error_code == -1)
-        //            {
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
-        ///* check range */
+        
 
 
 
