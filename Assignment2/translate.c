@@ -41,85 +41,85 @@ int check_range(char* argv, int* total_range_ch_count)
 
     size_t i;
 
+    {
+        for (i = 1; i < strlen(argv) - 1; i++)
         {
-            for (i = 1; i < strlen(argv) - 1; i++)
-            {
 
-                if (argv[i] == '-')
-                {
-                    is_delim = TRUE;
-                    first_index = argv[i - 1];
-                    last_index = argv[i + 1];
-                    left_index = i - 2;
-                    right_index = i + 2;
-
-                    if (first_index > last_index)
-                    {
-                        continue;
-                    }
-                    else {
-                        goto next;
-                    }
-                }
-            }
-            if (first_index != last_index)
+            if (argv[i] == '-')
             {
+                is_delim = TRUE;
+                first_index = argv[i - 1];
+                last_index = argv[i + 1];
+                left_index = i - 2;
+                right_index = i + 2;
+
                 if (first_index > last_index)
                 {
-                    return ERROR_CODE_INVALID_RANGE;
+                    continue;
+                }
+                else {
+                    goto next;
                 }
             }
         }
-
-    next:
-
-        if (left_index >= 0)
+        if (first_index != last_index)
         {
+            if (first_index > last_index)
             {
-                int i;
-                for (i = 0; i < left_index + 1; i++)
-                {
-                    left_buf[i] = argv[i];
-                }
+                return ERROR_CODE_INVALID_RANGE;
             }
         }
+    }
 
-        if ((size_t)right_index < strlen(argv))
-        {
-            {
-                size_t i;
-                for (i = 0; i < strlen(argv) - right_index; i++)
-                {
-                    right_buf[i] = argv[right_index + i];
-                }
-            }
-        }
+next:
 
+    if (left_index >= 0)
+    {
         {
             int i;
-            for (i = 0; i < last_index - first_index + 1; i++)
+            for (i = 0; i < left_index + 1; i++)
             {
-                buf[i] = (char)first_index + i;
+                left_buf[i] = argv[i];
             }
         }
+    }
 
-        if (is_delim)
+    if ((size_t)right_index < strlen(argv))
+    {
         {
-            if (strlen(left_buf) + strlen(right_buf) + strlen(argv) >= MAX_VALUE)
+            size_t i;
+            for (i = 0; i < strlen(argv) - right_index; i++)
             {
-                return ERROR_CODE_ARGUMENT_TOO_LONG;
+                right_buf[i] = argv[right_index + i];
             }
-            strcat(left_buf, buf);
-            strcat(left_buf, right_buf);
-            strcpy(argv, left_buf);
         }
+    }
 
-        if (i == (size_t)*total_range_ch_count)
+    {
+        int i;
+        for (i = 0; i < last_index - first_index + 1; i++)
         {
-            return -1;
+            buf[i] = (char)first_index + i;
         }
-    
-        --(*total_range_ch_count);
+    }
+
+    if (is_delim)
+    {
+        if (strlen(left_buf) + strlen(right_buf) + strlen(argv) >= MAX_VALUE)
+        {
+            return ERROR_CODE_ARGUMENT_TOO_LONG;
+        }
+        strcat(left_buf, buf);
+        strcat(left_buf, right_buf);
+        strcpy(argv, left_buf);
+    }
+
+    if (i == (size_t)*total_range_ch_count)
+    {
+        return -1;
+    }
+
+    --(*total_range_ch_count);
     return 0;
 }
 
@@ -171,6 +171,41 @@ int translate(int argc, const char** argv)
             return ERROR_CODE_ARGUMENT_TOO_LONG;
         }
 
+
+        {
+            size_t i;
+            int is_checked = 0;
+            for (i = 0; i < strlen(argv[argc_index]); i++)
+            {
+                if (argv[argc_index][i] == '\\')
+                {
+                    is_checked++;
+                    if (is_checked == 2)
+                    {
+                        is_checked = 0;
+                        memmove((void*)(argv[argc_index] + i), (void*)(argv[argc_index] + i + 1), strlen(argv[argc_index]) - i);
+                    }
+                }
+            }
+        }
+
+        {
+            size_t i;
+            int is_checked = 0;
+            for (i = 0; i < strlen(argv[argc_index + 1]); i++)
+            {
+                if (argv[argc_index + 1][i] == '\\')
+                {
+                    is_checked++;
+                    if (is_checked == 2)
+                    {
+                        is_checked = 0;
+                        memmove((void*)(argv[argc_index + 1] + i), (void*)(argv[argc_index + 1] + i + 1), strlen(argv[argc_index + 1]) - i);
+                    }
+                }
+            }
+        }
+
         strcpy(first_argv, argv[argc_index]);
         strcpy(second_argv, argv[argc_index + 1]);
 
@@ -208,7 +243,7 @@ int translate(int argc, const char** argv)
                     size_t j;
                     check = FALSE;
                     check2 = 0;
-                    for (j = 0; j < strlen(escape_sequence_check_arr); j++)
+                    for (j = 0; j < sizeof(escape_sequence_check_arr); j++)
                     {
                         if (escape_sequence_check_arr[j] == first_argv[i])
                         {
@@ -342,7 +377,7 @@ int translate(int argc, const char** argv)
         /* first argv 중복 check end */
 
 
-        
+
 
 
 
