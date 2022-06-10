@@ -27,11 +27,84 @@ void check_newline_func(int* newline_arr, char* source)
     }
 }
 
+int check_range(char* argv)
+{
+    int first_index = 0;
+    int last_index = 0;
+    int left_index = -1;
+    int right_index = -1;
+    char left_buf[MAX_VALUE] = { 0, };
+    char right_buf[MAX_VALUE] = { 0, };
+    char buf[MAX_VALUE] = { 0, };
+    int is_delim = FALSE;
+
+    {
+        size_t i;
+        for (i = 1; i < strlen(argv) - 1; i++)
+        {
+            if ((argv[i] == '-'))
+            {
+                is_delim = TRUE;
+                first_index = argv[i - 1];
+                last_index = argv[i + 1];
+                left_index = i - 2;
+                right_index = i + 2;
+                break;
+            }
+        }
+    }
+
+    if (first_index > last_index)
+    {
+        return ERROR_CODE_INVALID_RANGE;
+    }
+
+    if (left_index >= 0)
+    {
+        {
+            int i;
+            for (i = 0; i < left_index + 1; i++)
+            {
+                left_buf[i] = argv[i];
+            }
+        }
+    }
+
+    if (right_index < strlen(argv))
+    {
+        {
+            size_t i;
+            for (i = 0; i < strlen(argv) - right_index; i++)
+            {
+                right_buf[i] = argv[right_index + i];
+            }
+        }
+    }
+
+    {
+        int i;
+        for (i = 0; i < last_index - first_index + 1; i++)
+        {
+            buf[i] = (char)first_index + i;
+        }
+    }
+
+    if (is_delim)
+    {
+        if (strlen(left_buf) + strlen(right_buf) + strlen(argv) >= MAX_VALUE)
+        {
+            return ERROR_CODE_ARGUMENT_TOO_LONG;
+        }
+		strcat(left_buf, buf);
+		strcat(left_buf, right_buf);
+		strcpy(argv, left_buf);
+    }
+}
+
 int translate(int argc, const char** argv)
 {
-    const unsigned int MAX_VALUE = 512;
-    char first_argv[512] = { 0, };
-    char second_argv[512] = { 0, };
+    char first_argv[MAX_VALUE] = { 0, };
+    char second_argv[MAX_VALUE] = { 0, };
     char buffer_origin[128] = { 0, };
     char buffer_backup[128] = { 0, };
     char read_buffer[32][128] = { 0, };
@@ -41,9 +114,6 @@ int translate(int argc, const char** argv)
     int read_buffer_count = 0;
     int check_newline_arr[16] = { 0, };
 
-    char check_character_left[16] = { 0, };
-    char check_character_right[16] = { 0, };
-
     char buffer_overlap_second[128] = { 0, };
     char buffer_overlap_first[128] = { 0, };
     int index_arr[512] = { 0, };
@@ -51,26 +121,57 @@ int translate(int argc, const char** argv)
     int argc_index = 1;
     int is_flag = FALSE;
 
-    if (argc > 3)
-    {
-        argc_index++;
-        is_flag = TRUE;
+    if (argc == 4) {
+        if ((strcmp(argv[1], "-i") == 0)) {
+            argc_index++;
+            is_flag = TRUE;
+        } else {
+            return ERROR_CODE_INVALID_FLAG;
+        }
     }
 
+    if (argc < 3 || argc > 4)
+    {
+        return ERROR_CODE_WRONG_ARGUMENTS_NUMBER;
+    }
+
+    /* argv 크기 검사 */
     if (argc >= 3)
     {
-        if (strlen(argv[argc_index]) > MAX_VALUE || strlen(argv[argc_index + 1]) > MAX_VALUE)
+        if (strlen(argv[argc_index]) >= MAX_VALUE || strlen(argv[argc_index + 1]) >= MAX_VALUE)
         {
             return ERROR_CODE_ARGUMENT_TOO_LONG;
         }
 
-
-        /* argv에 escape 문자가 들어올 경우 */
-
-
-
         strcpy(first_argv, argv[argc_index]);
         strcpy(second_argv, argv[argc_index + 1]);
+
+        /* argv에 escape 문자가 들어올 경우 start */
+        /* ASCII 코드의 오름차순을 기준으로함 개행문자가 들어오는 경우는 없는 걸로 치고 작성 */
+
+        if (strlen(first_argv) >= 3)
+        {
+            int error_code = 0;
+            error_code = check_range(first_argv);
+            if (error_code == ERROR_CODE_INVALID_RANGE)
+            {
+                return error_code;
+            }
+        }
+
+        if (strlen(second_argv) >= 3)
+        {
+            int error_code = 0;
+            error_code = check_range(second_argv);
+            if (error_code == ERROR_CODE_INVALID_RANGE)
+            {
+                return error_code;
+            }
+        }
+
+        /* argv에 escape 문자가 들어올 경우 end */
+
+
 
 
 
@@ -90,13 +191,12 @@ int translate(int argc, const char** argv)
         /* first argv 가 더 클때 end */
 
 
-        /* 중복 check start */
+        /* first argv 중복 check start */
         {
             int total_count = 0;
             {
                 size_t i;
                 size_t j;
-                int count = 0;
                 int index = 0;
                 for (i = 0; i < strlen(first_argv); i++)
                 {
@@ -107,7 +207,6 @@ int translate(int argc, const char** argv)
                             index = j;
                         }
                     }
-                    //buffer[index] = second_argv[index];
                     index_arr[index] = index + 1;
                 }
             }
@@ -138,7 +237,7 @@ int translate(int argc, const char** argv)
 
         strcpy(second_argv, buffer_overlap_second);
         strcpy(first_argv, buffer_overlap_first);
-        /* 중복 check end */
+        /* first argv 중복 check end */
     }
 
 
@@ -252,5 +351,5 @@ int translate(int argc, const char** argv)
 
     /*return translate(argc, argv);*/
 
-    return TRUE;
+    return 0;
 }
