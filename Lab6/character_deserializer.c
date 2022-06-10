@@ -1,759 +1,565 @@
-#include "character_deserializer.h"
-/* 이 실습에서 계산을 할 때 소수점 이하는 무시하세요. 즉, 모든 결과는 무조건 내림을 합니다.
-이 실습에서 전역(global) 변수와 정적(static) 변수의 사용을 금합니다. 전역/정적 변수 없이도 이 실습을 끝낼 수 있으니 저를 믿으세요. :)*/
+#include "translate.h"
 
-void itoa_ft(int num, char* str, int base, int buf_size)
+void check_newline_func(int* newline_arr, char* source)
 {
-    const int MAX_VALUE = 999999999;
-    int i = 0;
-    int radix = 10;
-    int deg = 1;
-    int cnt = 0;
-    int num_size = 0;
-    int check = num;
-    while (check != 0) {
-        check = check / 10;
-        ++num_size;
-    }
-
-    if (num >= MAX_VALUE) {
-        num = MAX_VALUE;
-    }
-
-    if (buf_size <= num_size) {
-        return;
-    }
-
-    while (1) {
-        if ((num / deg) > 0) {
-            cnt++;
-        } else {
-            break;
+    int index = 0;
+    int buf_count = 0;
+    int check_count = 0;
+    while (*(source + index) != '\0')
+    {
+        if (*(source + index) == '\n')
+        {
+            if (check_count > 0)
+            {
+                newline_arr[buf_count - 1]++;
+                check_count++;
+            }
+            else {
+                check_count++;
+                newline_arr[buf_count]++;
+                buf_count++;
+            }
         }
-        deg *= radix;
+        else {
+            check_count = 0;
+        }
+        index++;
     }
-    deg /= radix;
-
-    for (i = 0; i < cnt; i++) {
-        *(str + i) = num / deg + '0';
-        num -= ((num / deg) * deg);
-        deg /= radix;
-    }
-    *(str + i) = '\0';
 }
 
-int atoi_ft(char* str)
+int check_range(char* argv, int* total_range_ch_count)
 {
-    int result = 0;
-    int positive = 1;
+    int first_index = 0;
+    int last_index = 0;
+    int left_index = -1;
+    int right_index = -1;
+    char left_buf[MAX_VALUE] = { 0, };
+    char right_buf[MAX_VALUE] = { 0, };
+    char buf[MAX_VALUE] = { 0, };
+    int is_delim = FALSE;
 
-    while ((9 <= *str && *str <= 13) || *str == ' ') {
-        str++;
-    }
-    if (*str == '+' || *str == '-') {
-        if (*str == '-') {
-            positive = -1;
+
+    size_t i;
+
+    {
+        for (i = 1; i < strlen(argv) - 1; i++)
+        {
+
+            if (argv[i] == '-')
+            {
+                is_delim = TRUE;
+                first_index = argv[i - 1];
+                last_index = argv[i + 1];
+                left_index = i - 2;
+                right_index = i + 2;
+
+                if (first_index > last_index)
+                {
+                    continue;
+                }
+                else {
+                    goto next;
+                }
+            }
         }
-        str++;
-    }
-    while ('0' <= *str && *str <= '9') {
-        if (result > INT_MAX || result < 0) {
-            result = INT_MAX;
-            return result;
+        if (first_index != last_index)
+        {
+            if (first_index > last_index)
+            {
+                return ERROR_CODE_INVALID_RANGE;
+            }
         }
-        result *= 10;
-        result += (*str - '0') * positive;
-        str++;
     }
 
-    if (result < 0) {
-        result = INT_MAX;
+next:
+
+    if (left_index >= 0)
+    {
+        {
+            int i;
+            for (i = 0; i < left_index + 1; i++)
+            {
+                left_buf[i] = argv[i];
+            }
+        }
     }
 
-    return result;
+    if ((size_t)right_index < strlen(argv))
+    {
+        {
+            size_t i;
+            for (i = 0; i < strlen(argv) - right_index; i++)
+            {
+                right_buf[i] = argv[right_index + i];
+            }
+        }
+    }
+
+    {
+        int i;
+        for (i = 0; i < last_index - first_index + 1; i++)
+        {
+            buf[i] = (char)first_index + i;
+        }
+    }
+
+    if (is_delim)
+    {
+        if (strlen(left_buf) + strlen(right_buf) + strlen(argv) >= MAX_VALUE)
+        {
+            return ERROR_CODE_ARGUMENT_TOO_LONG;
+        }
+        strcat(left_buf, buf);
+        strcat(left_buf, right_buf);
+        strcpy(argv, left_buf);
+    }
+
+    if (i == (size_t)*total_range_ch_count)
+    {
+        return -1;
+    }
+
+    --(*total_range_ch_count);
+    return 0;
 }
 
-int string_length_before_carriage_return(const char* str)
+int translate(int argc, const char** argv)
 {
-    int str_length = 0;
-    while (*(str + str_length) != '\n') {
-        if (*(str + str_length) == '\0') {
-            break;
+    char first_argv[MAX_VALUE] = { 0, };
+    char second_argv[MAX_VALUE] = { 0, };
+    char buffer_origin[128] = { 0, };
+    char buffer_backup[128] = { 0, };
+    char read_buffer[32][128] = { 0, };
+
+    char* ptr = NULL;
+
+    int read_buffer_count = 0;
+    int check_newline_arr[16] = { 0, };
+
+    char buffer_overlap_second[128] = { 0, };
+    char buffer_overlap_first[128] = { 0, };
+    int index_arr[512] = { 0, };
+    int index_arr_backup[16] = { 0, };
+    int argc_index = 1;
+    int is_flag = FALSE;
+    int total_range_ch_count1 = 0;
+    int total_range_ch_count2 = 0;
+
+    char escape_sequence_arr[] = { '\a', '\b', '\f', '\n', '\r', '\t', '\v','\"', '\\','\'' };
+    char escape_sequence_check_arr[] = { 'a', 'b', 'f', 'n', 'r', 't', 'v', '"' , '\\' };
+
+    if (argc == 4) {
+        if ((strcmp(argv[1], "-i") == 0)) {
+            argc_index++;
+            is_flag = TRUE;
         }
-        str_length++;
-    }
-    return str_length;
-}
-
-int count_token(const char* str, const char delim)
-{
-    int str_length = 0;
-    int delim_count = 0;
-    while ((*(str + str_length) != '\n') && (*(str + str_length) != '\0')) {
-        if (*(str + str_length) == delim) {
-            delim_count++;
+        else {
+            return ERROR_CODE_INVALID_FLAG;
         }
-        str_length++;
-    }
-    return delim_count;
-}
-
-int get_character(const char* filename, character_v3_t* out_character)
-{
-    /* , 인지 : 인지, | 인지 먼저 검사 */
-    /*const int version1_size = 8;*/
-    /*const int version2_size = 10;*/
-    const int VERSION3_SIZE = 14;
-
-    FILE* fp = NULL;
-    char buffer[1024] = { 0, };
-    char* words_backup[512] = { 0, };
-    char* values_backup[512] = { 0, };
-
-
-
-    /*char* version1_out_character_arr[] = { "id", "lvl", "str", "dex", "intel", "def", "hp", "mp" };*/
-    /*char* version2_out_character_arr[] = { "level", "strength", "dexterity", "intelligence", "armour", "health", "mana", "name", "evasion", "magic_resistance" };*/
-    char* version3_out_character_arr[] = { "name", "level", "health", "mana", "strength", "dexterity", "intelligence", "armour", "evasion", "leadership", "minion_count", "fire_res", "cold_res", "lightning_res" };
-
-    char* minions_out_arr[] = { "name", "health", "strength", "defence" };
-
-    int values_check[128] = { 0, };
-
-    int version_check = 0;
-    if ((fp = (fopen(filename, "r"))) == NULL) {
-        return 0;
     }
 
-    /* 파일에 있는거 전부 가져오기 */
+    if (argc < 3 || argc > 4)
+    {
+        return ERROR_CODE_WRONG_ARGUMENTS_NUMBER;
+    }
+
+    /* argv 크기 검사 */
+    if (argc >= 3)
+    {
+        if (strlen(argv[argc_index]) >= MAX_VALUE || strlen(argv[argc_index + 1]) >= MAX_VALUE)
+        {
+            return ERROR_CODE_ARGUMENT_TOO_LONG;
+        }
+
+
+        {
+            size_t i;
+            int is_checked = 0;
+            for (i = 0; i < strlen(argv[argc_index]); i++)
+            {
+                if (argv[argc_index][i] == '\\')
+                {
+                    is_checked++;
+                    if (is_checked == 2)
+                    {
+                        is_checked = 0;
+                        memmove((void*)(argv[argc_index] + i), (void*)(argv[argc_index] + i + 1), strlen(argv[argc_index]) - i);
+                    }
+                }
+            }
+        }
+
+        {
+            size_t i;
+            int is_checked = 0;
+            for (i = 0; i < strlen(argv[argc_index + 1]); i++)
+            {
+                if (argv[argc_index + 1][i] == '\\')
+                {
+                    is_checked++;
+                    if (is_checked == 2)
+                    {
+                        is_checked = 0;
+                        memmove((void*)(argv[argc_index + 1] + i), (void*)(argv[argc_index + 1] + i + 1), strlen(argv[argc_index + 1]) - i);
+                    }
+                }
+            }
+        }
+
+        strcpy(first_argv, argv[argc_index]);
+        strcpy(second_argv, argv[argc_index + 1]);
+
+
+
+
+
+        /* argv에 escape 문자가 들어올 경우1 start */
+
+        {
+            size_t i;
+            int check = FALSE;
+            int check2 = 0;
+            char buf[MAX_VALUE] = { 0, };
+
+            size_t length = strlen(first_argv);
+            strcpy(buf, first_argv);
+            for (i = 0; i < length; i++)
+            {
+                if (first_argv[i] == '\\')
+                {
+                    check = TRUE;
+                    check2++;
+                    if (check2 == 2)
+                    {
+                        check2 = 0;
+                        goto next;
+                    }
+                    continue;
+                }
+
+            next:
+                if (check == TRUE)
+                {
+                    size_t j;
+                    check = FALSE;
+                    check2 = 0;
+                    for (j = 0; j < sizeof(escape_sequence_check_arr); j++)
+                    {
+                        if (escape_sequence_check_arr[j] == first_argv[i])
+                        {
+                            first_argv[i - 1] = escape_sequence_arr[j];
+                            {
+                                size_t k;
+                                for (k = i + 1; k < strlen(first_argv); k++)
+                                {
+                                    first_argv[k - 1] = buf[k];
+                                }
+                                first_argv[k - 1] = '\0';
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /* argv에 escape 문자가 들어올 경우1 end */
+
+
+        /* argv에 escape 문자가 들어올 경우2 start */
+        {
+            size_t i;
+            int check = FALSE;
+            int check2 = 0;
+            char buf[MAX_VALUE] = { 0, };
+
+            size_t length = strlen(second_argv);
+            strcpy(buf, second_argv);
+            for (i = 0; i < length; i++)
+            {
+                if (second_argv[i] == '\\')
+                {
+                    check = TRUE;
+                    check2++;
+                    if (check2 == 2)
+                    {
+                        check2 = 0;
+                        goto next2;
+                    }
+                    continue;
+                }
+
+            next2:
+                if (check == TRUE)
+                {
+                    size_t j;
+                    check = FALSE;
+                    check2 = 0;
+                    for (j = 0; j < sizeof(escape_sequence_check_arr); j++)
+                    {
+                        if (escape_sequence_check_arr[j] == second_argv[i])
+                        {
+                            second_argv[i - 1] = escape_sequence_arr[j];
+                            {
+                                size_t k;
+                                for (k = i + 1; k < strlen(second_argv); k++)
+                                {
+                                    second_argv[k - 1] = buf[k];
+                                }
+                                second_argv[k - 1] = '\0';
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        /* argv에 escape 문자가 들어올 경우2 end */
+
+
+        /* total range count 세기 start*/
+        {
+            size_t i;
+            for (i = 0; i < strlen(first_argv); i++)
+            {
+                if (first_argv[i] == '-')
+                {
+                    total_range_ch_count1 = i;
+                    total_range_ch_count2 = i;
+                }
+            }
+        }
+
+
+
+        /* total range count 세기 end*/
+
+        {
+            int i;
+            for (i = 0; i < 128; i++)
+            {
+
+                /* ASCII 코드의 오름차순을 기준으로함 개행문자가 들어오는 경우는 없는 걸로 치고 작성 */
+                /* check range */
+                if (strlen(first_argv) >= 3)
+                {
+                    int error_code = 0;
+                    error_code = check_range(first_argv, &total_range_ch_count1);
+                    if (error_code > 0)
+                    {
+                        return error_code;
+                    }
+                    if (error_code == -1)
+                    {
+                        break;
+                    }
+                }
+
+                if (strlen(second_argv) >= 3)
+                {
+                    int error_code = 0;
+                    error_code = check_range(second_argv, &total_range_ch_count2);
+                    if (error_code > 0)
+                    {
+                        return error_code;
+                    }
+                    if (error_code == -1)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        /* check range */
+
+
+        /* first argv 중복 check start */
+        {
+            int total_count = 0;
+            {
+                size_t i;
+                size_t j;
+                int index = 0;
+                for (i = 0; i < strlen(first_argv); i++)
+                {
+                    for (j = 0; j < strlen(first_argv); j++)
+                    {
+                        if (first_argv[i] == first_argv[j])
+                        {
+                            index = j;
+                        }
+                        if (first_argv[i] == '-')
+                        {
+                            index_arr[index] = index + 1;
+                        }
+                    }
+                    index_arr[index] = index + 1;
+                }
+            }
+
+            {
+                size_t i;
+                int count = 0;
+                for (i = 0; i < strlen(first_argv); i++)
+                {
+                    if (index_arr[i] != 0)
+                    {
+                        index_arr_backup[count] = index_arr[i];
+                        count++;
+                    }
+                }
+                total_count = count;
+            }
+
+            {
+                int i;
+                for (i = 0; i < total_count; i++)
+                {
+                    buffer_overlap_second[i] = second_argv[index_arr_backup[i] - 1];
+                    buffer_overlap_first[i] = first_argv[index_arr_backup[i] - 1];
+                }
+            }
+        }
+
+        strcpy(second_argv, buffer_overlap_second);
+        strcpy(first_argv, buffer_overlap_first);
+        /* first argv 중복 check end */
+
+
+
+
+
+
+
+
+        /* first argv 가 더 클때 start */
+        if (strlen(first_argv) > strlen(second_argv))
+        {
+            int second_argv_length = strlen(second_argv);
+            int sub_both_length = strlen(first_argv) - strlen(second_argv);
+            {
+                int i;
+                for (i = 0; i < sub_both_length; i++)
+                {
+                    second_argv[second_argv_length + i] = second_argv[strlen(second_argv) - 1];
+                }
+            }
+        }
+        /* first argv 가 더 클때 end */
+    }
+
+
+
+    /* 모든 문자열 읽기 start */
     {
         int count = 0;
-        char c = 0;
-        while (1) {
-            c = fgetc(fp);
-            switch (c) {
-            case ':':
-                version_check = 1;
-                break;
-            case ',':
-                version_check = 2;
-                break;
-            case '|':
-                version_check = 3;
-                break;
-            default:
-                break;
-            }
-
-            if (c == EOF) {
-                buffer[count] = '\0';
-                break;
-            }
-            buffer[count] = c;
+        while ((buffer_origin[count] = getchar()) != EOF)
+        {
             count++;
         }
     }
-    /* end */
+    /* 모든 문자열 읽기 end */
 
-    printf("%s\nversion : %d\n", buffer, version_check);
 
-    switch (version_check) {
-    case 1: {
-            int check = 0;
+
+    buffer_origin[strlen(buffer_origin) - 1] = '\0';
+
+    strcpy(buffer_backup, buffer_origin);
+
+    check_newline_func(check_newline_arr, buffer_origin);
+
+
+    /* 문자열 변환 start */
+    if (argc >= 3)
+    {
+        {
+            size_t i;
             int count = 0;
-            int word_count = 0;
-            int value_count = 0;
-            char* ptr = buffer;
-            char* temp = NULL;
-            char* backup_temp = NULL;
-            while (TRUE) {
-                if (count % 2 == 0) {
-                    temp = strtok(ptr, ":,");
-                    if (check == 1) {
-                        if (temp == NULL || !strcmp(temp, backup_temp)) {
-                            break;
-                        }
-                    } else {
-                        check++;
-                    }
-
-                    if (!strcmp(temp, "lvl")) {
-                        words_backup[word_count++] = "level";
-                        ptr = NULL;
-                        count++;
-                        continue;
-                    }
-                    if (!strcmp(temp, "str")) {
-                        words_backup[word_count++] = "strength";
-                        ptr = NULL;
-                        count++;
-                        continue;
-                    }
-                    if (!strcmp(temp, "dex")) {
-                        words_backup[word_count++] = "dexterity";
-                        ptr = NULL;
-                        count++;
-                        continue;
-                    }
-                    if (!strcmp(temp, "intel")) {
-                        words_backup[word_count++] = "intelligence";
-                        ptr = NULL;
-                        count++;
-                        continue;
-                    }
-                    if (!strcmp(temp, "def")) {
-                        words_backup[word_count++] = "armour";
-                        ptr = NULL;
-                        count++;
-                        continue;
-                    }
-                    if (!strcmp(temp, "hp")) {
-                        words_backup[word_count++] = "health";
-                        ptr = NULL;
-                        count++;
-                        continue;
-                    }
-                    if (!strcmp(temp, "mp")) {
-                        words_backup[word_count++] = "mana";
-                        ptr = NULL;
-                        count++;
-                        continue;
-                    }
-                    if (!strcmp(temp, "id")) {
-                        words_backup[word_count++] = "name";
-
-                        ptr = NULL;
-                        count++;
-                        continue;
-                    }
-                    words_backup[word_count] = temp;
-                    backup_temp = temp;
-                    word_count++;
-                } else {
-                    temp = strtok(ptr, ":,");
-                    if (strlen(temp) > 10) {
-                        *(temp + 10) = '\0';
-                    }
-                    values_backup[value_count] = temp;
-                    backup_temp = temp;
-                    value_count++;
-                }
-
-                ptr = NULL;
-                count++;
-            }
-
-            words_backup[word_count++] = "evasion";
-            words_backup[word_count] = "magic_resistance";
-
+            if (is_flag) /* 대소문자 flag가 활성화 될경우 */
             {
-                int num = 0;
-                int i;
-                int j;
-                char buf[16] = { 0, };
-                char buf2[16] = { 0, };
-                for (i = 0; i < 10; i++) {
-                    if (!strcmp(words_backup[i], "dexterity")) {
-                        num = atoi_ft(values_backup[i]) / 2;
-                        itoa_ft(num, buf, 10, sizeof(buf));
-                        values_backup[value_count++] = buf;
-                        break;
-                    }
-                }
-
-                for (j = 0; j < 11; j++) {
-                    if (!strcmp(words_backup[j], "armour")) {
-                        num = atoi_ft(values_backup[j]) / 4;
-                        itoa_ft(num, buf2, 10, sizeof(buf2));
-                        values_backup[value_count++] = buf2;
-                        break;
-                    }
-                }
-            }
-
-            goto label2;
-        }
-        break;
-    case 2: {
-        int word_count = 0;
-        int value_count = 0;
-        char backup_buffer[1024] = { 0, };
-        char* ptr = backup_buffer;
-        char* temp = NULL;
-        int limit = 0;
-
-        strcpy(backup_buffer, buffer);
-        limit = count_token(backup_buffer, ',') + 1;
-        {
-            int i;
-            for (i = 0; i < limit; i++) {
-                temp = strtok(ptr, ",\n");
-                if (!strcmp(temp, "magic_resistance")) {
-                    words_backup[word_count] = "fire_res";
-                    word_count++;
-                    words_backup[word_count] = "cold_res";
-                    word_count++;
-                    words_backup[word_count] = "lightning_res";
-                    word_count++;
-                    continue;
-                }
-                words_backup[word_count] = temp;
-                word_count++;
-                ptr = NULL;
-            }
-        }
-
-    label2:
-        if (version_check == 1) {
-            int i;
-            int num;
-            char buf1[16] = { 0, };
-            word_count = 12;
-            value_count = 12;
-
-            for (i = 0; i < 12; i++) {
-                if (!strcmp(words_backup[i], "magic_resistance")) {
-                    words_backup[i] = "fire_res";
-                    words_backup[i + 1] = "cold_res";
-                    words_backup[i + 2] = "lightning_res";
-
-                    num = atoi_ft(values_backup[i]);
-                    itoa_ft(num / 3, buf1, 10, sizeof(buf1));
-
-                    values_backup[i] = buf1;
-                    values_backup[i + 1] = buf1;
-                    values_backup[i + 2] = buf1;
-
-                    break;
-                }
-            }
-            words_backup[word_count++] = "leadership";
-            words_backup[word_count] = "minion_count";
-
-            goto version1_next;
-        }
-
-        words_backup[word_count++] = "leadership";
-        words_backup[word_count] = "minion_count";
-
-
-
-        /* magic_resistance 지우기 , leadership, minion_count, fire_res, cold_res, lightning_res 추가됨 */
-
-
-        {
-            int i;
-            int j;
-            int count1 = 0;
-            for (i = 0; i < 14; i++) {
-                for (j = 0; j < VERSION3_SIZE; j++) {
-                    if (!strcmp(version3_out_character_arr[i], words_backup[j])) {
-                        values_check[count1] = j;
-                        count1++;
-                        break;
-                    }
-                }
-            }
-        }
-
-
-        strcpy(backup_buffer, buffer);
-        temp = NULL;
-        {
-            int i;
-            int limit = count_token(backup_buffer, ',') + 1;
-            ptr = backup_buffer + string_length_before_carriage_return(buffer) + 1;
-
-            for (i = 0; i < limit; i++) {
-                temp = strtok(ptr, ",\n");
-                if (i == 7) {
-                    values_backup[value_count] = temp;
-                    value_count++;
-                    values_backup[value_count] = temp;
-                    value_count++;
-                    values_backup[value_count] = temp;
-                    value_count++;
-                    continue;
-                }
-                values_backup[value_count] = temp;
-                value_count++;
-                ptr = NULL;
-            }
-        }
-
-        if (version_check == 1) {
-
-        version1_next:{
-            int num = 0;
-            int i;
-            char buf[16] = {
-                0,
-            };
-            for (i = 0; i < 14; i++) {
-                if (!strcmp(words_backup[i], "level")) {
-                    num = atoi_ft(values_backup[i]);
-                    itoa_ft(num / 10, buf, 10, sizeof(buf));
-                    values_backup[value_count++] = buf;
-                    values_backup[value_count] = "0";
-                    break;
-                }
-            }
-        }
-
-            /* 순서 세팅 작업 */
-            {
-                int i;
-                int j;
-                int count1 = 0;
-                for (i = 0; i < 14; i++) {
-                    for (j = 0; j < VERSION3_SIZE; j++) {
-                        if (!strcmp(version3_out_character_arr[i], words_backup[j])) {
-                            values_check[count1] = j;
-                            count1++;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            goto deserializer;
-        }
-
-
-        {
-            int i;
-            int num;
-            char buf1[16] = { 0, };
-            for (i = 0; i < 14; i++) {
-                if (!strcmp(version3_out_character_arr[i], "level")) {
-                    num = atoi_ft(values_backup[i]);
-                    itoa_ft(num / 10, buf1, 10, sizeof(buf1));
-                    values_backup[value_count++] = buf1;
-                    break;
-                }
-            }
-        }
-        values_backup[value_count++] = "0";
-
-
-        goto deserializer;
-
-    }
-        break;
-    case 3: {
-        int word_count = 0;
-        int value_count = 0;
-
-
-        char backup_buffer[1024] = { 0, };
-        char* ptr = backup_buffer;
-        char* temp = NULL;
-
-
-        int total_count = 0;
-
-        int limit = 0;
-
-        /* 1열  토큰화 */
-        strcpy(backup_buffer, buffer);
-
-        limit = count_token(backup_buffer, '|') + 1;
-        {
-            int i;
-            for (i = 0; i < limit; i++) {
-                temp = strtok(ptr, "|  \n");
-                words_backup[word_count] = temp;
-                word_count++;
-                ptr = NULL;
-            }
-        }
-
-        /* 순서 세팅 작업 */
-        {
-            int i;
-            int j;
-            int count1 = 0;
-            for (i = 0; i < limit; i++) {
-                for (j = 0; j < VERSION3_SIZE; j++) {
-                    if (!strcmp(version3_out_character_arr[i], words_backup[j])) {
-                        values_check[count1] = j;
-                        count1++;
-                        break;
-                    }
-                }
-            }
-        }
-
-        total_count = string_length_before_carriage_return(buffer) + 1;
-
-        /* 2열 (데이터) 토큰화 */
-
-        strcpy(backup_buffer, buffer + total_count);
-        temp = NULL;
-        {
-            int i;
-            int limit = count_token(backup_buffer, '|') + 1;
-            ptr = backup_buffer;
-
-            total_count += string_length_before_carriage_return(buffer + total_count + 1) + 1;
-
-
-            for (i = 0; i < limit; i++) {
-                temp = strtok(ptr, "|  \n");
-
-                values_backup[value_count] = temp;
-                value_count++;
-                ptr = NULL;
-            }
-        }
-
-
-
-
-
-        {
-            int i;
-
-        deserializer:
-
-            for (i = 0; i < VERSION3_SIZE; i++) {
-                switch (i) {
-                case 0:
-                    if (version_check == 1) {
-                        char buf[128] = { 0, };
-                        strncpy(buf, "player_", 50);
-                        strncat(buf, values_backup[values_check[i]], 50 - strlen("player_"));
-                        /*check_name(buf);*/
-
-                        strncpy(out_character->name, buf, 50);
-                    } else {
-                        char buf[128] = { 0, };
-                        strncpy(buf, values_backup[values_check[i]], 50);
-                        /*check_name(buf);*/
-                        strncpy(out_character->name, buf, 50);
-                    }
-                    break;
-                case 1:
-                    out_character->level = atoi_ft(values_backup[values_check[i]]);
-                    break;
-                case 2:
-                    out_character->health = atoi_ft(values_backup[values_check[i]]);
-                    break;
-                case 3:
-                    out_character->mana = atoi_ft(values_backup[values_check[i]]);
-                    break;
-                case 4:
-                    out_character->strength = atoi_ft(values_backup[values_check[i]]);
-                    break;
-                case 5:
-                    out_character->dexterity = atoi_ft(values_backup[values_check[i]]);
-                    break;
-                case 6:
-                    out_character->intelligence = atoi_ft(values_backup[values_check[i]]);
-                    break;
-                case 7:
-                    out_character->armour = atoi_ft(values_backup[values_check[i]]);
-                    break;
-                case 8:
-                    out_character->evasion = atoi_ft(values_backup[values_check[i]]);
-                    break;
-                case 9:
-                    if (version_check == 4) {
-                        out_character->leadership = atoi_ft(values_backup[values_check[i]]) / 10;
-                    } else {
-                        out_character->leadership = atoi_ft(values_backup[values_check[i]]);
-                    }
-                    break;
-                case 10:
-                    out_character->minion_count = atoi_ft(values_backup[values_check[i]]);
-                    break;
-                case 11:
-                    if (version_check == 2) {
-                        out_character->elemental_resistance.fire = atoi_ft(values_backup[values_check[i]]) / 3;
-                    } else {
-                        out_character->elemental_resistance.fire = atoi_ft(values_backup[values_check[i]]);
-
-                    }
-                    break;
-                case 12:
-                    if (version_check == 2) {
-                        out_character->elemental_resistance.cold = atoi_ft(values_backup[values_check[i]]) / 3;
-                    } else {
-                        out_character->elemental_resistance.cold = atoi_ft(values_backup[values_check[i]]);
-
-                    }
-                    break;
-                case 13:
-                    if (version_check == 2) {
-                        out_character->elemental_resistance.lightning = atoi_ft(values_backup[values_check[i]]) / 3;
-                    } else {
-                        out_character->elemental_resistance.lightning = atoi_ft(values_backup[values_check[i]]);
-
-                    }
-                    break;
-                default:
-                    break;
-                }
-            }
-        }
-
-        temp = NULL;
-
-
-        if (out_character->minion_count) {
-            int count = out_character->minion_count;
-            int values_check1[128] = { 0, };
-            word_count = 0;
-            value_count = 0;
-
-            strcpy(backup_buffer, buffer + total_count + 1);
-            total_count += string_length_before_carriage_return(buffer + total_count + 1) + 1;
-            /*char* b = backup_buffer + total_count + 1;*/
-            if (*(backup_buffer + total_count + 1) != '\0') {
+                while (buffer_backup[count] != '\0')
                 {
-                    int i;
-                    int limit = count_token(backup_buffer, '|') + 1;
-                    ptr = backup_buffer;
-
-                    /*total_count += string_length_before_carriage_return(backup_buffer + total_count + 1) + 1;*/
-
-                    /*backup_ptr = ptr;*/
-                    /*buffer_clear(words_backup);*/
-                    for (i = 0; i < limit; i++) {
-                        temp = strtok(ptr, "|  \n");
-                        words_backup[word_count] = temp;
-                        word_count++;
-                        ptr = NULL;
-                    }
-                }
-
-                temp = NULL;
-                /*b = backup_buffer + total_count;*/
-
-                /* 순서 세팅 작업 */
-                {
-                    int i;
-                    int j;
-                    int count1 = 0;
-
-                    for (i = 0; i < 4; i++) {
-                        for (j = 0; j < 4; j++) {
-                            if (!strcmp(minions_out_arr[i], words_backup[j])) {
-                                values_check1[count1] = j;
-                                count1++;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-
-
-                /* 4열 */
-
-                {
-                    int i = 0;
-                    int k;
-
-                    strcpy(backup_buffer, buffer + total_count + 1);
-                    /*b = backup_buffer + total_count;*/
-                    while (*backup_buffer != '\0') {
+                    for (i = 0; i < strlen(first_argv); i++)
+                    {
+                        if (buffer_backup[count] == first_argv[i] || buffer_backup[count] == (first_argv[i] - 32))
                         {
-                            int j;
-                            int limit = count_token(backup_buffer, '|') + 1;
-                            ptr = backup_buffer;
-
-                            total_count += string_length_before_carriage_return(backup_buffer + total_count + 1) + 1;
-
-                            /*backup_ptr = ptr;*/
-                            for (j = 0; j < limit; j++) {
-                                temp = strtok(ptr, "|  \n");
-                                if (temp == 0) {
-                                    break;
-                                }
-                                values_backup[value_count] = temp;
-                                value_count++;
-                                ptr = NULL;
-                            }
-                        }
-
-
-
-
-
-
-
-
-
-
-
-
-                        for (k = 0; k < 4; k++) {
-                            switch (k) {
-                            case 0: {
-                                char buf[128] = {
-                                    0,
-                                };
-                                strncpy(buf, values_backup[values_check[k]], 50);
-                                // check_name(buf);
-                                strncpy(out_character->minions[i].name, buf, 50);
-                                }
-                                break;
-                            case 1:
-                                out_character->minions[i].health = atoi_ft(values_backup[values_check1[k]]);
-                                break;
-                            case 2:
-                                out_character->minions[i].strength = atoi_ft(values_backup[values_check1[k]]);
-                                break;
-                            case 3:
-                                out_character->minions[i].defence = atoi_ft(values_backup[values_check1[k]]);
-                                break;
-
-                            default:
-                                break;
-                            }
-                        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        strcpy(backup_buffer, buffer + total_count + 1);
-
-                        if (i >= count) {
-                            return version_check;
-                        } else {
-                            i++;
+                            buffer_backup[count] = second_argv[i];
+                            break;
                         }
                     }
-
+                    count++;
                 }
             }
-
+            else {
+                while (buffer_backup[count] != '\0')
+                {
+                    for (i = 0; i < strlen(first_argv); i++)
+                    {
+                        if (buffer_backup[count] == first_argv[i])
+                        {
+                            buffer_backup[count] = second_argv[i];
+                            break;
+                        }
+                    }
+                    count++;
+                }
+            }
         }
+    }
+    /* 문자열 변환 end */
 
 
 
-
+    /* 읽은 문자열 쪼개기 start */
+    ptr = buffer_backup;
+    {
+        char* temp = NULL;
+        while (1)
+        {
+            temp = strtok(ptr, "\n");
+            if (temp == NULL)
+            {
+                break;
+            }
+            strcpy(read_buffer[read_buffer_count++], temp);
+            ptr = NULL;
         }
-        break;
-    default:
-        break;
     }
+    /* 읽은 문자열 쪼개기 end */
 
-
-    if (fclose(fp) == EOF) {
-        return 0;
+    /* 문자열 내보내기 전 개행문자 추가  start */
+    {
+        int i;
+        int j;
+        int length = 0;
+        for (i = 0; i < read_buffer_count; i++)
+        {
+            length = strlen(read_buffer[i]);
+            for (j = 0; j < check_newline_arr[i]; j++)
+            {
+                read_buffer[i][length + j] = '\n';
+            }
+        }
     }
+    /* 문자열 내보내기 전 개행문자 추가  end */
 
-    return version_check;
+
+
+    /* 문자열 출력 start */
+    {
+        int i;
+        for (i = 0; i < read_buffer_count; i++)
+        {
+            printf("%s", read_buffer[i]);
+        }
+    }
+    /* 문자열 출력 end */
+
+
+
+    /*return translate(argc, argv);*/
+
+    return 0;
 }
