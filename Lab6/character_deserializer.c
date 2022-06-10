@@ -272,10 +272,8 @@ int get_character(const char* filename, character_v3_t* out_character)
         }
 
         goto label2;
-
-
-        }
-            break;
+}
+    break;
     case 2: {
         int word_count = 0;
         int value_count = 0;
