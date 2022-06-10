@@ -159,122 +159,122 @@ int get_character(const char* filename, character_v3_t* out_character)
 
     switch (version_check) {
     case 1: {
-        int check = 0;
-        int count = 0;
-        int word_count = 0;
-        int value_count = 0;
-        char* ptr = buffer;
-        char* temp = NULL;
-        char* backup_temp = NULL;
-        while (TRUE) {
-            if (count % 2 == 0) {
-                temp = strtok(ptr, ":,");
-                if (check == 1) {
-                    if (temp == NULL || !strcmp(temp, backup_temp)) {
+            int check = 0;
+            int count = 0;
+            int word_count = 0;
+            int value_count = 0;
+            char* ptr = buffer;
+            char* temp = NULL;
+            char* backup_temp = NULL;
+            while (TRUE) {
+                if (count % 2 == 0) {
+                    temp = strtok(ptr, ":,");
+                    if (check == 1) {
+                        if (temp == NULL || !strcmp(temp, backup_temp)) {
+                            break;
+                        }
+                    } else {
+                        check++;
+                    }
+
+                    if (!strcmp(temp, "lvl")) {
+                        words_backup[word_count++] = "level";
+                        ptr = NULL;
+                        count++;
+                        continue;
+                    }
+                    if (!strcmp(temp, "str")) {
+                        words_backup[word_count++] = "strength";
+                        ptr = NULL;
+                        count++;
+                        continue;
+                    }
+                    if (!strcmp(temp, "dex")) {
+                        words_backup[word_count++] = "dexterity";
+                        ptr = NULL;
+                        count++;
+                        continue;
+                    }
+                    if (!strcmp(temp, "intel")) {
+                        words_backup[word_count++] = "intelligence";
+                        ptr = NULL;
+                        count++;
+                        continue;
+                    }
+                    if (!strcmp(temp, "def")) {
+                        words_backup[word_count++] = "armour";
+                        ptr = NULL;
+                        count++;
+                        continue;
+                    }
+                    if (!strcmp(temp, "hp")) {
+                        words_backup[word_count++] = "health";
+                        ptr = NULL;
+                        count++;
+                        continue;
+                    }
+                    if (!strcmp(temp, "mp")) {
+                        words_backup[word_count++] = "mana";
+                        ptr = NULL;
+                        count++;
+                        continue;
+                    }
+                    if (!strcmp(temp, "id")) {
+                        words_backup[word_count++] = "name";
+
+                        ptr = NULL;
+                        count++;
+                        continue;
+                    }
+                    words_backup[word_count] = temp;
+                    backup_temp = temp;
+                    word_count++;
+                } else {
+                    temp = strtok(ptr, ":,");
+                    if (strlen(temp) > 10) {
+                        *(temp + 10) = '\0';
+                    }
+                    values_backup[value_count] = temp;
+                    backup_temp = temp;
+                    value_count++;
+                }
+
+                ptr = NULL;
+                count++;
+            }
+
+            words_backup[word_count++] = "evasion";
+            words_backup[word_count] = "magic_resistance";
+
+            {
+                int num = 0;
+                int i;
+                int j;
+                char buf[16] = { 0, };
+                char buf2[16] = { 0, };
+                for (i = 0; i < 10; i++) {
+                    if (!strcmp(words_backup[i], "dexterity")) {
+                        num = atoi_ft(values_backup[i]) / 2;
+                        itoa_ft(num, buf, 10, sizeof(buf));
+                        values_backup[value_count++] = buf;
                         break;
                     }
-                } else {
-                    check++;
                 }
 
-                if (!strcmp(temp, "lvl")) {
-                    words_backup[word_count++] = "level";
-                    ptr = NULL;
-                    count++;
-                    continue;
+                for (j = 0; j < 11; j++) {
+                    if (!strcmp(words_backup[j], "armour")) {
+                        num = atoi_ft(values_backup[j]) / 4;
+                        itoa_ft(num, buf2, 10, sizeof(buf2));
+                        values_backup[value_count++] = buf2;
+                        break;
+                    }
                 }
-                if (!strcmp(temp, "str")) {
-                    words_backup[word_count++] = "strength";
-                    ptr = NULL;
-                    count++;
-                    continue;
-                }
-                if (!strcmp(temp, "dex")) {
-                    words_backup[word_count++] = "dexterity";
-                    ptr = NULL;
-                    count++;
-                    continue;
-                }
-                if (!strcmp(temp, "intel")) {
-                    words_backup[word_count++] = "intelligence";
-                    ptr = NULL;
-                    count++;
-                    continue;
-                }
-                if (!strcmp(temp, "def")) {
-                    words_backup[word_count++] = "armour";
-                    ptr = NULL;
-                    count++;
-                    continue;
-                }
-                if (!strcmp(temp, "hp")) {
-                    words_backup[word_count++] = "health";
-                    ptr = NULL;
-                    count++;
-                    continue;
-                }
-                if (!strcmp(temp, "mp")) {
-                    words_backup[word_count++] = "mana";
-                    ptr = NULL;
-                    count++;
-                    continue;
-                }
-                if (!strcmp(temp, "id")) {
-                    words_backup[word_count++] = "name";
-
-                    ptr = NULL;
-                    count++;
-                    continue;
-                }
-                words_backup[word_count] = temp;
-                backup_temp = temp;
-                word_count++;
-            } else {
-                temp = strtok(ptr, ":,");
-                if (strlen(temp) > 10) {
-                    *(temp + 10) = '\0';
-                }
-                values_backup[value_count] = temp;
-                backup_temp = temp;
-                value_count++;
             }
 
-            ptr = NULL;
-            count++;
+            goto label2;
+
+
         }
-
-        words_backup[word_count++] = "evasion";
-        words_backup[word_count] = "magic_resistance";
-
-        {
-            int num = 0;
-            int i;
-            int j;
-            char buf[16] = { 0, };
-            char buf2[16] = { 0, };
-            for (i = 0; i < 10; i++) {
-                if (!strcmp(words_backup[i], "dexterity")) {
-                    num = atoi_ft(values_backup[i]) / 2;
-                    itoa_ft(num, buf, 10, sizeof(buf));
-                    values_backup[value_count++] = buf;
-                    break;
-                }
-            }
-
-            for (j = 0; j < 11; j++) {
-                if (!strcmp(words_backup[j], "armour")) {
-                    num = atoi_ft(values_backup[j]) / 4;
-                    itoa_ft(num, buf2, 10, sizeof(buf2));
-                    values_backup[value_count++] = buf2;
-                    break;
-                }
-            }
-        }
-
-        goto label2;
-
-
-    }
         break;
     case 2: {
         int word_count = 0;
