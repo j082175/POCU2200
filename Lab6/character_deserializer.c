@@ -158,8 +158,7 @@ int get_character(const char* filename, character_v3_t* out_character)
     printf("%s\nversion : %d\n", buffer, version_check);
 
     switch (version_check) {
-    case 1:
-        {
+    case 1: {
         int check = 0;
         int count = 0;
         int word_count = 0;
@@ -277,8 +276,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
         }
         break;
-    case 2:
-        {
+    case 2: {
         int word_count = 0;
         int value_count = 0;
         char backup_buffer[1024] = { 0, };
@@ -387,8 +385,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
         if (version_check == 1) {
 
-        version1_next:
-        {
+        version1_next: {
             int num = 0;
             int i;
             char buf[16] = {
@@ -445,8 +442,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
         }
         break;
-    case 3:
-        {
+    case 3: {
         int word_count = 0;
         int value_count = 0;
 
@@ -696,13 +692,14 @@ int get_character(const char* filename, character_v3_t* out_character)
 
                         for (k = 0; k < 4; k++) {
                             switch (k) {
-                            case 0:
-                                {
-                                    char buf[128] = { 0, };
-                                    strncpy(buf, values_backup[values_check[k]], 50);
-                                    //check_name(buf);
-                                    strncpy(out_character->minions[i].name, buf, 50);
-                                }
+                            case 0: {
+                                char buf[128] = {
+                                    0,
+                                };
+                                strncpy(buf, values_backup[values_check[k]], 50);
+                                // check_name(buf);
+                                strncpy(out_character->minions[i].name, buf, 50);
+                            }
                                 break;
                             case 1:
                                 out_character->minions[i].health = atoi_ft(values_backup[values_check1[k]]);
@@ -750,7 +747,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
 
     }
-    break;
+        break;
     default:
         break;
     }
