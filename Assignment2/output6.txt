@@ -1,1 +1,2 @@
-cccctcccnddddtdddn
+cccc	ccc
+dddd	ddd
