@@ -42,7 +42,7 @@ int check_range(char* argv)
         size_t i;
         for (i = 1; i < strlen(argv) - 1; i++)
         {
-            if ((argv[i] == '-'))
+            if (argv[i] == '-')
             {
                 is_delim = TRUE;
                 first_index = argv[i - 1];
