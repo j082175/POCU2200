@@ -27,8 +27,7 @@ void itoa_ft(int num, char* str, int base, int buf_size)
     while (1) {
         if ((num / deg) > 0) {
             cnt++;
-        }
-        else {
+        } else {
             break;
         }
         deg *= radix;
@@ -43,16 +42,18 @@ void itoa_ft(int num, char* str, int base, int buf_size)
     *(str + i) = '\0';
 }
 
-int atoi_ft(char* str) {
-    int result, positive;
+int atoi_ft(char* str)
+{
+    int result = 0;
+    int positive = 1;
 
-    result = 0;
-    positive = 1;
-    while ((9 <= *str && *str <= 13) || *str == ' ')
+    while ((9 <= *str && *str <= 13) || *str == ' ') {
         str++;
+    }
     if (*str == '+' || *str == '-') {
-        if (*str == '-')
+        if (*str == '-') {
             positive = -1;
+        }
         str++;
     }
     while ('0' <= *str && *str <= '9') {
@@ -158,7 +159,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
     switch (version_check) {
     case 1:
-    {
+        {
         int check = 0;
         int count = 0;
         int word_count = 0;
@@ -274,10 +275,10 @@ int get_character(const char* filename, character_v3_t* out_character)
         goto label2;
 
 
-    }
-    break;
+        }
+        break;
     case 2:
-    {
+        {
         int word_count = 0;
         int value_count = 0;
         char backup_buffer[1024] = { 0, };
@@ -385,22 +386,24 @@ int get_character(const char* filename, character_v3_t* out_character)
         }
 
         if (version_check == 1) {
+
         version1_next:
-            {
-                int num = 0;
-                int i;
-                char buf[16] = { 0, };
-                for (i = 0; i < 14; i++) {
-                    if (!strcmp(words_backup[i], "level")) {
-                        num = atoi_ft(values_backup[i]);
-                        itoa_ft(num / 10, buf, 10, sizeof(buf));
-                        values_backup[value_count++] = buf;
-                        values_backup[value_count] = "0";
-                        break;
-                    }
+        {
+            int num = 0;
+            int i;
+            char buf[16] = {
+                0,
+            };
+            for (i = 0; i < 14; i++) {
+                if (!strcmp(words_backup[i], "level")) {
+                    num = atoi_ft(values_backup[i]);
+                    itoa_ft(num / 10, buf, 10, sizeof(buf));
+                    values_backup[value_count++] = buf;
+                    values_backup[value_count] = "0";
+                    break;
                 }
             }
-
+        }
 
             /* 순서 세팅 작업 */
             {
@@ -440,10 +443,10 @@ int get_character(const char* filename, character_v3_t* out_character)
 
         goto deserializer;
 
-    }
-    break;
+        }
+        break;
     case 3:
-    {
+        {
         int word_count = 0;
         int value_count = 0;
 
@@ -520,20 +523,19 @@ int get_character(const char* filename, character_v3_t* out_character)
         deserializer:
 
             for (i = 0; i < VERSION3_SIZE; i++) {
-                switch (i)
-                {
+                switch (i) {
                 case 0:
                     if (version_check == 1) {
                         char buf[128] = { 0, };
                         strncpy(buf, "player_", 50);
                         strncat(buf, values_backup[values_check[i]], 50 - strlen("player_"));
-                        //check_name(buf);
+                        /*check_name(buf);*/
 
                         strncpy(out_character->name, buf, 50);
                     } else {
                         char buf[128] = { 0, };
                         strncpy(buf, values_backup[values_check[i]], 50);
-                        //check_name(buf);
+                        /*check_name(buf);*/
                         strncpy(out_character->name, buf, 50);
                     }
                     break;
@@ -634,8 +636,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 temp = NULL;
                 /*b = backup_buffer + total_count;*/
 
-
-                        /* 순서 세팅 작업 */
+                /* 순서 세팅 작업 */
                 {
                     int i;
                     int j;
@@ -696,13 +697,13 @@ int get_character(const char* filename, character_v3_t* out_character)
                         for (k = 0; k < 4; k++) {
                             switch (k) {
                             case 0:
-                            {
-                                char buf[128] = { 0, };
-                                strncpy(buf, values_backup[values_check[k]], 50);
-                                //check_name(buf);
-                                strncpy(out_character->minions[i].name, buf, 50);
-                            }
-                            break;
+                                {
+                                    char buf[128] = { 0, };
+                                    strncpy(buf, values_backup[values_check[k]], 50);
+                                    //check_name(buf);
+                                    strncpy(out_character->minions[i].name, buf, 50);
+                                }
+                                break;
                             case 1:
                                 out_character->minions[i].health = atoi_ft(values_backup[values_check1[k]]);
                                 break;
