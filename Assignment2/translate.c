@@ -27,7 +27,7 @@ void check_newline_func(int* newline_arr, char* source)
     }
 }
 
-int check_range(char* argv, int* is_end, int* total_range_ch_count)
+int check_range(char* argv, int* total_range_ch_count)
 {
     int first_index = 0;
     int last_index = 0;
@@ -114,7 +114,7 @@ int check_range(char* argv, int* is_end, int* total_range_ch_count)
             strcpy(argv, left_buf);
         }
 
-        if (i == *total_range_ch_count)
+        if (i == (size_t)*total_range_ch_count)
         {
             return -1;
         }
@@ -196,6 +196,7 @@ int translate(int argc, const char** argv)
                     check2++;
                     if (check2 == 2)
                     {
+                        check2 = 0;
                         goto next;
                     }
                     continue;
@@ -206,6 +207,7 @@ int translate(int argc, const char** argv)
                 {
                     size_t j;
                     check = FALSE;
+                    check2 = 0;
                     for (j = 0; j < strlen(escape_sequence_check_arr); j++)
                     {
                         if (escape_sequence_check_arr[j] == first_argv[i])
@@ -233,7 +235,7 @@ int translate(int argc, const char** argv)
 
         /* total range count 세기 start*/
         {
-            int i;
+            size_t i;
             for (i = 0; i < strlen(first_argv); i++)
             {
                 if (first_argv[i] == '-')
@@ -250,7 +252,6 @@ int translate(int argc, const char** argv)
 
         {
             int i;
-            int is_end = FALSE;
             for (i = 0; i < 128; i++)
             {
 
@@ -259,7 +260,7 @@ int translate(int argc, const char** argv)
                 if (strlen(first_argv) >= 3)
                 {
                     int error_code = 0;
-                    error_code = check_range(first_argv, &is_end, &total_range_ch_count1);
+                    error_code = check_range(first_argv, &total_range_ch_count1);
                     if (error_code > 0)
                     {
                         return error_code;
@@ -273,7 +274,7 @@ int translate(int argc, const char** argv)
                 if (strlen(second_argv) >= 3)
                 {
                     int error_code = 0;
-                    error_code = check_range(second_argv, &is_end, &total_range_ch_count2);
+                    error_code = check_range(second_argv, &total_range_ch_count2);
                     if (error_code > 0)
                     {
                         return error_code;
