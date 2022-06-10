@@ -70,7 +70,7 @@ int check_range(char* argv)
         }
     }
 
-    if (right_index < strlen(argv))
+    if ((size_t)right_index < strlen(argv))
     {
         {
             size_t i;
@@ -95,10 +95,12 @@ int check_range(char* argv)
         {
             return ERROR_CODE_ARGUMENT_TOO_LONG;
         }
-		strcat(left_buf, buf);
-		strcat(left_buf, right_buf);
-		strcpy(argv, left_buf);
+        strcat(left_buf, buf);
+        strcat(left_buf, right_buf);
+        strcpy(argv, left_buf);
     }
+
+    return 0;
 }
 
 int translate(int argc, const char** argv)
@@ -125,7 +127,8 @@ int translate(int argc, const char** argv)
         if ((strcmp(argv[1], "-i") == 0)) {
             argc_index++;
             is_flag = TRUE;
-        } else {
+        }
+        else {
             return ERROR_CODE_INVALID_FLAG;
         }
     }
@@ -153,7 +156,7 @@ int translate(int argc, const char** argv)
         {
             int error_code = 0;
             error_code = check_range(first_argv);
-            if (error_code == ERROR_CODE_INVALID_RANGE)
+            if (error_code > 0)
             {
                 return error_code;
             }
@@ -163,7 +166,7 @@ int translate(int argc, const char** argv)
         {
             int error_code = 0;
             error_code = check_range(second_argv);
-            if (error_code == ERROR_CODE_INVALID_RANGE)
+            if (error_code > 0)
             {
                 return error_code;
             }
