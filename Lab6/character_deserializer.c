@@ -274,7 +274,7 @@ int get_character(const char* filename, character_v3_t* out_character)
         goto label2;
 
 
-        }
+    }
         break;
     case 2: {
         int word_count = 0;
@@ -385,7 +385,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
         if (version_check == 1) {
 
-        version1_next: {
+        version1_next:{
             int num = 0;
             int i;
             char buf[16] = {
@@ -440,7 +440,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
         goto deserializer;
 
-        }
+    }
         break;
     case 3: {
         int word_count = 0;
@@ -699,7 +699,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                                 strncpy(buf, values_backup[values_check[k]], 50);
                                 // check_name(buf);
                                 strncpy(out_character->minions[i].name, buf, 50);
-                            }
+                                }
                                 break;
                             case 1:
                                 out_character->minions[i].health = atoi_ft(values_backup[values_check1[k]]);
@@ -746,7 +746,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
 
 
-    }
+        }
         break;
     default:
         break;
