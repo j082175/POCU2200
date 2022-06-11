@@ -28,8 +28,7 @@ void itoa_ft(int num, char* str, int base, int buf_size)
     while (1) {
         if ((num / deg) > 0) {
             cnt++;
-        }
-        else {
+        } else {
             break;
         }
         deg *= radix;
@@ -45,15 +44,16 @@ void itoa_ft(int num, char* str, int base, int buf_size)
 }
 
 int atoi_ft(char* str) {
-    int result, positive;
+    int result = 0;
+    int positive = 1;
 
-    result = 0;
-    positive = 1;
-    while ((9 <= *str && *str <= 13) || *str == ' ')
+    while ((9 <= *str && *str <= 13) || *str == ' ') {
         str++;
+    }
     if (*str == '+' || *str == '-') {
-        if (*str == '-')
+        if (*str == '-') {
             positive = -1;
+        }
         str++;
     }
     while ('0' <= *str && *str <= '9') {
@@ -185,8 +185,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                         if (temp == NULL || !strcmp(temp, backup_temp)) {
                             break;
                         }
-                    }
-                    else {
+                    } else {
                         check++;
                     }
 
@@ -242,8 +241,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     words_backup[word_count] = temp;
                     backup_temp = temp;
                     word_count++;
-                }
-                else {
+                } else {
                     temp = strtok(ptr, ":,");
                     if (strlen(temp) > 10) {
                         *(temp + 10) = '\0';
@@ -400,10 +398,13 @@ int get_character(const char* filename, character_v3_t* out_character)
 
             if (version_check == 1) {
 
-            version1_next: {
+            version1_next:
+            {
                 int num = 0;
                 int i;
-                char buf[16] = { 0, };
+                char buf[16] = {
+                    0,
+                };
                 for (i = 0; i < 14; i++) {
                     if (!strcmp(words_backup[i], "level")) {
                         num = atoi_ft(values_backup[i]);
@@ -413,29 +414,26 @@ int get_character(const char* filename, character_v3_t* out_character)
                         break;
                     }
                 }
+            }
 
-                }
-
-
-            /* 순서 세팅 작업 */
-            {
-                int i;
-                int j;
-                int count1 = 0;
-                for (i = 0; i < 14; i++) {
-                    for (j = 0; j < VERSION3_SIZE; j++) {
-                        if (!strcmp(version3_out_character_arr[i], words_backup[j])) {
-                            values_check[count1] = j;
-                            count1++;
-                            break;
+                /* 순서 세팅 작업 */
+                {
+                    int i;
+                    int j;
+                    int count1 = 0;
+                    for (i = 0; i < 14; i++) {
+                        for (j = 0; j < VERSION3_SIZE; j++) {
+                            if (!strcmp(version3_out_character_arr[i], words_backup[j])) {
+                                values_check[count1] = j;
+                                count1++;
+                                break;
+                            }
                         }
                     }
                 }
-            }
 
-            goto deserializer;
+                goto deserializer;
             }
-
 
             {
                 int i;
@@ -535,8 +533,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             deserializer:
 
                 for (i = 0; i < VERSION3_SIZE; i++) {
-                    switch (i)
-                    {
+                    switch (i) {
                     case 0:
                         if (version_check == 1) {
                             char buf[128] = { 0, };
@@ -545,8 +542,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                             /*check_name(buf);*/
 
                             strncpy(out_character->name, buf, 50);
-                        }
-                        else {
+                        } else {
                             char buf[128] = { 0, };
                             strncpy(buf, values_backup[values_check[i]], 50);
                             /*check_name(buf);*/
@@ -580,8 +576,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     case 9:
                         if (version_check == 4) {
                             out_character->leadership = atoi_ft(values_backup[values_check[i]]) / 10;
-                        }
-                        else {
+                        } else {
                             out_character->leadership = atoi_ft(values_backup[values_check[i]]);
                         }
                         break;
@@ -591,8 +586,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     case 11:
                         if (version_check == 2) {
                             out_character->elemental_resistance.fire = atoi_ft(values_backup[values_check[i]]) / 3;
-                        }
-                        else {
+                        } else {
                             out_character->elemental_resistance.fire = atoi_ft(values_backup[values_check[i]]);
 
                         }
@@ -600,8 +594,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     case 12:
                         if (version_check == 2) {
                             out_character->elemental_resistance.cold = atoi_ft(values_backup[values_check[i]]) / 3;
-                        }
-                        else {
+                        } else {
                             out_character->elemental_resistance.cold = atoi_ft(values_backup[values_check[i]]);
 
                         }
@@ -609,8 +602,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     case 13:
                         if (version_check == 2) {
                             out_character->elemental_resistance.lightning = atoi_ft(values_backup[values_check[i]]) / 3;
-                        }
-                        else {
+                        } else {
                             out_character->elemental_resistance.lightning = atoi_ft(values_backup[values_check[i]]);
 
                         }
@@ -654,8 +646,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                     temp = NULL;
                     /*b = backup_buffer2 + total_count;*/
 
-
-                            /* 순서 세팅 작업 */
+                    /* 순서 세팅 작업 */
                     {
                         int i;
                         int j;
@@ -754,8 +745,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
                             if (i >= count) {
                                 return version_check;
-                            }
-                            else {
+                            } else {
                                 i++;
                             }
                         }
