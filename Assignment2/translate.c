@@ -219,7 +219,7 @@ int translate(int argc, const char** argv)
 
 
 
-        /* argv에 escape 문자가 들어올 경우 start */
+        /* argv에 escape 문자가 들어올 경우1 start */
 
         {
             size_t i;
@@ -270,7 +270,60 @@ int translate(int argc, const char** argv)
             }
         }
 
-        /* argv에 escape 문자가 들어올 경우 end */
+        /* argv에 escape 문자가 들어올 경우1 end */
+
+		/* argv에 escape 문자가 들어올 경우2 start */
+
+        {
+            size_t i;
+            int check = FALSE;
+            int check2 = 0;
+            char buf[MAX_VALUE] = { 0, };
+
+            size_t length = strlen(second_argv);
+            strcpy(buf, second_argv);
+            for (i = 0; i < length; i++)
+            {
+                if (second_argv[i] == '\\')
+                {
+                    check = TRUE;
+                    check2++;
+                    if (check2 == 2)
+                    {
+                        check2 = 0;
+                        goto next2;
+                    }
+                    continue;
+                }
+
+            next2:
+                if (check == TRUE)
+                {
+                    size_t j;
+                    check = FALSE;
+                    check2 = 0;
+                    for (j = 0; j < sizeof(escape_sequence_check_arr); j++)
+                    {
+                        if (escape_sequence_check_arr[j] == second_argv[i])
+                        {
+                            second_argv[i - 1] = escape_sequence_arr[j];
+                            {
+                                size_t k;
+                                for (k = i + 1; k < strlen(second_argv); k++)
+                                {
+                                    second_argv[k - 1] = buf[k];
+                                }
+                                second_argv[k - 1] = '\0';
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /* argv에 escape 문자가 들어올 경우2 end */
 
 
 
@@ -467,60 +520,61 @@ int translate(int argc, const char** argv)
 
 
 
-    /* 읽은 문자열 쪼개기 start */
-    ptr = buffer_backup;
-    {
-        char* temp = NULL;
-        while (1)
-        {
-            temp = strtok(ptr, "\n");
-            if (temp == NULL)
-            {
-                break;
-            }
-            strcpy(read_buffer[read_buffer_count++], temp);
-            ptr = NULL;
-        }
-    }
-    /* 읽은 문자열 쪼개기 end */
+    ///* 읽은 문자열 쪼개기 start */
+    //ptr = buffer_backup;
+    //{
+    //    char* temp = NULL;
+    //    while (1)
+    //    {
+    //        temp = strtok(ptr, "\n");
+    //        if (temp == NULL)
+    //        {
+    //            break;
+    //        }
+    //        strcpy(read_buffer[read_buffer_count++], temp);
+    //        ptr = NULL;
+    //    }
+    //}
+    ///* 읽은 문자열 쪼개기 end */
 
-    /* 문자열 내보내기 전 개행문자 추가  start */
-    {
-        int i = 0;
-        int j = 0;
-        int length = 0;
-        char(*p)[128] = read_buffer;
-        for (i = 0; i < read_buffer_count; i++)
-        {
-            length = strlen(read_buffer[i]);
-            for (j = 0; j < check_newline_arr[i]; j++)
-            {
-                read_buffer[i][length + j] = '\n';
-            }
-        }
-        --i;
-        --j;
+    ///* 문자열 내보내기 전 개행문자 추가  start */
+    //{
+    //    int i = 0;
+    //    int j = 0;
+    //    int length = 0;
+    //    char(*p)[128] = read_buffer;
+    //    for (i = 0; i < read_buffer_count; i++)
+    //    {
+    //        length = strlen(read_buffer[i]);
+    //        for (j = 0; j < check_newline_arr[i]; j++)
+    //        {
+    //            read_buffer[i][length + j] = '\n';
+    //        }
+    //    }
+    //    --i;
+    //    --j;
 
-        //read_buffer[i][length + j] = '\0';
-        (*(p + i))[length + j] = '\0';
+    //    //read_buffer[i][length + j] = '\0';
+    //    (*(p + i))[length + j] = '\0';
 
-        int w = 3;
-    }
-    /* 문자열 내보내기 전 개행문자 추가  end */
-
-
-
-    /* 문자열 출력 start */
-    {
-        int i;
-        for (i = 0; i < read_buffer_count; i++)
-        {
-            printf("%s", read_buffer[i]);
-        }
-    }
-    /* 문자열 출력 end */
+    //    int w = 3;
+    //}
+    ///* 문자열 내보내기 전 개행문자 추가  end */
 
 
+
+    ///* 문자열 출력 start */
+    //{
+    //    int i;
+    //    for (i = 0; i < read_buffer_count; i++)
+    //    {
+    //        printf("%s", read_buffer[i]);
+    //    }
+    //}
+    ///* 문자열 출력 end */
+
+    buffer_backup[strlen(buffer_backup)] = '\0';
+    printf("%s", buffer_backup);
 
     /*return translate(argc, argv);*/
 
