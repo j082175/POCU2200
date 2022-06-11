@@ -272,8 +272,8 @@ int get_character(const char* filename, character_v3_t* out_character)
         }
 
         goto label2;
-                }
-            break;
+        }
+        break;
     case 2: {
         int word_count = 0;
         int value_count = 0;
@@ -383,7 +383,9 @@ int get_character(const char* filename, character_v3_t* out_character)
 
         if (version_check == 1) {
 
-        version1_next:{
+        version1_next:
+
+        {
             int num = 0;
             int i;
             char buf[16] = {
@@ -419,7 +421,6 @@ int get_character(const char* filename, character_v3_t* out_character)
             goto deserializer;
         }
 
-
         {
             int i;
             int num;
@@ -435,11 +436,11 @@ int get_character(const char* filename, character_v3_t* out_character)
         }
         values_backup[value_count++] = "0";
 
-
         goto deserializer;
 
-    }
+        }
         break;
+
     case 3: {
         int word_count = 0;
         int value_count = 0;
