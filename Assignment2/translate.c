@@ -27,7 +27,7 @@ void check_newline_func(int* newline_arr, char* source)
     }
 }
 
-int check_range(char* argv, int* total_range_ch_count)
+int check_range(char* argv, int* total_range_ch_count, int* check)
 {
     int first_index = 0;
     int last_index = 0;
@@ -58,6 +58,11 @@ int check_range(char* argv, int* total_range_ch_count)
                     continue;
                 }
                 else {
+                    if (*check == TRUE)
+                    {
+                        return 0;
+                    }
+                    *check = 1;
                     goto next;
                 }
             }
@@ -147,6 +152,17 @@ int translate(int argc, const char** argv)
 
     char escape_sequence_arr[] = { '\a', '\b', '\f', '\n', '\r', '\t', '\v','\"', '\\','\'' };
     char escape_sequence_check_arr[] = { 'a', 'b', 'f', 'n', 'r', 't', 'v', '"' , '\\' };
+    char escape_sequence_total_area[32] = { 0, };
+
+    {
+        size_t i;
+        int count = '\xe';
+        for (i = 0; i < '\x1f' + 1 - '\xe'; i++)
+        {
+            escape_sequence_total_area[i] = count++;
+        }
+        escape_sequence_total_area['\x1f'] = '\0';
+    }
 
     if (argc == 4) {
         if ((strcmp(argv[1], "-i") == 0)) {
@@ -396,6 +412,9 @@ int translate(int argc, const char** argv)
 
 
 
+        
+
+
         /* total range count 세기 start*/
         {
             size_t i;
@@ -416,6 +435,7 @@ int translate(int argc, const char** argv)
 
         {
             int i;
+            int check = 0;
             for (i = 0; i < 128; i++)
             {
 
@@ -424,7 +444,7 @@ int translate(int argc, const char** argv)
                 if (strlen(first_argv) >= 3)
                 {
                     int error_code = 0;
-                    error_code = check_range(first_argv, &total_range_ch_count1);
+                    error_code = check_range(first_argv, &total_range_ch_count1, &check);
                     if (error_code > 0)
                     {
                         return error_code;
@@ -435,10 +455,12 @@ int translate(int argc, const char** argv)
                     }
                 }
 
+                check = 0;
+
                 if (strlen(second_argv) >= 3)
                 {
                     int error_code = 0;
-                    error_code = check_range(second_argv, &total_range_ch_count2);
+                    error_code = check_range(second_argv, &total_range_ch_count2, &check);
                     if (error_code > 0)
                     {
                         return error_code;
@@ -451,6 +473,49 @@ int translate(int argc, const char** argv)
             }
         }
         /* check range */
+
+
+        /* 허용되지 않는 escape 문자가 있는지 다시 한번더 검사1 start */
+        {
+            int i;
+
+            for (i = 0; i < strlen(first_argv); i++)
+            {
+                {
+                    size_t j;
+                    for (j = 0; j < strlen(escape_sequence_total_area); j++)
+                    {
+                        if (escape_sequence_total_area[j] == first_argv[i])
+                        {
+                            return ERROR_CODE_INVALID_FORMAT;
+                        }
+                    }
+                }
+            }
+        }
+
+        /* 허용되지 않는 escape 문자가 있는지 다시 한번더 검사1 end */
+
+        /* 허용되지 않는 escape 문자가 있는지 다시 한번더 검사2 start */
+        {
+            int i;
+
+            for (i = 0; i < strlen(second_argv); i++)
+            {
+                {
+                    size_t j;
+                    for (j = 0; j < strlen(escape_sequence_total_area); j++)
+                    {
+                        if (escape_sequence_total_area[j] == second_argv[i])
+                        {
+                            return ERROR_CODE_INVALID_FORMAT;
+                        }
+                    }
+                }
+            }
+        }
+
+        /* 허용되지 않는 escape 문자가 있는지 다시 한번더 검사2 end */
 
 
         /* first argv 중복 check start */
