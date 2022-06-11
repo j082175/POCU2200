@@ -504,6 +504,7 @@ int translate(int argc, const char** argv)
         //read_buffer[i][length + j] = '\0';
         (*(p + i))[length + j] = '\0';
 
+        int w = 3;
     }
     /* 문자열 내보내기 전 개행문자 추가  end */
 
