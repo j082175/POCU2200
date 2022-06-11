@@ -179,8 +179,28 @@ int translate(int argc, const char** argv)
         {
             size_t i;
             int is_checked = 0;
+            int is_escape_exist = FALSE;
             for (i = 0; i < strlen(argv[argc_index]); i++)
             {
+                if (is_checked == 1)
+                {
+                    {
+                        size_t j;
+                        for (j = 0; j < sizeof(escape_sequence_check_arr); j++)
+                        {
+                            if (escape_sequence_check_arr[j] == argv[argc_index][i])
+                            {
+                                is_escape_exist = TRUE;
+                                break;
+                            }
+                        }
+                    }
+                    if (is_escape_exist == FALSE)
+                    {
+                        return ERROR_CODE_INVALID_FORMAT;
+                    }
+                }
+
                 if (argv[argc_index][i] == '\\')
                 {
                     is_checked++;
@@ -193,14 +213,35 @@ int translate(int argc, const char** argv)
                 else {
                     is_checked = 0;
                 }
+                is_escape_exist = FALSE;
             }
         }
 
         {
             size_t i;
             int is_checked = 0;
+            int is_escape_exist = FALSE;
             for (i = 0; i < strlen(argv[argc_index + 1]); i++)
             {
+                if (is_checked == 1)
+                {
+                    {
+                        size_t j;
+                        for (j = 0; j < sizeof(escape_sequence_check_arr); j++)
+                        {
+                            if (escape_sequence_check_arr[j] == argv[argc_index + 1][i])
+                            {
+                                is_escape_exist = TRUE;
+                                break;
+                            }
+                        }
+                    }
+                    if (is_escape_exist == FALSE)
+                    {
+                        return ERROR_CODE_INVALID_FORMAT;
+                    }
+                }
+
                 if (argv[argc_index + 1][i] == '\\')
                 {
                     is_checked++;
@@ -213,6 +254,7 @@ int translate(int argc, const char** argv)
                 else {
                     is_checked = 0;
                 }
+                is_escape_exist = FALSE;
             }
         }
 
