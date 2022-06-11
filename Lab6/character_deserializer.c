@@ -43,7 +43,8 @@ void itoa_ft(int num, char* str, int base, int buf_size)
     *(str + i) = '\0';
 }
 
-int atoi_ft(char* str) {
+int atoi_ft(char* str)
+{
     int result = 0;
     int positive = 1;
 
@@ -398,8 +399,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
             if (version_check == 1) {
 
-            version1_next:
-            {
+            version1_next:{
                 int num = 0;
                 int i;
                 char buf[16] = {
