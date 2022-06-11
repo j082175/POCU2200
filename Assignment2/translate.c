@@ -438,12 +438,55 @@ int translate(int argc, const char** argv)
                         if (first_argv[i - 1] == first_argv[i + 1])
                         {
                             is_check_range_total = TRUE;
-                            error_code = check_range_total(first_argv, second_argv, &total_range_ch_count1, &total_range_ch_count2);
-                            if (error_code > 0)
+                            //error_code = check_range_total(first_argv, second_argv, &total_range_ch_count1, &total_range_ch_count2);
+                            //if (error_code > 0)
+                            //{
+                            //    return error_code;
+                            //}
+                            //break;
+
                             {
-                                return error_code;
+                                int i;
+                                int check = 0;
+                                for (i = 0; i < total_range_ch_count1; i++)
+                                {
+
+                                    /* ASCII 코드의 오름차순을 기준으로함 개행문자가 들어오는 경우는 없는 걸로 치고 작성 */
+                                    /* check range */
+                                    if (strlen(first_argv) >= 3)
+                                    {
+                                        int error_code = 0;
+                                        error_code = check_range(first_argv, &total_range_ch_count1, &check);
+                                        if (error_code > 0)
+                                        {
+                                            return error_code;
+                                        }
+                                        if (error_code == -1)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                check = 0;
+                                for (i = 0; i < total_range_ch_count2; i++)
+                                {
+                                    if (strlen(second_argv) >= 3)
+                                    {
+                                        int error_code = 0;
+                                        error_code = check_range(second_argv, &total_range_ch_count2, &check);
+                                        if (error_code > 0)
+                                        {
+                                            return error_code;
+                                        }
+                                        if (error_code == -1)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
                             }
-                            break;
+                            /* check range */
                         }
                     }
                 }
@@ -554,15 +597,58 @@ int translate(int argc, const char** argv)
 
         if (!is_check_range_total)
         {
-            int error_code = 0;
-            error_code = check_range_total(first_argv, second_argv, &total_range_ch_count1, &total_range_ch_count2);
-            if (error_code > 0)
+            //int error_code = 0;
+            //error_code = check_range_total(first_argv, second_argv, &total_range_ch_count1, &total_range_ch_count2);
+            //if (error_code > 0)
+            //{
+            //    return error_code;
+            //}
+
             {
-                return error_code;
+                int i;
+                int check = 0;
+                for (i = 0; i < total_range_ch_count1; i++)
+                {
+
+                    /* ASCII 코드의 오름차순을 기준으로함 개행문자가 들어오는 경우는 없는 걸로 치고 작성 */
+                    /* check range */
+                    if (strlen(first_argv) >= 3)
+                    {
+                        int error_code = 0;
+                        error_code = check_range(first_argv, &total_range_ch_count1, &check);
+                        if (error_code > 0)
+                        {
+                            return error_code;
+                        }
+                        if (error_code == -1)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                check = 0;
+                for (i = 0; i < total_range_ch_count2; i++)
+                {
+                    if (strlen(second_argv) >= 3)
+                    {
+                        int error_code = 0;
+                        error_code = check_range(second_argv, &total_range_ch_count2, &check);
+                        if (error_code > 0)
+                        {
+                            return error_code;
+                        }
+                        if (error_code == -1)
+                        {
+                            break;
+                        }
+                    }
+                }
             }
+            /* check range */
         }
 
-        
+
 
 
 
