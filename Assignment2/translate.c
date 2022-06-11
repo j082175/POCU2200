@@ -166,12 +166,16 @@ int translate(int argc, const char** argv)
     /* argv 크기 검사 */
     if (argc >= 3)
     {
+
+        /* 입력된 argv 크기 검사 start */
         if (strlen(argv[argc_index]) >= MAX_VALUE || strlen(argv[argc_index + 1]) >= MAX_VALUE)
         {
             return ERROR_CODE_ARGUMENT_TOO_LONG;
         }
+        /* 입력된 argv 크기 검사 end */
 
 
+        /* (사전조사) \\ 가 2개이상 연속으로 올때? 확인 코드 start */
         {
             size_t i;
             int is_checked = 0;
@@ -212,6 +216,9 @@ int translate(int argc, const char** argv)
             }
         }
 
+        /* (사전조사) \\ 가 2개이상 연속으로 올때? 확인 코드 end */
+
+
         strcpy(first_argv, argv[argc_index]);
         strcpy(second_argv, argv[argc_index + 1]);
 
@@ -228,7 +235,7 @@ int translate(int argc, const char** argv)
             char buf[MAX_VALUE] = { 0, };
 
             size_t length = strlen(first_argv);
-            strcpy(buf, first_argv);
+            //strcpy(buf, first_argv);
             for (i = 0; i < length; i++)
             {
                 if (first_argv[i] == '\\')
@@ -256,11 +263,21 @@ int translate(int argc, const char** argv)
                             first_argv[i - 1] = escape_sequence_arr[j];
                             {
                                 size_t k;
-                                for (k = i + 1; k < strlen(first_argv); k++)
+                                for (k = i + 1; k < MAX_VALUE; k++)
                                 {
-                                    first_argv[k - 1] = buf[k];
+                                    /*first_argv[k - 1] = buf[k];*/
+
+                                    {
+                                        size_t i;
+                                        for (i = k - 1; i < length; i++)
+                                        {
+                                            first_argv[i] = first_argv[i + 1];
+                                        }
+                                        --length;
+                                        break;
+                                    }
                                 }
-                                first_argv[k - 1] = '\0';
+                                /*first_argv[k - 1] = '\0';*/
                                 i--;
                                 break;
                             }
@@ -309,11 +326,21 @@ int translate(int argc, const char** argv)
                             second_argv[i - 1] = escape_sequence_arr[j];
                             {
                                 size_t k;
-                                for (k = i + 1; k < strlen(second_argv); k++)
+                                for (k = i + 1; k < MAX_VALUE; k++)
                                 {
-                                    second_argv[k - 1] = buf[k];
+                                    /*first_argv[k - 1] = buf[k];*/
+
+                                    {
+                                        size_t i;
+                                        for (i = k - 1; i < length; i++)
+                                        {
+                                            second_argv[i] = second_argv[i + 1];
+                                        }
+                                        --length;
+                                        break;
+                                    }
                                 }
-                                second_argv[k - 1] = '\0';
+                                /*first_argv[k - 1] = '\0';*/
                                 i--;
                                 break;
                             }
@@ -340,9 +367,10 @@ int translate(int argc, const char** argv)
             }
         }
 
-
-
         /* total range count 세기 end*/
+
+
+
 
         {
             int i;
@@ -479,7 +507,7 @@ int translate(int argc, const char** argv)
     check_newline_func(check_newline_arr, buffer_origin);
 
 
-    /* 문자열 변환 start */
+    /* 문자열 변환 (-i flag 가 들어올시) start */
     if (argc >= 3)
     {
         {
@@ -575,8 +603,6 @@ int translate(int argc, const char** argv)
 
     buffer_backup[strlen(buffer_backup)] = '\0';
     printf("%s", buffer_backup);
-
-    /*return translate(argc, argv);*/
 
     return 0;
 }
