@@ -113,11 +113,11 @@ int translate(int argc, const char** argv)
     char second_argv[MAX_VALUE] = { 0, };
     char buffer_origin[128] = { 0, };
     char buffer_backup[128] = { 0, };
-    char read_buffer[32][128] = { 0, };
+    /*char read_buffer[32][128] = { 0, };*/
 
-    char* ptr = NULL;
+    /*char* ptr = NULL;*/
 
-    int read_buffer_count = 0;
+    /*int read_buffer_count = 0;*/
     int check_newline_arr[16] = { 0, };
 
     char buffer_overlap_second[128] = { 0, };
@@ -129,8 +129,8 @@ int translate(int argc, const char** argv)
     int total_range_ch_count1 = 0;
     int total_range_ch_count2 = 0;
 
-    char escape_sequence_arr[] = { '\a', '\b', '\f', '\n', '\r', '\t', '\v','\"', '\\','\'' };
-    char escape_sequence_check_arr[] = { 'a', 'b', 'f', 'n', 'r', 't', 'v', '"' , '\\' };
+    char escape_sequence_arr[] = { '\a', '\b', '\f', '\n', '\r', '\t', '\v','\"', '\\', '\'' };
+    char escape_sequence_check_arr[] = { 'a', 'b', 'f', 'n', 'r', 't', 'v', '"', '\\' };
     char escape_sequence_total_area[32] = { 0, };
 
     {
@@ -248,10 +248,10 @@ int translate(int argc, const char** argv)
             size_t i;
             int check = FALSE;
             int check2 = 0;
-            char buf[MAX_VALUE] = { 0, };
+            /*char buf[MAX_VALUE] = { 0, };*/
 
             size_t length = strlen(first_argv);
-            //strcpy(buf, first_argv);
+            /*strcpy(buf, first_argv);*/
             for (i = 0; i < length; i++) {
                 if (first_argv[i] == '\\') {
                     check = TRUE;
@@ -385,8 +385,7 @@ int translate(int argc, const char** argv)
                     if (error_code > 0) {
                         return error_code;
                     }
-                    if (error_code == -1)
-                    {
+                    if (error_code == -1) {
                         break;
                     }
                 }
@@ -536,7 +535,7 @@ int translate(int argc, const char** argv)
         {
             size_t i;
             int count = 0;
-             /* 대소문자 flag가 활성화 될경우 */
+            /* 대소문자 flag가 활성화 될경우 */
             if (is_flag) {
                 while (buffer_backup[count] != '\0') {
                     for (i = 0; i < strlen(first_argv); i++) {
