@@ -10,12 +10,14 @@ void check_newline_func(int* newline_arr, char* source)
             if (check_count > 0) {
                 newline_arr[buf_count - 1]++;
                 check_count++;
-            } else {
+            }
+            else {
                 check_count++;
                 newline_arr[buf_count]++;
                 buf_count++;
             }
-        } else {
+        }
+        else {
             check_count = 0;
         }
         index++;
@@ -33,11 +35,12 @@ int check_range(char* argv, int* total_range_ch_count, int* check)
     char buf[MAX_VALUE] = { 0, };
     int is_delim = FALSE;
 
-
+    int check_ch = 0;
+    size_t length = strlen(argv);
     size_t i;
 
     {
-        for (i = 1; i < strlen(argv) - 1; i++) {
+        for (i = 1; i < length - 1; i++) {
             if (argv[i] == '-') {
                 is_delim = TRUE;
                 first_index = argv[i - 1];
@@ -47,12 +50,57 @@ int check_range(char* argv, int* total_range_ch_count, int* check)
 
                 if (first_index > last_index) {
                     continue;
-                } else {
-                    if (*check == TRUE) {
-                        return 0;
+                }
+                else {
+                    if (check_ch == first_index)
+                    {
+                        continue;
                     }
-                    *check = 1;
-                    goto next;
+
+
+                    if (left_index >= 0) {
+                        {
+                            int i;
+                            for (i = 0; i < left_index + 1; i++) {
+                                left_buf[i] = argv[i];
+                            }
+                        }
+                    }
+
+                    if ((size_t)right_index < strlen(argv)) {
+                        {
+                            size_t i;
+                            for (i = 0; i < strlen(argv) - right_index; i++) {
+                                right_buf[i] = argv[right_index + i];
+                            }
+                        }
+                    }
+
+                    {
+                        int i;
+                        for (i = 0; i < last_index - first_index + 1; i++) {
+                            buf[i] = (char)first_index + i;
+                        }
+                    }
+
+                    if (is_delim) {
+                        if (strlen(left_buf) + strlen(right_buf) + strlen(argv) >= MAX_VALUE) {
+                            return ERROR_CODE_ARGUMENT_TOO_LONG;
+                        }
+                        strcat(left_buf, buf);
+                        strcat(left_buf, right_buf);
+                        strcpy(argv, left_buf);
+                    }
+
+                    if (i == (size_t)*total_range_ch_count) {
+                        return -1;
+                    }
+
+                    //--(*total_range_ch_count);
+
+                    check_ch = last_index;
+                    memset(left_buf, 0, sizeof(left_buf));
+                    memset(right_buf, 0, sizeof(right_buf));
                 }
             }
         }
@@ -63,47 +111,7 @@ int check_range(char* argv, int* total_range_ch_count, int* check)
         }
     }
 
-next:
-
-    if (left_index >= 0) {
-        {
-            int i;
-            for (i = 0; i < left_index + 1; i++) {
-                left_buf[i] = argv[i];
-            }
-        }
-    }
-
-    if ((size_t)right_index < strlen(argv)) {
-        {
-            size_t i;
-            for (i = 0; i < strlen(argv) - right_index; i++) {
-                right_buf[i] = argv[right_index + i];
-            }
-        }
-    }
-
-    {
-        int i;
-        for (i = 0; i < last_index - first_index + 1; i++) {
-            buf[i] = (char)first_index + i;
-        }
-    }
-
-    if (is_delim) {
-        if (strlen(left_buf) + strlen(right_buf) + strlen(argv) >= MAX_VALUE) {
-            return ERROR_CODE_ARGUMENT_TOO_LONG;
-        }
-        strcat(left_buf, buf);
-        strcat(left_buf, right_buf);
-        strcpy(argv, left_buf);
-    }
-
-    if (i == (size_t)*total_range_ch_count) {
-        return -1;
-    }
-
-    --(*total_range_ch_count);
+    
     return 0;
 }
 
@@ -128,6 +136,7 @@ int translate(int argc, const char** argv)
     int is_flag = FALSE;
     int total_range_ch_count1 = 0;
     int total_range_ch_count2 = 0;
+    int range_count = 0;
 
     char escape_sequence_arr[] = { '\a', '\b', '\f', '\n', '\r', '\t', '\v', '\"', '\\', '\'' };
     char escape_sequence_check_arr[] = { 'a', 'b', 'f', 'n', 'r', 't', 'v', '"', '\\' };
@@ -146,7 +155,8 @@ int translate(int argc, const char** argv)
         if ((strcmp(argv[1], "-i") == 0)) {
             argc_index++;
             is_flag = TRUE;
-        } else {
+        }
+        else {
             return ERROR_CODE_INVALID_FLAG;
         }
     }
@@ -192,7 +202,8 @@ int translate(int argc, const char** argv)
                         is_checked = 0;
                         memmove((void*)(argv[argc_index] + i), (void*)(argv[argc_index] + i + 1), strlen(argv[argc_index]) - i);
                     }
-                } else {
+                }
+                else {
                     is_checked = 0;
                 }
                 is_escape_exist = FALSE;
@@ -225,7 +236,8 @@ int translate(int argc, const char** argv)
                         is_checked = 0;
                         memmove((void*)(argv[argc_index + 1] + i), (void*)(argv[argc_index + 1] + i + 1), strlen(argv[argc_index + 1]) - i);
                     }
-                } else {
+                }
+                else {
                     is_checked = 0;
                 }
                 is_escape_exist = FALSE;
@@ -364,6 +376,7 @@ int translate(int argc, const char** argv)
                 if (first_argv[i] == '-') {
                     total_range_ch_count1 = i;
                     total_range_ch_count2 = i;
+                    range_count++;
                 }
             }
         }
@@ -372,11 +385,35 @@ int translate(int argc, const char** argv)
 
 
 
+        //{
+        //    int i;
+        //    int count = 0;
+        //    int last_index = 0;
+        //    int first
+        //    for (i = 1; i < strlen(first_argv) - 1; i++)
+        //    {
+        //        if (count == range_count)
+        //        {
+        //            break;
+        //        }
+        //        if (first_argv[i] == '-')
+        //        {
 
+
+
+        //            count++;
+
+        //        }
+        //    }
+
+        //}
+
+
+        /* - 사용하기 start */
         {
             int i;
             int check = 0;
-            for (i = 0; i < 128; i++) {
+            for (i = 0; i < 1; i++) {
                 /* ASCII 코드의 오름차순을 기준으로함 개행문자가 들어오는 경우는 없는 걸로 치고 작성 */
                 /* check range */
                 if (strlen(first_argv) >= 3) {
@@ -405,6 +442,7 @@ int translate(int argc, const char** argv)
             }
         }
         /* check range */
+		/* - 사용하기 end */
 
 
         /* 허용되지 않는 escape 문자가 있는지 다시 한번더 검사1 start */
@@ -546,7 +584,8 @@ int translate(int argc, const char** argv)
                     }
                     count++;
                 }
-            } else {
+            }
+            else {
                 while (buffer_backup[count] != '\0') {
                     for (i = 0; i < strlen(first_argv); i++) {
                         if (buffer_backup[count] == first_argv[i]) {
