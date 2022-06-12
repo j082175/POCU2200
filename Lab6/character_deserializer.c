@@ -415,27 +415,25 @@ int get_character(const char* filename, character_v3_t* out_character)
                         break;
                     }
                 }
-            
 
-            /* 순서 세팅 작업 */
-            {
-                int i;
-                int j;
-                int count1 = 0;
-                for (i = 0; i < 14; i++) {
-                    for (j = 0; j < VERSION3_SIZE; j++) {
-                        if (!strcmp(version3_out_character_arr[i], words_backup[j])) {
-                            values_check[count1] = j;
-                            count1++;
-                            break;
+                /* 순서 세팅 작업 */
+                {
+                    int i;
+                    int j;
+                    int count1 = 0;
+                    for (i = 0; i < 14; i++) {
+                        for (j = 0; j < VERSION3_SIZE; j++) {
+                            if (!strcmp(version3_out_character_arr[i], words_backup[j])) {
+                                values_check[count1] = j;
+                                count1++;
+                                break;
+                            }
                         }
                     }
                 }
-            }
 
-            goto deserializer;
-        }
-        
+                goto deserializer;
+            }
 
             {
                 int i;
