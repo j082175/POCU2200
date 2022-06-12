@@ -129,7 +129,7 @@ int translate(int argc, const char** argv)
     int total_range_ch_count1 = 0;
     int total_range_ch_count2 = 0;
 
-    char escape_sequence_arr[] = { '\a', '\b', '\f', '\n', '\r', '\t', '\v','\"', '\\', '\'' };
+    char escape_sequence_arr[] = {'\a', '\b', '\f', '\n', '\r', '\t', '\v', '\"', '\\', '\''};
     char escape_sequence_check_arr[] = { 'a', 'b', 'f', 'n', 'r', 't', 'v', '"', '\\' };
     char escape_sequence_total_area[32] = { 0, };
 
