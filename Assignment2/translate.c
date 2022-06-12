@@ -38,23 +38,8 @@ int check_range(char* argv, int* total_range_ch_count, int* check)
     char buf[MAX_VALUE] = { 0, };
     int is_delim = FALSE;
 
-    int check_total_count = 0;
-    int current_index = 0;
 
     size_t i;
-    /* 먼저 마지막 - 인지 확인하기 위한 작업 */
-    {
-        int c;
-        for (c = 1; c < strlen(argv) - 1; c++)
-        {
-            if (argv[c] == '-')
-            {
-                check_total_count++;
-            }
-        }
-    }
-
-
 
     {
         for (i = 1; i < strlen(argv) - 1; i++)
@@ -62,7 +47,6 @@ int check_range(char* argv, int* total_range_ch_count, int* check)
 
             if (argv[i] == '-')
             {
-                current_index++;
                 is_delim = TRUE;
                 first_index = argv[i - 1];
                 last_index = argv[i + 1];
@@ -141,12 +125,6 @@ next:
     }
 
     --(*total_range_ch_count);
-
-
-    if (current_index == check_total_count)
-    {
-        return -1;
-    }
     return 0;
 }
 
@@ -171,8 +149,6 @@ int translate(int argc, const char** argv)
     int is_flag = FALSE;
     int total_range_ch_count1 = 0;
     int total_range_ch_count2 = 0;
-
-    int is_overlap = FALSE;
 
     char escape_sequence_arr[] = { '\a', '\b', '\f', '\n', '\r', '\t', '\v','\"', '\\','\'' };
     char escape_sequence_check_arr[] = { 'a', 'b', 'f', 'n', 'r', 't', 'v', '"' , '\\' };
@@ -455,115 +431,12 @@ int translate(int argc, const char** argv)
         /* total range count 세기 end*/
 
 
-        /* - 하기전에 먼저 중복되는 놈이 있는지 찾아봄. 중복되는 놈이 없으면 이코드 뛰어넘고 있다면 중복되는놈 제거한후*/
-        /* a-a 같은놈 예외 */
-		{
-			int c;
-            int check_overlap = FALSE;
-			for (c = 1; c < strlen(first_argv) - 1; c++)
-			{
-				if (first_argv[c] == '-')
-				{
-					if (first_argv[c - 1] != first_argv[c + 1])
-					{
-						is_overlap = TRUE;
-                        /* execute */
-
-/* first argv 중복 check start */
-                        {
-                            int total_count = 0;
-                            {
-                                size_t i;
-                                size_t j;
-                                int index = 0;
-                                for (i = 0; i < strlen(first_argv); i++)
-                                {
-                                    for (j = 0; j < strlen(first_argv); j++)
-                                    {
-                                        if (first_argv[i] == first_argv[j])
-                                        {
-                                            index = j;
-                                        }
-                                        if (first_argv[i] == '-')
-                                        {
-                                            index_arr[index] = index + 1;
-                                        }
-                                    }
-                                    index_arr[index] = index + 1;
-                                }
-                            }
-
-                            {
-                                size_t i;
-                                int count = 0;
-                                for (i = 0; i < strlen(first_argv); i++)
-                                {
-                                    if (index_arr[i] != 0)
-                                    {
-                                        index_arr_backup[count] = index_arr[i];
-                                        count++;
-                                    }
-                                }
-                                total_count = count;
-                            }
-
-
-                            {
-                                int z;
-                                int correct_count = 0;
-                                for (z = 1; z < total_count; z++)
-                                {
-                                    if (index_arr_backup[z - 1] == index_arr_backup[z] - 1)
-                                    {
-                                        correct_count++;
-                                        continue;
-                                    }
-                                    else {
-                                        break;
-                                    }
-                                }
-
-                                if (correct_count == total_count - 1)
-                                {
-                                    check_overlap = TRUE;
-                                }
-                            }
-
-                            {
-                                int i;
-                                for (i = 0; i < total_count; i++)
-                                {
-                                    if (check_overlap == TRUE)
-                                    {
-                                        buffer_overlap_second[i] = second_argv[index_arr_backup[i] - index_arr_backup[0]];
-                                        buffer_overlap_first[i] = first_argv[index_arr_backup[i] - 1];
-                                    }
-                                    else {
-                                        buffer_overlap_second[i] = second_argv[index_arr_backup[i] - index_arr_backup[0]];
-                                        buffer_overlap_first[i] = first_argv[index_arr_backup[i] - 1];
-                                    }
- 
-                                   
-                                }
-                            }
-                        }
-                        strcpy(second_argv, buffer_overlap_second);
-                        strcpy(first_argv, buffer_overlap_first);
-                        break;
-					}
-				}
-			}
-		}
-
-
-
-
 
 
         {
             int i;
             int check = 0;
-            for (i = 0; i < total_range_ch_count1; i++)
+            for (i = 0; i < 128; i++)
             {
 
                 /* ASCII 코드의 오름차순을 기준으로함 개행문자가 들어오는 경우는 없는 걸로 치고 작성 */
@@ -581,11 +454,9 @@ int translate(int argc, const char** argv)
                         break;
                     }
                 }
-            }
 
-            check = 0;
-            for (i = 0; i < total_range_ch_count2; i++)
-            {
+                check = 0;
+
                 if (strlen(second_argv) >= 3)
                 {
                     int error_code = 0;
@@ -646,112 +517,60 @@ int translate(int argc, const char** argv)
 
         /* 허용되지 않는 escape 문자가 있는지 다시 한번더 검사2 end */
 
-        if (is_overlap != TRUE)
+
+        /* first argv 중복 check start */
         {
-            /* first argv 중복 check start */
+            int total_count = 0;
             {
-                int total_count = 0;
+                size_t i;
+                size_t j;
+                int index = 0;
+                for (i = 0; i < strlen(first_argv); i++)
                 {
-                    size_t i;
-                    size_t j;
-                    int index = 0;
-                    for (i = 0; i < strlen(first_argv); i++)
+                    for (j = 0; j < strlen(first_argv); j++)
                     {
-                        for (j = 0; j < strlen(first_argv); j++)
+                        if (first_argv[i] == first_argv[j])
                         {
-                            if (first_argv[i] == first_argv[j])
-                            {
-                                index = j;
-                            }
-                            if (first_argv[i] == '-')
-                            {
-                                index_arr[index] = index + 1;
-                            }
+                            index = j;
                         }
-                        index_arr[index] = index + 1;
-                    }
-                }
-
-                {
-                    size_t i;
-                    int count = 0;
-                    for (i = 0; i < strlen(first_argv); i++)
-                    {
-                        if (index_arr[i] != 0)
+                        if (first_argv[i] == '-')
                         {
-                            index_arr_backup[count] = index_arr[i];
-                            count++;
+                            index_arr[index] = index + 1;
                         }
                     }
-                    total_count = count;
-                }
-
-                {
-                    int i;
-                    for (i = 0; i < total_count; i++)
-                    {
-                        buffer_overlap_second[i] = second_argv[index_arr_backup[i] - 1];
-
-                        buffer_overlap_first[i] = first_argv[index_arr_backup[i] - 1];
-                    }
+                    index_arr[index] = index + 1;
                 }
             }
-            strcpy(second_argv, buffer_overlap_second);
 
-            strcpy(first_argv, buffer_overlap_first);
-            /* first argv 중복 check end */
+            {
+                size_t i;
+                int count = 0;
+                for (i = 0; i < strlen(first_argv); i++)
+                {
+                    if (index_arr[i] != 0)
+                    {
+                        index_arr_backup[count] = index_arr[i];
+                        count++;
+                    }
+                }
+                total_count = count;
+            }
 
-            ///* second argv 중복 check start */
-            //{
-            //    int total_count = 0;
-            //    {
-            //        size_t i;
-            //        size_t j;
-            //        int index = 0;
-            //        for (i = 0; i < strlen(second_argv); i++)
-            //        {
-            //            for (j = 0; j < strlen(second_argv); j++)
-            //            {
-            //                if (second_argv[i] == second_argv[j])
-            //                {
-            //                    index = j;
-            //                }
-            //                if (second_argv[i] == '-')
-            //                {
-            //                    index_arr[index] = index + 1;
-            //                }
-            //            }
-            //            index_arr[index] = index + 1;
-            //        }
-            //    }
-
-            //    {
-            //        size_t i;
-            //        int count = 0;
-            //        for (i = 0; i < strlen(second_argv); i++)
-            //        {
-            //            if (index_arr[i] != 0)
-            //            {
-            //                index_arr_backup[count] = index_arr[i];
-            //                count++;
-            //            }
-            //        }
-            //        total_count = count;
-            //    }
-
-            //    {
-            //        int i;
-            //        for (i = 0; i < total_count; i++)
-            //        {
-            //            buffer_overlap_second[i] = second_argv[index_arr_backup[i] - 1];
-            //        }
-            //    }
-            //}
-
-            //strcpy(second_argv, buffer_overlap_second);
-            ///* second argv 중복 check end */
-
+            {
+                int i;
+                for (i = 0; i < total_count; i++)
+                {
+                    buffer_overlap_second[i] = second_argv[index_arr_backup[i] - 1];
+                    buffer_overlap_first[i] = first_argv[index_arr_backup[i] - 1];
+                }
+            }
         }
+
+        strcpy(second_argv, buffer_overlap_second);
+        strcpy(first_argv, buffer_overlap_first);
+        /* first argv 중복 check end */
+
+
 
 
 
