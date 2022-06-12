@@ -400,12 +400,12 @@ int get_character(const char* filename, character_v3_t* out_character)
 
         
             if (version_check == 1) {
-
-            version1_next:
-
                 int num = 0;
                 int i;
                 char buf[16] = { 0, };
+
+            version1_next:
+
                 for (i = 0; i < 14; i++) {
                     if (!strcmp(words_backup[i], "level")) {
                         num = atoi_ft(values_backup[i]);
