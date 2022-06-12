@@ -140,16 +140,47 @@ int translate(int argc, const char** argv)
 
     char escape_sequence_arr[] = { '\a', '\b', '\f', '\n', '\r', '\t', '\v', '\"', '\\', '\'' };
     char escape_sequence_check_arr[] = { 'a', 'b', 'f', 'n', 'r', 't', 'v', '"', '\\' };
-    char escape_sequence_total_area[32] = { 0, };
-
-    {
+    char escape_sequence_total_area[64] = { 0, };
+    /*
+     {
         size_t i;
         int count = '\xe';
         for (i = 0; i < '\x1f' + 1 - '\xe'; i++) {
             escape_sequence_total_area[i] = count++;
         }
+
+
         escape_sequence_total_area['\x1f'] = '\0';
+
     }
+    */
+
+    {
+        size_t i;
+        int j;
+        int count = 0;
+        for (i = 1; i < '\a'; i++) {
+            escape_sequence_total_area[i - 1] = i;
+            count++;
+        }
+
+        for (j = 14; j < 33; j++)
+        {
+            escape_sequence_total_area[count] = j;
+            count++;
+        }
+        escape_sequence_total_area[count++] = 127;
+
+        escape_sequence_total_area[count] = '\0';
+
+    }
+
+
+
+
+
+
+
 
     if (argc == 4) {
         if ((strcmp(argv[1], "-i") == 0)) {
@@ -423,7 +454,7 @@ int translate(int argc, const char** argv)
                         return error_code;
                     }
                     if (error_code == -1) {
-                        break;
+                        /*break;*/
                     }
                 }
 
