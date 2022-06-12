@@ -397,10 +397,11 @@ int get_character(const char* filename, character_v3_t* out_character)
                 }
             }
 
-        version1_next:
 
         {
             if (version_check == 1) {
+
+            version1_next:
 
                 int num = 0;
                 int i;
