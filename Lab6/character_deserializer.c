@@ -398,16 +398,14 @@ int get_character(const char* filename, character_v3_t* out_character)
             }
 
 
-        {
+        
             if (version_check == 1) {
 
             version1_next:
 
                 int num = 0;
                 int i;
-                char buf[16] = {
-                    0,
-                };
+                char buf[16] = { 0, };
                 for (i = 0; i < 14; i++) {
                     if (!strcmp(words_backup[i], "level")) {
                         num = atoi_ft(values_backup[i]);
@@ -417,7 +415,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                         break;
                     }
                 }
-            }
+            
 
             /* 순서 세팅 작업 */
             {
@@ -437,6 +435,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 
             goto deserializer;
         }
+        
 
             {
                 int i;
