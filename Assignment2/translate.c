@@ -41,6 +41,7 @@ int check_range(char* argv, int* total_range_ch_count, int* check)
     int check_total_count = 0;
     int current_index = 0;
 
+    size_t i;
     /* 먼저 마지막 - 인지 확인하기 위한 작업 */
     {
         int c;
@@ -54,7 +55,6 @@ int check_range(char* argv, int* total_range_ch_count, int* check)
     }
 
 
-    size_t i;
 
     {
         for (i = 1; i < strlen(argv) - 1; i++)
