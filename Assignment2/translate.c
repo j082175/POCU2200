@@ -5,22 +5,17 @@ void check_newline_func(int* newline_arr, char* source)
     int index = 0;
     int buf_count = 0;
     int check_count = 0;
-    while (*(source + index) != '\0')
-    {
-        if (*(source + index) == '\n')
-        {
-            if (check_count > 0)
-            {
+    while (*(source + index) != '\0') {
+        if (*(source + index) == '\n') {
+            if (check_count > 0) {
                 newline_arr[buf_count - 1]++;
                 check_count++;
-            }
-            else {
+            } else {
                 check_count++;
                 newline_arr[buf_count]++;
                 buf_count++;
             }
-        }
-        else {
+        } else {
             check_count = 0;
         }
         index++;
@@ -42,24 +37,18 @@ int check_range(char* argv, int* total_range_ch_count, int* check)
     size_t i;
 
     {
-        for (i = 1; i < strlen(argv) - 1; i++)
-        {
-
-            if (argv[i] == '-')
-            {
+        for (i = 1; i < strlen(argv) - 1; i++) {
+            if (argv[i] == '-') {
                 is_delim = TRUE;
                 first_index = argv[i - 1];
                 last_index = argv[i + 1];
                 left_index = i - 2;
                 right_index = i + 2;
 
-                if (first_index > last_index)
-                {
+                if (first_index > last_index) {
                     continue;
-                }
-                else {
-                    if (*check == TRUE)
-                    {
+                } else {
+                    if (*check == TRUE) {
                         return 0;
                     }
                     *check = 1;
@@ -67,10 +56,8 @@ int check_range(char* argv, int* total_range_ch_count, int* check)
                 }
             }
         }
-        if (first_index != last_index)
-        {
-            if (first_index > last_index)
-            {
+        if (first_index != last_index) {
+            if (first_index > last_index) {
                 return ERROR_CODE_INVALID_RANGE;
             }
         }
@@ -78,23 +65,19 @@ int check_range(char* argv, int* total_range_ch_count, int* check)
 
 next:
 
-    if (left_index >= 0)
-    {
+    if (left_index >= 0) {
         {
             int i;
-            for (i = 0; i < left_index + 1; i++)
-            {
+            for (i = 0; i < left_index + 1; i++) {
                 left_buf[i] = argv[i];
             }
         }
     }
 
-    if ((size_t)right_index < strlen(argv))
-    {
+    if ((size_t)right_index < strlen(argv)) {
         {
             size_t i;
-            for (i = 0; i < strlen(argv) - right_index; i++)
-            {
+            for (i = 0; i < strlen(argv) - right_index; i++) {
                 right_buf[i] = argv[right_index + i];
             }
         }
@@ -102,16 +85,13 @@ next:
 
     {
         int i;
-        for (i = 0; i < last_index - first_index + 1; i++)
-        {
+        for (i = 0; i < last_index - first_index + 1; i++) {
             buf[i] = (char)first_index + i;
         }
     }
 
-    if (is_delim)
-    {
-        if (strlen(left_buf) + strlen(right_buf) + strlen(argv) >= MAX_VALUE)
-        {
+    if (is_delim) {
+        if (strlen(left_buf) + strlen(right_buf) + strlen(argv) >= MAX_VALUE) {
             return ERROR_CODE_ARGUMENT_TOO_LONG;
         }
         strcat(left_buf, buf);
@@ -119,8 +99,7 @@ next:
         strcpy(argv, left_buf);
     }
 
-    if (i == (size_t)*total_range_ch_count)
-    {
+    if (i == (size_t)*total_range_ch_count) {
         return -1;
     }
 
@@ -157,8 +136,7 @@ int translate(int argc, const char** argv)
     {
         size_t i;
         int count = '\xe';
-        for (i = 0; i < '\x1f' + 1 - '\xe'; i++)
-        {
+        for (i = 0; i < '\x1f' + 1 - '\xe'; i++) {
             escape_sequence_total_area[i] = count++;
         }
         escape_sequence_total_area['\x1f'] = '\0';
@@ -168,24 +146,20 @@ int translate(int argc, const char** argv)
         if ((strcmp(argv[1], "-i") == 0)) {
             argc_index++;
             is_flag = TRUE;
-        }
-        else {
+        } else {
             return ERROR_CODE_INVALID_FLAG;
         }
     }
 
-    if (argc < 3 || argc > 4)
-    {
+    if (argc < 3 || argc > 4) {
         return ERROR_CODE_WRONG_ARGUMENTS_NUMBER;
     }
 
     /* argv 크기 검사 */
-    if (argc >= 3)
-    {
+    if (argc >= 3) {
 
         /* 입력된 argv 크기 검사 start */
-        if (strlen(argv[argc_index]) >= MAX_VALUE || strlen(argv[argc_index + 1]) >= MAX_VALUE)
-        {
+        if (strlen(argv[argc_index]) >= MAX_VALUE || strlen(argv[argc_index + 1]) >= MAX_VALUE) {
             return ERROR_CODE_ARGUMENT_TOO_LONG;
         }
         /* 입력된 argv 크기 검사 end */
@@ -196,37 +170,29 @@ int translate(int argc, const char** argv)
             size_t i;
             int is_checked = 0;
             int is_escape_exist = FALSE;
-            for (i = 0; i < strlen(argv[argc_index]); i++)
-            {
-                if (is_checked == 1)
-                {
+            for (i = 0; i < strlen(argv[argc_index]); i++) {
+                if (is_checked == 1) {
                     {
                         size_t j;
-                        for (j = 0; j < sizeof(escape_sequence_check_arr); j++)
-                        {
-                            if (escape_sequence_check_arr[j] == argv[argc_index][i])
-                            {
+                        for (j = 0; j < sizeof(escape_sequence_check_arr); j++) {
+                            if (escape_sequence_check_arr[j] == argv[argc_index][i]) {
                                 is_escape_exist = TRUE;
                                 break;
                             }
                         }
                     }
-                    if (is_escape_exist == FALSE)
-                    {
+                    if (is_escape_exist == FALSE) {
                         return ERROR_CODE_INVALID_FORMAT;
                     }
                 }
 
-                if (argv[argc_index][i] == '\\')
-                {
+                if (argv[argc_index][i] == '\\') {
                     is_checked++;
-                    if (is_checked == 2)
-                    {
+                    if (is_checked == 2) {
                         is_checked = 0;
                         memmove((void*)(argv[argc_index] + i), (void*)(argv[argc_index] + i + 1), strlen(argv[argc_index]) - i);
                     }
-                }
-                else {
+                } else {
                     is_checked = 0;
                 }
                 is_escape_exist = FALSE;
@@ -237,37 +203,29 @@ int translate(int argc, const char** argv)
             size_t i;
             int is_checked = 0;
             int is_escape_exist = FALSE;
-            for (i = 0; i < strlen(argv[argc_index + 1]); i++)
-            {
-                if (is_checked == 1)
-                {
+            for (i = 0; i < strlen(argv[argc_index + 1]); i++) {
+                if (is_checked == 1) {
                     {
                         size_t j;
-                        for (j = 0; j < sizeof(escape_sequence_check_arr); j++)
-                        {
-                            if (escape_sequence_check_arr[j] == argv[argc_index + 1][i])
-                            {
+                        for (j = 0; j < sizeof(escape_sequence_check_arr); j++) {
+                            if (escape_sequence_check_arr[j] == argv[argc_index + 1][i]) {
                                 is_escape_exist = TRUE;
                                 break;
                             }
                         }
                     }
-                    if (is_escape_exist == FALSE)
-                    {
+                    if (is_escape_exist == FALSE) {
                         return ERROR_CODE_INVALID_FORMAT;
                     }
                 }
 
-                if (argv[argc_index + 1][i] == '\\')
-                {
+                if (argv[argc_index + 1][i] == '\\') {
                     is_checked++;
-                    if (is_checked == 2)
-                    {
+                    if (is_checked == 2) {
                         is_checked = 0;
                         memmove((void*)(argv[argc_index + 1] + i), (void*)(argv[argc_index + 1] + i + 1), strlen(argv[argc_index + 1]) - i);
                     }
-                }
-                else {
+                } else {
                     is_checked = 0;
                 }
                 is_escape_exist = FALSE;
@@ -294,14 +252,11 @@ int translate(int argc, const char** argv)
 
             size_t length = strlen(first_argv);
             //strcpy(buf, first_argv);
-            for (i = 0; i < length; i++)
-            {
-                if (first_argv[i] == '\\')
-                {
+            for (i = 0; i < length; i++) {
+                if (first_argv[i] == '\\') {
                     check = TRUE;
                     check2++;
-                    if (check2 == 2)
-                    {
+                    if (check2 == 2) {
                         check2 = 0;
                         goto next;
                     }
@@ -309,26 +264,21 @@ int translate(int argc, const char** argv)
                 }
 
             next:
-                if (check == TRUE)
-                {
+                if (check == TRUE) {
                     size_t j;
                     check = FALSE;
                     check2 = 0;
-                    for (j = 0; j < sizeof(escape_sequence_check_arr); j++)
-                    {
-                        if (escape_sequence_check_arr[j] == first_argv[i])
-                        {
+                    for (j = 0; j < sizeof(escape_sequence_check_arr); j++) {
+                        if (escape_sequence_check_arr[j] == first_argv[i]) {
                             first_argv[i - 1] = escape_sequence_arr[j];
                             {
                                 size_t k;
-                                for (k = i + 1; k < MAX_VALUE; k++)
-                                {
+                                for (k = i + 1; k < MAX_VALUE; k++) {
                                     /*first_argv[k - 1] = buf[k];*/
 
                                     {
                                         size_t i;
-                                        for (i = k - 1; i < length; i++)
-                                        {
+                                        for (i = k - 1; i < length; i++) {
                                             first_argv[i] = first_argv[i + 1];
                                         }
                                         --length;
@@ -357,14 +307,11 @@ int translate(int argc, const char** argv)
 
             size_t length = strlen(second_argv);
             strcpy(buf, second_argv);
-            for (i = 0; i < length; i++)
-            {
-                if (second_argv[i] == '\\')
-                {
+            for (i = 0; i < length; i++) {
+                if (second_argv[i] == '\\') {
                     check = TRUE;
                     check2++;
-                    if (check2 == 2)
-                    {
+                    if (check2 == 2) {
                         check2 = 0;
                         goto next2;
                     }
@@ -372,26 +319,21 @@ int translate(int argc, const char** argv)
                 }
 
             next2:
-                if (check == TRUE)
-                {
+                if (check == TRUE) {
                     size_t j;
                     check = FALSE;
                     check2 = 0;
-                    for (j = 0; j < sizeof(escape_sequence_check_arr); j++)
-                    {
-                        if (escape_sequence_check_arr[j] == second_argv[i])
-                        {
+                    for (j = 0; j < sizeof(escape_sequence_check_arr); j++) {
+                        if (escape_sequence_check_arr[j] == second_argv[i]) {
                             second_argv[i - 1] = escape_sequence_arr[j];
                             {
                                 size_t k;
-                                for (k = i + 1; k < MAX_VALUE; k++)
-                                {
+                                for (k = i + 1; k < MAX_VALUE; k++) {
                                     /*first_argv[k - 1] = buf[k];*/
 
                                     {
                                         size_t i;
-                                        for (i = k - 1; i < length; i++)
-                                        {
+                                        for (i = k - 1; i < length; i++) {
                                             second_argv[i] = second_argv[i + 1];
                                         }
                                         --length;
@@ -418,10 +360,8 @@ int translate(int argc, const char** argv)
         /* total range count 세기 start*/
         {
             size_t i;
-            for (i = 0; i < strlen(first_argv); i++)
-            {
-                if (first_argv[i] == '-')
-                {
+            for (i = 0; i < strlen(first_argv); i++) {
+                if (first_argv[i] == '-') {
                     total_range_ch_count1 = i;
                     total_range_ch_count2 = i;
                 }
@@ -436,17 +376,13 @@ int translate(int argc, const char** argv)
         {
             int i;
             int check = 0;
-            for (i = 0; i < 128; i++)
-            {
-
+            for (i = 0; i < 128; i++) {
                 /* ASCII 코드의 오름차순을 기준으로함 개행문자가 들어오는 경우는 없는 걸로 치고 작성 */
                 /* check range */
-                if (strlen(first_argv) >= 3)
-                {
+                if (strlen(first_argv) >= 3) {
                     int error_code = 0;
                     error_code = check_range(first_argv, &total_range_ch_count1, &check);
-                    if (error_code > 0)
-                    {
+                    if (error_code > 0) {
                         return error_code;
                     }
                     if (error_code == -1)
@@ -457,16 +393,13 @@ int translate(int argc, const char** argv)
 
                 check = 0;
 
-                if (strlen(second_argv) >= 3)
-                {
+                if (strlen(second_argv) >= 3) {
                     int error_code = 0;
                     error_code = check_range(second_argv, &total_range_ch_count2, &check);
-                    if (error_code > 0)
-                    {
+                    if (error_code > 0) {
                         return error_code;
                     }
-                    if (error_code == -1)
-                    {
+                    if (error_code == -1) {
                         break;
                     }
                 }
@@ -479,14 +412,11 @@ int translate(int argc, const char** argv)
         {
             int i;
 
-            for (i = 0; i < strlen(first_argv); i++)
-            {
+            for (i = 0; i < strlen(first_argv); i++) {
                 {
                     size_t j;
-                    for (j = 0; j < strlen(escape_sequence_total_area); j++)
-                    {
-                        if (escape_sequence_total_area[j] == first_argv[i])
-                        {
+                    for (j = 0; j < strlen(escape_sequence_total_area); j++) {
+                        if (escape_sequence_total_area[j] == first_argv[i]) {
                             return ERROR_CODE_INVALID_FORMAT;
                         }
                     }
@@ -500,14 +430,11 @@ int translate(int argc, const char** argv)
         {
             int i;
 
-            for (i = 0; i < strlen(second_argv); i++)
-            {
+            for (i = 0; i < strlen(second_argv); i++) {
                 {
                     size_t j;
-                    for (j = 0; j < strlen(escape_sequence_total_area); j++)
-                    {
-                        if (escape_sequence_total_area[j] == second_argv[i])
-                        {
+                    for (j = 0; j < strlen(escape_sequence_total_area); j++) {
+                        if (escape_sequence_total_area[j] == second_argv[i]) {
                             return ERROR_CODE_INVALID_FORMAT;
                         }
                     }
@@ -525,16 +452,12 @@ int translate(int argc, const char** argv)
                 size_t i;
                 size_t j;
                 int index = 0;
-                for (i = 0; i < strlen(first_argv); i++)
-                {
-                    for (j = 0; j < strlen(first_argv); j++)
-                    {
-                        if (first_argv[i] == first_argv[j])
-                        {
+                for (i = 0; i < strlen(first_argv); i++) {
+                    for (j = 0; j < strlen(first_argv); j++) {
+                        if (first_argv[i] == first_argv[j]) {
                             index = j;
                         }
-                        if (first_argv[i] == '-')
-                        {
+                        if (first_argv[i] == '-') {
                             index_arr[index] = index + 1;
                         }
                     }
@@ -545,10 +468,8 @@ int translate(int argc, const char** argv)
             {
                 size_t i;
                 int count = 0;
-                for (i = 0; i < strlen(first_argv); i++)
-                {
-                    if (index_arr[i] != 0)
-                    {
+                for (i = 0; i < strlen(first_argv); i++) {
+                    if (index_arr[i] != 0) {
                         index_arr_backup[count] = index_arr[i];
                         count++;
                     }
@@ -558,8 +479,7 @@ int translate(int argc, const char** argv)
 
             {
                 int i;
-                for (i = 0; i < total_count; i++)
-                {
+                for (i = 0; i < total_count; i++) {
                     buffer_overlap_second[i] = second_argv[index_arr_backup[i] - 1];
                     buffer_overlap_first[i] = first_argv[index_arr_backup[i] - 1];
                 }
@@ -578,14 +498,12 @@ int translate(int argc, const char** argv)
 
 
         /* first argv 가 더 클때 start */
-        if (strlen(first_argv) > strlen(second_argv))
-        {
+        if (strlen(first_argv) > strlen(second_argv)) {
             int second_argv_length = strlen(second_argv);
             int sub_both_length = strlen(first_argv) - strlen(second_argv);
             {
                 int i;
-                for (i = 0; i < sub_both_length; i++)
-                {
+                for (i = 0; i < sub_both_length; i++) {
                     second_argv[second_argv_length + i] = second_argv[strlen(second_argv) - 1];
                 }
             }
@@ -598,8 +516,7 @@ int translate(int argc, const char** argv)
     /* 모든 문자열 읽기 start */
     {
         int count = 0;
-        while ((buffer_origin[count] = getchar()) != EOF)
-        {
+        while ((buffer_origin[count] = getchar()) != EOF) {
             count++;
         }
     }
@@ -615,33 +532,25 @@ int translate(int argc, const char** argv)
 
 
     /* 문자열 변환 (-i flag 가 들어올시) start */
-    if (argc >= 3)
-    {
+    if (argc >= 3) {
         {
             size_t i;
             int count = 0;
-            if (is_flag) /* 대소문자 flag가 활성화 될경우 */
-            {
-                while (buffer_backup[count] != '\0')
-                {
-                    for (i = 0; i < strlen(first_argv); i++)
-                    {
-                        if (buffer_backup[count] == first_argv[i] || buffer_backup[count] == (first_argv[i] - 32))
-                        {
+             /* 대소문자 flag가 활성화 될경우 */
+            if (is_flag) {
+                while (buffer_backup[count] != '\0') {
+                    for (i = 0; i < strlen(first_argv); i++) {
+                        if (buffer_backup[count] == first_argv[i] || buffer_backup[count] == (first_argv[i] - 32)) {
                             buffer_backup[count] = second_argv[i];
                             break;
                         }
                     }
                     count++;
                 }
-            }
-            else {
-                while (buffer_backup[count] != '\0')
-                {
-                    for (i = 0; i < strlen(first_argv); i++)
-                    {
-                        if (buffer_backup[count] == first_argv[i])
-                        {
+            } else {
+                while (buffer_backup[count] != '\0') {
+                    for (i = 0; i < strlen(first_argv); i++) {
+                        if (buffer_backup[count] == first_argv[i]) {
                             buffer_backup[count] = second_argv[i];
                             break;
                         }
@@ -653,60 +562,6 @@ int translate(int argc, const char** argv)
     }
     /* 문자열 변환 end */
 
-
-
-    ///* 읽은 문자열 쪼개기 start */
-    //ptr = buffer_backup;
-    //{
-    //    char* temp = NULL;
-    //    while (1)
-    //    {
-    //        temp = strtok(ptr, "\n");
-    //        if (temp == NULL)
-    //        {
-    //            break;
-    //        }
-    //        strcpy(read_buffer[read_buffer_count++], temp);
-    //        ptr = NULL;
-    //    }
-    //}
-    ///* 읽은 문자열 쪼개기 end */
-
-    ///* 문자열 내보내기 전 개행문자 추가  start */
-    //{
-    //    int i = 0;
-    //    int j = 0;
-    //    int length = 0;
-    //    char(*p)[128] = read_buffer;
-    //    for (i = 0; i < read_buffer_count; i++)
-    //    {
-    //        length = strlen(read_buffer[i]);
-    //        for (j = 0; j < check_newline_arr[i]; j++)
-    //        {
-    //            read_buffer[i][length + j] = '\n';
-    //        }
-    //    }
-    //    --i;
-    //    --j;
-
-    //    //read_buffer[i][length + j] = '\0';
-    //    (*(p + i))[length + j] = '\0';
-
-    //    int w = 3;
-    //}
-    ///* 문자열 내보내기 전 개행문자 추가  end */
-
-
-
-    ///* 문자열 출력 start */
-    //{
-    //    int i;
-    //    for (i = 0; i < read_buffer_count; i++)
-    //    {
-    //        printf("%s", read_buffer[i]);
-    //    }
-    //}
-    ///* 문자열 출력 end */
 
     buffer_backup[strlen(buffer_backup)] = '\0';
     printf("%s", buffer_backup);
