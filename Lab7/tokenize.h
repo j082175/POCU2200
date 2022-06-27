@@ -1,6 +1,6 @@
 #ifndef TOKENIZE_H
 #define TOKENIZE_H
-#define _CRT_SECURE_NO_WARNINGS
+//#define _CRT_SECURE_NO_WARNINGS
 
 #include <string.h>
 #include <stdlib.h>
