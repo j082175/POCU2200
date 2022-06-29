@@ -11,18 +11,15 @@ char** tokenize_malloc(const char* str, const char* delim)
     char* backup = NULL;
     int arr_count = 0;
 
-    if (str_length == 0)
-    {
+    if (str_length == 0) {
         arr = (char**)malloc(sizeof(char*) * 1);
     }
 
-    if (arr == NULL)
-    {
+    if (arr == NULL) {
         return NULL;
     }
     str_backup = (char*)malloc(sizeof(char) * str_length + 1);
-    if (str_backup == NULL)
-    {
+    if (str_backup == NULL) {
         return NULL;
     }
     strncpy(str_backup, str, str_length + 1);
@@ -30,18 +27,14 @@ char** tokenize_malloc(const char* str, const char* delim)
     {
         int i;
         int j;
-        for (i = 0; i < str_length; i++)
-        {
-            if (delim_length == 0 || str_length == 1)
-            {
+        for (i = 0; i < str_length; i++) {
+            if (delim_length == 0 || str_length == 1) {
                 char** str2 = (char**)malloc(sizeof(char*) * 2);
-                if (str2 == NULL)
-                {
+                if (str2 == NULL) {
                     return NULL;
                 }
                 str2[0] = (char*)malloc(sizeof(char) * str_length + 1);
-                if (str2[0] == NULL)
-                {
+                if (str2[0] == NULL) {
                     return NULL;
                 }
                 strcpy(str2[0], str);
@@ -49,18 +42,14 @@ char** tokenize_malloc(const char* str, const char* delim)
                 return str2;
             }
 
-            for (j = 0; j < delim_length; j++)
-            {
-                if (*(str + i) == *(delim + j))
-                {
-                    if (i - str_start_index == 0)
-                    {
+            for (j = 0; j < delim_length; j++) {
+                if (*(str + i) == *(delim + j)) {
+                    if (i - str_start_index == 0) {
                         str_start_index++;
                         break;
                     }
                     arr[arr_count] = (char*)malloc(sizeof(char) * (i - str_start_index + 1));
-                    if (arr[arr_count] == NULL)
-                    {
+                    if (arr[arr_count] == NULL) {
                         return NULL;
                     }
                     strncpy(arr[arr_count], backup, i - str_start_index + 1);
@@ -73,11 +62,9 @@ char** tokenize_malloc(const char* str, const char* delim)
 
             backup = str_backup + str_start_index;
         }
-        if (*backup != '\0')
-        {
+        if (*backup != '\0') {
             arr[arr_count] = (char*)malloc(sizeof(char) * (i - str_start_index + 1));
-            if (arr[arr_count] == NULL)
-            {
+            if (arr[arr_count] == NULL) {
                 return NULL;
             }
             strncpy(arr[arr_count], backup, i - str_start_index + 1);
