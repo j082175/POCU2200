@@ -1,13 +1,15 @@
 #ifndef DOCUMENT_ANALYZER_H
 #define DOCUMENT_ANALYZER_H
 
-#define _CRT_SECURE_NO_WARNINGS
+//#define _CRT_SECURE_NO_WARNINGS
 
 #define TRUE (1)
 #define FALSE (0)
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <assert.h>
 
 int load_document(const char* document);
 
