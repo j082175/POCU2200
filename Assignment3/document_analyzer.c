@@ -17,8 +17,8 @@ static char data_backup[128][32] = { 0, };
 static const char* recent_document = NULL;
 
 static int total_paragraph_count = 0;
-static int total_sentence_count[128] = { 0, };
-static int total_word_count[512] = { 0, };
+static int total_sentence_count[32] = { 0, };
+static int total_word_count[32] = { 0, };
 
 static int total_sentence_count_int = 0;
 
@@ -26,7 +26,7 @@ static int is_paragraph;
 static int is_word;
 static int check;
 
-static int word_count;
+static int g_word_count;
 
 char paragraph_division = '\n';
 char sentence_division[] = { '.', '?', '!' };
@@ -36,6 +36,30 @@ char**** doc;
 char**** paragraph = NULL;
 char** sentence;
 char* word;
+
+void print(void)
+{
+    {
+        int i;
+        int j;
+        int k;
+        int count = 0;
+        int word_count = 0;
+        for (i = 0; i < total_paragraph_count; i++)
+        {
+            for (j = 0; j < total_sentence_count[i]; j++)
+            {
+                for (k = 0; k < total_word_count[word_count]; k++)
+                {
+                    printf("%s ", *(*(*(paragraph + i) + j) + k));
+                }
+                printf("\n");
+                word_count++;
+            }
+            printf("\n");
+        }
+    }
+}
 
 
 int load_document(const char* document)
@@ -48,6 +72,22 @@ int load_document(const char* document)
     {
         return FALSE;
     }
+
+    memset(data, 0, 512);
+    {
+        int i;
+        for (i = 0; i < 128; i++)
+        {
+            memset(data_backup[i], 0, 32);
+        }
+    }
+
+    total_paragraph_count = 0;
+    memset(total_sentence_count, 0, 32);
+    memset(total_word_count, 0, 32);
+    g_word_count = 0;
+
+    //dispose();
 
     /* 총 단락 개수 구하기 */
     for (i = 0; i < 512; i++)
@@ -99,10 +139,10 @@ int load_document(const char* document)
                 if (data[i] == word_division[j] && !is_word)
                 {
                     //total_word_count++;
-                    total_word_count[word_count]++;
+                    total_word_count[g_word_count]++;
                     if (check)
                     {
-                        word_count++;
+                        g_word_count++;
                         check = FALSE;
                     }
                     is_word = TRUE;
@@ -118,8 +158,9 @@ int load_document(const char* document)
     /* word tokenizer */
     {
         int count = 0;
-        char data_backup1[512] = { 0, };
         char* ptr;
+        char* data_backup1 = malloc(sizeof(char) * strlen(data) + 1);
+        memset(data_backup1, 0, strlen(data) + 1);
         strcpy(data_backup1, data);
         ptr = data_backup1;
         strtok(ptr, " ,.!?\n");
@@ -133,11 +174,12 @@ int load_document(const char* document)
             }
             strcpy(data_backup[count++], ptr);
         }
+
+        free(data_backup1);
     }
     /**/
 
     paragraph = (char****)malloc(sizeof(char**) * total_paragraph_count);
-    printf("%d ", _msize(paragraph));
     if (paragraph == NULL)
     {
         assert(FALSE);
@@ -147,12 +189,10 @@ int load_document(const char* document)
         for (i = 0; i < total_paragraph_count; i++)
         {
             *(paragraph + i) = (char***)malloc(sizeof(char*) * total_sentence_count[i]);
-            printf("%d ", _msize(*(paragraph + i)));
             if (*(paragraph + i) == NULL)
             {
                 assert(FALSE);
             }
-            //printf("%d\n", _msize(paragraph[i]));
         }
     }
 
@@ -189,10 +229,12 @@ int load_document(const char* document)
                     //paragraph[i][j][k] = malloc(sizeof(char) * strlen(data_backup[count]) + 1);/* 메모리 문제 */
 
                     strcpy(*(*(*(paragraph + i) + j) + k), data_backup[count++]);
-                    printf("%s\n", *(*(*(paragraph + i) + j) + k));
+                    printf("%s ", *(*(*(paragraph + i) + j) + k));
                 }
+                printf("\n");
                 word_count++;
             }
+            printf("\n");
         }
     }
 
@@ -208,7 +250,7 @@ int load_document(const char* document)
 void dispose(void)
 {
     /*동적으로 할당된 메모리를 모두 해제*/
-    
+
 
     //{
     //	int i;
@@ -247,18 +289,21 @@ void dispose(void)
     //		free(paragraph[i]);
     //	}
     //}
-    //char* a = paragraph[2][2][13];
-    //char** b = paragraph[2][2];
-    //char*** c = paragraph[2];
-    //char**** d = paragraph;
+    // char* a = paragraph[2][2][13];
+    // char** b = paragraph[2][2];
+    // char*** c = paragraph[2];
+    // char**** d = paragraph;
+    if (paragraph != NULL)
+    {
+		free(paragraph);
+		paragraph = NULL;
+    }
 
-    free(paragraph);
     //a = paragraph[2][2][13];
     //b = paragraph[2][2];
     //c = paragraph[2];
     //d = paragraph;
 
-    paragraph = NULL;
 }
 
 unsigned int get_total_word_count(void)
