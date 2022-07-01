@@ -110,7 +110,10 @@ int load_document(const char* document)
 
         if (data[i] == EOF)
         {
-            total_paragraph_count++;
+            if (data[i - 1] != '\n')
+            {
+				total_paragraph_count++;
+            }
             data[i] = '\0';
             break;
         }
@@ -135,6 +138,7 @@ int load_document(const char* document)
                     total_sentence_count[total_paragraph_count]++;
                     total_sentence_count_int++;
                     check = TRUE;
+                    break;
                     //word_count++;
                 }
             }
@@ -162,14 +166,22 @@ int load_document(const char* document)
             }
         }
     }
-
+    /**/
 
     {
         int i;
         data_backup = (char**)malloc(sizeof(char*) * 128);
+        if (data_backup == NULL)
+        {
+            assert(FALSE);
+        }
         for (i = 0; i < 128; i++)
         {
             data_backup[i] = (char*)malloc(sizeof(char) * 32 + 1);
+            if (data_backup[i] == NULL)
+            {
+                assert(FALSE);
+            }
             memset(data_backup[i], 0, 32);
         }
     }
@@ -178,6 +190,7 @@ int load_document(const char* document)
     {
         int count = 0;
         char* ptr;
+        char* a;
         char* data_backup1 = (char*)malloc(sizeof(char) * strlen(data) + 1);/* 메모리 문제 1*/
         if (data_backup1 == NULL)
         {
@@ -186,7 +199,11 @@ int load_document(const char* document)
         memset(data_backup1, 0, strlen(data) + 1);
         strcpy(data_backup1, data);
         ptr = data_backup1;
-        strtok(ptr, " ,.!?\n");
+        a = strtok(ptr, " ,.!?\n");
+        if (a == NULL)
+        {
+            assert(FALSE);
+        }
         strcpy(data_backup[count++], ptr);
         while (TRUE)
         {
@@ -403,13 +420,11 @@ unsigned int get_total_paragraph_count(void)
 
 const char*** get_paragraph_or_null(const unsigned int paragraph_index)
 {
-    int i;
-    int j;
     int buf_count = 0;
     char buf[128][32] = { 0, };
     char*** buf_malloc;
 
-    if (paragraph_index >= total_paragraph_count)
+    if (paragraph_index >= (unsigned int)total_paragraph_count)
     {
         return NULL;
     }
@@ -470,12 +485,9 @@ unsigned int get_paragraph_sentence_count(const char*** paragraph)
 
 const char** get_sentence_or_null(const unsigned int paragraph_index, const unsigned int sentence_index)
 {
-    int i;
-    int j;
     int buf_count = 0;
     char buf[128][32] = { 0, };
     char** buf_malloc;
-    char** buf_malloc_backup;
 
     int total_sentence_move_count = 0;
 
