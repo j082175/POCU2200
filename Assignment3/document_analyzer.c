@@ -317,7 +317,6 @@ void dispose(void)
         return;
     }
 
-
     {
         int i;
         int j;
@@ -357,26 +356,8 @@ void dispose(void)
     }
 
     free(paragraph);
-
+    paragraph = NULL;
     clear();
-    //char* a = paragraph[2][2][12];
-    //free(paragraph[2][2]);
-    //a = paragraph[2][2][11];
-    //char** b = paragraph[2][2];
-    //char*** c = paragraph[2];
-    //char**** d = paragraph;
-
-   //if (paragraph != NULL)
-   //{
-   //    free(paragraph);
-   //    paragraph = NULL;
-   //}
-
-   //a = paragraph[2][2][13];
-   //b = paragraph[2][2];
-   //c = paragraph[2];
-   //d = paragraph;
-
 }
 
 unsigned int get_total_word_count(void)
