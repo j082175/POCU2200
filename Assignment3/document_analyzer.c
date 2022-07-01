@@ -38,7 +38,7 @@ char**** paragraph = NULL;
 char** sentence;
 char* word;
 
-void clear()
+void clear(void)
 {
     total_paragraph_count = 0;
     memset(total_sentence_count, 0, 32);
@@ -544,6 +544,11 @@ int print_as_tree(const char* filename)
     FILE* fp2;
 
     if (is_empty)
+    {
+        return FALSE;
+    }
+
+    if (recent_document == NULL)
     {
         return FALSE;
     }
