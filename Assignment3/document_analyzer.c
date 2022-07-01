@@ -13,7 +13,9 @@ static char*** release_malloc_twice;
 static char** release_malloc_once;
 
 static char data[512] = { 0, };
-static char data_backup[128][32] = { 0, };
+//static char data_backup[128][32] = { 0, };
+static char** data_backup;
+
 static const char* recent_document = NULL;
 
 static int total_paragraph_count = 0;
@@ -37,7 +39,7 @@ char**** paragraph = NULL;
 char** sentence;
 char* word;
 
-/*void print(void)
+void print(void)
 {
     {
         int i;
@@ -52,6 +54,8 @@ char* word;
                 for (k = 0; k < total_word_count[word_count]; k++)
                 {
                     printf("%s ", *(*(*(paragraph + i) + j) + k));
+                    //printf("%d ", _msize(*(*(*(paragraph + i) + j) + k)));
+
                 }
                 printf("\n");
                 word_count++;
@@ -60,7 +64,7 @@ char* word;
         }
     }
 }
-*/
+
 
 int load_document(const char* document)
 {
@@ -73,11 +77,15 @@ int load_document(const char* document)
         return FALSE;
     }
 
+    //dispose();
+
     memset(data, 0, 512);
     {
         int i;
+        data_backup = (char**)malloc(sizeof(char*) * 128);
         for (i = 0; i < 128; i++)
         {
+            data_backup[i] = (char*)malloc(sizeof(char) * 32 + 1);
             memset(data_backup[i], 0, 32);
         }
     }
@@ -85,9 +93,10 @@ int load_document(const char* document)
     total_paragraph_count = 0;
     memset(total_sentence_count, 0, 32);
     memset(total_word_count, 0, 32);
+    total_sentence_count_int = 0;
     g_word_count = 0;
 
-    //dispose();
+
 
     /* 총 단락 개수 구하기 */
     for (i = 0; i < 512; i++)
@@ -159,7 +168,7 @@ int load_document(const char* document)
     {
         int count = 0;
         char* ptr;
-        char* data_backup1 = malloc(sizeof(char) * strlen(data) + 1);/* 메모리 문제 1*/
+        char* data_backup1 = (char*)malloc(sizeof(char) * strlen(data) + 1);/* 메모리 문제 1*/
         if (data_backup1 == NULL)
         {
             assert(FALSE);
@@ -183,7 +192,7 @@ int load_document(const char* document)
     }
     /**/
 
-    paragraph = (char****)malloc(sizeof(char**) * total_paragraph_count);
+    paragraph = (char****)malloc(sizeof(char***) * total_paragraph_count);
     if (paragraph == NULL)
     {
         assert(FALSE);
@@ -192,8 +201,8 @@ int load_document(const char* document)
         int i;
         for (i = 0; i < total_paragraph_count; i++)
         {
-            *(paragraph + i) = (char***)malloc(sizeof(char*) * total_sentence_count[i]);
-            if (*(paragraph + i) == NULL)
+            paragraph[i] = (char***)malloc(sizeof(char**) * total_sentence_count[i]);
+            if (paragraph[i] == NULL)
             {
                 assert(FALSE);
             }
@@ -208,8 +217,8 @@ int load_document(const char* document)
         {
             for (j = 0; j < total_sentence_count[i]; j++)
             {
-                *(*(paragraph + i) + j) = (char**)malloc(sizeof(char*) * total_word_count[j]);
-                if (*(*(paragraph + i) + j) == NULL)
+                paragraph[i][j] = (char**)malloc(sizeof(char*) * total_word_count[count++]);
+                if (paragraph[i][j] == NULL)
                 {
                     assert(FALSE);
                 }
@@ -229,8 +238,8 @@ int load_document(const char* document)
             {
                 for (k = 0; k < total_word_count[word_count]; k++)
                 {
-                    *(*(*(paragraph + i) + j) + k) = (char*)malloc(sizeof(char) * strlen(data_backup[count]) + 1);/* 메모리 문제 */
-                    if (*(*(*(paragraph + i) + j) + k) == NULL)
+                    paragraph[i][j][k] = (char*)malloc(sizeof(char) * strlen(data_backup[count]) + 1);/* 메모리 문제 */
+                    if (paragraph[i][j][k] == NULL)
                     {
                         assert(FALSE);
                     }
@@ -244,7 +253,7 @@ int load_document(const char* document)
             /*printf("\n"); */
         }
     }
-
+    //print();
 
     if (fclose(fp) == EOF)
     {
@@ -258,53 +267,70 @@ void dispose(void)
 {
     /*동적으로 할당된 메모리를 모두 해제*/
 
-
-    //{
-    //	int i;
-    //	int j;
-    //	int k;
-    //	int count = 0;
-    //	int word_count = 0;
-    //	for (i = 0; i < total_paragraph_count; i++)
-    //	{
-    //		for (j = 0; j < total_sentence_count[i]; j++)
-    //		{
-    //			for (k = 0; k < total_word_count[word_count]; k++)
-    //			{
-    //				free(paragraph[i][j][k]);
-    //			}
-    //		}
-    //	}
-    //}
-
-    //{
-    //	int i;
-    //	int j;
-    //	for (i = 0; i < total_paragraph_count; i++)
-    //	{
-    //		for (j = 0; j < total_sentence_count[i]; j++)
-    //		{
-    //			free(paragraph[i][j]);
-    //		}
-    //	}
-    //}
-
-    //{
-    //	int i;
-    //	for (i = 0; i < total_paragraph_count; i++)
-    //	{
-    //		free(paragraph[i]);
-    //	}
-    //}
-    // char* a = paragraph[2][2][13];
-    // char** b = paragraph[2][2];
-    // char*** c = paragraph[2];
-    // char**** d = paragraph;
-    if (paragraph != NULL)
     {
-        free(paragraph);
-        paragraph = NULL;
+        int i;
+        for (i = 0; i < 128; i++)
+        {
+            free(data_backup[i]);
+        }
+		free(data_backup);
     }
+
+    {
+        int i;
+        int j;
+        int k;
+        int count = 0;
+        int word_count = 0;
+        for (i = 0; i < total_paragraph_count; i++)
+        {
+            for (j = 0; j < total_sentence_count[i]; j++)
+            {
+                for (k = 0; k < total_word_count[word_count]; k++)
+                {
+                    free(paragraph[i][j][k]);
+                }
+                word_count++;
+            }
+        }
+    }
+
+    {
+        int i;
+        int j;
+        int count = 0;
+        for (i = 0; i < total_paragraph_count; i++)
+        {
+            for (j = 0; j < total_sentence_count[i]; j++)
+            {
+                free(paragraph[i][j]);
+            }
+        }
+    }
+
+    {
+        int i;
+        for (i = 0; i < total_paragraph_count; i++)
+        {
+            free(paragraph[i]);
+        }
+    }
+
+    free(paragraph);
+
+
+     //char* a = paragraph[2][2][12];
+     //free(paragraph[2][2]);
+     //a = paragraph[2][2][11];
+     //char** b = paragraph[2][2];
+     //char*** c = paragraph[2];
+     //char**** d = paragraph;
+
+    //if (paragraph != NULL)
+    //{
+    //    free(paragraph);
+    //    paragraph = NULL;
+    //}
 
     //a = paragraph[2][2][13];
     //b = paragraph[2][2];
