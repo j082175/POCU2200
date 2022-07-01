@@ -37,7 +37,7 @@ char**** paragraph = NULL;
 char** sentence;
 char* word;
 
-void print(void)
+/*void print(void)
 {
     {
         int i;
@@ -60,7 +60,7 @@ void print(void)
         }
     }
 }
-
+*/
 
 int load_document(const char* document)
 {
@@ -159,7 +159,11 @@ int load_document(const char* document)
     {
         int count = 0;
         char* ptr;
-        char* data_backup1 = malloc(sizeof(char) * strlen(data) + 1);
+        char* data_backup1 = malloc(sizeof(char) * strlen(data) + 1);/* 메모리 문제 1*/
+        if (data_backup1 == NULL)
+        {
+            assert(FALSE);
+        }
         memset(data_backup1, 0, strlen(data) + 1);
         strcpy(data_backup1, data);
         ptr = data_backup1;
@@ -226,15 +230,18 @@ int load_document(const char* document)
                 for (k = 0; k < total_word_count[word_count]; k++)
                 {
                     *(*(*(paragraph + i) + j) + k) = (char*)malloc(sizeof(char) * strlen(data_backup[count]) + 1);/* 메모리 문제 */
-                    //paragraph[i][j][k] = malloc(sizeof(char) * strlen(data_backup[count]) + 1);/* 메모리 문제 */
+                    if (*(*(*(paragraph + i) + j) + k) == NULL)
+                    {
+                        assert(FALSE);
+                    }
 
                     strcpy(*(*(*(paragraph + i) + j) + k), data_backup[count++]);
-                    printf("%s ", *(*(*(paragraph + i) + j) + k));
+                    /*printf("%s ", *(*(*(paragraph + i) + j) + k));*/
                 }
-                printf("\n");
+                /*printf("\n");*/
                 word_count++;
             }
-            printf("\n");
+            /*printf("\n"); */
         }
     }
 
@@ -295,8 +302,8 @@ void dispose(void)
     // char**** d = paragraph;
     if (paragraph != NULL)
     {
-		free(paragraph);
-		paragraph = NULL;
+        free(paragraph);
+        paragraph = NULL;
     }
 
     //a = paragraph[2][2][13];
@@ -384,10 +391,10 @@ unsigned int get_paragraph_word_count(const char*** paragraph)
 
             for (j = 0; j < total_word_count[checker + i]; j++)
             {
-                printf("%s ", paragraph[i][j]);
+                /*printf("%s ", paragraph[i][j]);*/
                 count++;
             }
-            printf("\n");
+            /*printf("\n");*/
         }
     }
 
