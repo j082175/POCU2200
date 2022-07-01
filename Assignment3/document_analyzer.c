@@ -9,8 +9,7 @@
 static int is_empty = FALSE;
 static int paragraph_index_store;
 static int sentence_index_store;
-static char*** release_malloc_twice;
-static char** release_malloc_once;
+
 
 static char data[512] = { 0, };
 //static char data_backup[128][32] = { 0, };
@@ -28,7 +27,7 @@ static int is_paragraph;
 static int is_word;
 static int check;
 
-static int g_word_count;
+static int s_word_count;
 
 char paragraph_division = '\n';
 char sentence_division[] = { '.', '?', '!' };
@@ -45,7 +44,7 @@ void clear()
     memset(total_sentence_count, 0, 32);
     memset(total_word_count, 0, 64);
     total_sentence_count_int = 0;
-    g_word_count = 0;
+    s_word_count = 0;
     paragraph = NULL;
 }
 
@@ -55,7 +54,6 @@ void print(void)
         int i;
         int j;
         int k;
-        int count = 0;
         int word_count = 0;
         for (i = 0; i < total_paragraph_count; i++)
         {
@@ -94,7 +92,7 @@ int load_document(const char* document)
 
     clear();
 
-    
+
 
 
     /* 총 단락 개수 구하기 */
@@ -144,16 +142,15 @@ int load_document(const char* document)
 
         {
             int j;
-            int k;
             for (j = 0; j < 5; j++)
             {
                 if (data[i] == word_division[j] && !is_word)
                 {
                     //total_word_count++;
-                    total_word_count[g_word_count]++;
+                    total_word_count[s_word_count]++;
                     if (check)
                     {
-                        g_word_count++;
+                        s_word_count++;
                         check = FALSE;
                     }
                     is_word = TRUE;
@@ -289,11 +286,11 @@ void dispose(void)
         int i;
         if (data_backup != NULL)
         {
-			for (i = 0; i < 128; i++)
-			{
-				free(data_backup[i]);
-			}
-			free(data_backup);
+            for (i = 0; i < 128; i++)
+            {
+                free(data_backup[i]);
+            }
+            free(data_backup);
         }
     }
 
@@ -307,7 +304,6 @@ void dispose(void)
         int i;
         int j;
         int k;
-        int count = 0;
         int word_count = 0;
         for (i = 0; i < total_paragraph_count; i++)
         {
@@ -325,7 +321,6 @@ void dispose(void)
     {
         int i;
         int j;
-        int count = 0;
         for (i = 0; i < total_paragraph_count; i++)
         {
             for (j = 0; j < total_sentence_count[i]; j++)
@@ -346,23 +341,23 @@ void dispose(void)
     free(paragraph);
 
     clear();
-     //char* a = paragraph[2][2][12];
-     //free(paragraph[2][2]);
-     //a = paragraph[2][2][11];
-     //char** b = paragraph[2][2];
-     //char*** c = paragraph[2];
-     //char**** d = paragraph;
+    //char* a = paragraph[2][2][12];
+    //free(paragraph[2][2]);
+    //a = paragraph[2][2][11];
+    //char** b = paragraph[2][2];
+    //char*** c = paragraph[2];
+    //char**** d = paragraph;
 
-    //if (paragraph != NULL)
-    //{
-    //    free(paragraph);
-    //    paragraph = NULL;
-    //}
+   //if (paragraph != NULL)
+   //{
+   //    free(paragraph);
+   //    paragraph = NULL;
+   //}
 
-    //a = paragraph[2][2][13];
-    //b = paragraph[2][2];
-    //c = paragraph[2];
-    //d = paragraph;
+   //a = paragraph[2][2][13];
+   //b = paragraph[2][2];
+   //c = paragraph[2];
+   //d = paragraph;
 
 }
 
@@ -423,7 +418,6 @@ const char*** get_paragraph_or_null(const unsigned int paragraph_index)
 
     buf_malloc = *(paragraph + paragraph_index);
 
-    release_malloc_twice = buf_malloc;
 
     return (const char***)buf_malloc;
 }
@@ -489,7 +483,7 @@ const char** get_sentence_or_null(const unsigned int paragraph_index, const unsi
     int word_count = 0;
 
     /* paragraph_index check */
-    if (paragraph_index >= total_paragraph_count)
+    if (paragraph_index >= (unsigned int)total_paragraph_count)
     {
         return NULL;
     }
@@ -497,7 +491,7 @@ const char** get_sentence_or_null(const unsigned int paragraph_index, const unsi
     /* sentence_index check */
     {
         int count = 0;
-        if (total_sentence_count[paragraph_index] <= sentence_index)
+        if ((unsigned int)total_sentence_count[paragraph_index] <= sentence_index)
         {
             return NULL;
         }
@@ -510,7 +504,7 @@ const char** get_sentence_or_null(const unsigned int paragraph_index, const unsi
     buf_malloc = *(*(paragraph + paragraph_index) + sentence_index);
 
     {
-        int i;
+        unsigned int i;
         for (i = 0; i < paragraph_index; i++)
         {
             total_sentence_move_count += total_sentence_count[i];
