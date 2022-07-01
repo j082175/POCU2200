@@ -6,7 +6,7 @@
    각각의 간격은 4개 */
 
 
-
+static int is_empty = FALSE;
 static int paragraph_index_store;
 static int sentence_index_store;
 static char*** release_malloc_twice;
@@ -20,7 +20,7 @@ static const char* recent_document = NULL;
 
 static int total_paragraph_count = 0;
 static int total_sentence_count[32] = { 0, };
-static int total_word_count[32] = { 0, };
+static int total_word_count[64] = { 0, };
 
 static int total_sentence_count_int = 0;
 
@@ -38,6 +38,15 @@ char**** doc;
 char**** paragraph = NULL;
 char** sentence;
 char* word;
+
+void clear()
+{
+    total_paragraph_count = 0;
+    memset(total_sentence_count, 0, 32);
+    memset(total_word_count, 0, 64);
+    total_sentence_count_int = 0;
+    g_word_count = 0;
+}
 
 void print(void)
 {
@@ -70,31 +79,19 @@ int load_document(const char* document)
 {
     FILE* fp;
     int i;
-    recent_document = document;
     fp = fopen(document, "r");
     if (fp == NULL)
     {
         return FALSE;
     }
 
+    recent_document = document;
+
     //dispose();
 
     memset(data, 0, 512);
-    {
-        int i;
-        data_backup = (char**)malloc(sizeof(char*) * 128);
-        for (i = 0; i < 128; i++)
-        {
-            data_backup[i] = (char*)malloc(sizeof(char) * 32 + 1);
-            memset(data_backup[i], 0, 32);
-        }
-    }
 
-    total_paragraph_count = 0;
-    memset(total_sentence_count, 0, 32);
-    memset(total_word_count, 0, 32);
-    total_sentence_count_int = 0;
-    g_word_count = 0;
+    clear();
 
 
 
@@ -105,8 +102,11 @@ int load_document(const char* document)
 
         if (data[0] == EOF)
         {
+            is_empty = TRUE;
             return TRUE;
         }
+
+        is_empty = FALSE;
 
         if (data[i] == EOF)
         {
@@ -161,6 +161,17 @@ int load_document(const char* document)
                     is_word = FALSE;
                 }
             }
+        }
+    }
+
+
+    {
+        int i;
+        data_backup = (char**)malloc(sizeof(char*) * 128);
+        for (i = 0; i < 128; i++)
+        {
+            data_backup[i] = (char*)malloc(sizeof(char) * 32 + 1);
+            memset(data_backup[i], 0, 32);
         }
     }
 
@@ -267,13 +278,23 @@ void dispose(void)
 {
     /*동적으로 할당된 메모리를 모두 해제*/
 
+    if (is_empty)
+    {
+        return;
+    }
+
+
     {
         int i;
-        for (i = 0; i < 128; i++)
+        if (data_backup != NULL)
         {
-            free(data_backup[i]);
+			for (i = 0; i < 128; i++)
+			{
+				free(data_backup[i]);
+			}
+			free(data_backup);
         }
-		free(data_backup);
+
     }
 
     {
@@ -318,7 +339,7 @@ void dispose(void)
 
     free(paragraph);
 
-
+    clear();
      //char* a = paragraph[2][2][12];
      //free(paragraph[2][2]);
      //a = paragraph[2][2][11];
@@ -341,6 +362,11 @@ void dispose(void)
 
 unsigned int get_total_word_count(void)
 {
+    if (is_empty)
+    {
+        return 0;
+    }
+
     if (recent_document != NULL)
     {
         int sum = 0;
@@ -358,11 +384,19 @@ unsigned int get_total_word_count(void)
 
 unsigned int get_total_sentence_count(void)
 {
+    if (is_empty)
+    {
+        return 0;
+    }
     return (unsigned int)total_sentence_count_int;
 }
 
 unsigned int get_total_paragraph_count(void)
 {
+    if (is_empty)
+    {
+        return 0;
+    }
     return (unsigned int)total_paragraph_count;
 }
 
@@ -526,11 +560,20 @@ int print_as_tree(const char* filename)
     const char delim = ':';
     int param_count = 0;
     int sentence_count = 0;
-    FILE* fp2 = fopen(filename, "w");
+
+    FILE* fp2;
+
+    if (is_empty)
+    {
+        return FALSE;
+    }
+
+    fp2 = fopen(filename, "w");
     if (fp2 == NULL)
     {
         return FALSE;
     }
+
 
     if (total_paragraph_count == 0)
     {
