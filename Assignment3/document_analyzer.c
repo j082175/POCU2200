@@ -86,7 +86,7 @@ int load_document(const char* document)
 
     recent_document = document;
 
-    //dispose();
+    dispose();
 
     memset(data, 0, 512);
 
@@ -309,6 +309,7 @@ void dispose(void)
             }
             free(data_backup);
         }
+        data_backup = NULL;
     }
 
     if (paragraph == NULL)
