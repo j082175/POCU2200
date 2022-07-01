@@ -46,6 +46,7 @@ void clear()
     memset(total_word_count, 0, 64);
     total_sentence_count_int = 0;
     g_word_count = 0;
+    paragraph = NULL;
 }
 
 void print(void)
@@ -93,6 +94,7 @@ int load_document(const char* document)
 
     clear();
 
+    
 
 
     /* 총 단락 개수 구하기 */
@@ -283,7 +285,6 @@ void dispose(void)
         return;
     }
 
-
     {
         int i;
         if (data_backup != NULL)
@@ -294,8 +295,13 @@ void dispose(void)
 			}
 			free(data_backup);
         }
-
     }
+
+    if (paragraph == NULL)
+    {
+        return;
+    }
+
 
     {
         int i;
@@ -513,22 +519,8 @@ const char** get_sentence_or_null(const unsigned int paragraph_index, const unsi
 
     word_count = total_word_count[total_sentence_move_count + sentence_index];
 
-    //buf_malloc_backup = malloc(sizeof(char*) * word_count);
-
-    //{
-    //	int i;
-    //	for (i = 0; i < word_count; i++)
-    //	{
-    //		buf_malloc_backup[i] = malloc(sizeof(char) * strlen(buf_malloc[i]) + 1);
-    //		strcpy(buf_malloc_backup[i], buf_malloc[i]);
-    //	}
-    //}
-
-    //release_malloc_once = buf_malloc_backup;
-
 
     return (const char**)buf_malloc;
-
 }
 
 unsigned int get_sentence_word_count(const char** sentence)
