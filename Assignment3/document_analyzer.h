@@ -1,7 +1,7 @@
 #ifndef DOCUMENT_ANALYZER_H
 #define DOCUMENT_ANALYZER_H
 
-//#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 
 #define TRUE (1)
 #define FALSE (0)
