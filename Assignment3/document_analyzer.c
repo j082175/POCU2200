@@ -5,7 +5,6 @@
    단락과 단락사이엔 개행이 존재
    각각의 간격은 4개 */
 
-
 static int is_empty = FALSE;
 static int paragraph_index_store;
 static int sentence_index_store;
@@ -97,11 +96,11 @@ int load_document(const char* document)
 
     recent_document = document;
 
-    dispose();
+    //dispose();
 
-    memset(data, 0, 512);
+    //memset(data, 0, 512);
 
-    clear();
+    //clear();
 
 
     /* 총 단락 개수 구하기 */
@@ -136,17 +135,23 @@ int load_document(const char* document)
             buf[count] = '\0';
             /**/
             paragraph_store[s_total_paragraph_count] = (char***)malloc(sizeof(char*) * s_total_sentence_count);
+            if (paragraph_store[s_total_paragraph_count] == NULL)
+            {
+                return FALSE;
+            }
+
             for (l = 0; l < s_total_sentence_count; l++)
             {
                 paragraph_store[s_total_paragraph_count][l] = sentence_store[l];
             }
+
+            s_total_paragraph_count++;
 
             if (data[count] == EOF)
             {
                 break;
             }
 
-            s_total_paragraph_count++;
 
             memset(data, 0, strlen(data));
             s_total_sentence_count = 0;
@@ -246,18 +251,7 @@ void dispose(void)
         return;
     }
 
-    {
-        int i;
-        if (data_backup != NULL)
-        {
-            for (i = 0; i < 128; i++)
-            {
-                free(data_backup[i]);
-            }
-            free(data_backup);
-        }
-        data_backup = NULL;
-    }
+    
 
     if (paragraph == NULL)
     {
@@ -269,11 +263,11 @@ void dispose(void)
         int j;
         int k;
         int word_count = 0;
-        for (i = 0; i < total_paragraph_count; i++)
+        for (i = 0; i < get_total_paragraph_count(); i++)
         {
-            for (j = 0; j < total_sentence_count[i]; j++)
+            for (j = 0; j < get_paragraph_sentence_count((const char***)(paragraph + i)); j++)
             {
-                for (k = 0; k < total_word_count[word_count]; k++)
+                for (k = 0; k < get_sentence_word_count((const char**)paragraph[i][j]); k++)
                 {
                     free(paragraph[i][j][k]);
                 }
@@ -285,9 +279,9 @@ void dispose(void)
     {
         int i;
         int j;
-        for (i = 0; i < total_paragraph_count; i++)
+        for (i = 0; i < get_total_paragraph_count(); i++)
         {
-            for (j = 0; j < total_sentence_count[i]; j++)
+            for (j = 0; j < get_paragraph_sentence_count((const char***)*(paragraph + i)); j++)
             {
                 free(paragraph[i][j]);
             }
@@ -296,13 +290,13 @@ void dispose(void)
 
     {
         int i;
-        for (i = 0; i < total_paragraph_count; i++)
+        for (i = 0; i < get_total_paragraph_count(); i++)
         {
             free(paragraph[i]);
         }
     }
 
-    free(paragraph);
+    
     paragraph = NULL;
     clear();
 }
@@ -348,7 +342,7 @@ unsigned int get_total_paragraph_count(void)
 
     {
         size_t i;
-        for (i = 0; i < _msize(paragraph) / sizeof(char***); i++)
+        for (i = 0; i < s_total_paragraph_count; i++)
         {
             count++;
         }
@@ -406,29 +400,18 @@ unsigned int get_paragraph_sentence_count(const char*** paragraph)
 
 const char** get_sentence_or_null(const unsigned int paragraph_index, const unsigned int sentence_index)
 {
-    char** buf_malloc;
-
-    /* paragraph_index check */
-    if (paragraph_index >= (unsigned int)total_paragraph_count)
+    if (paragraph_index >= s_total_paragraph_count)
     {
         return NULL;
     }
 
-    /* sentence_index check */
+
+    if (sentence_index >= _msize(*paragraph) / sizeof(char***))
     {
-        if ((unsigned int)total_sentence_count[paragraph_index] <= sentence_index)
-        {
-            return NULL;
-        }
+        return NULL;
     }
 
-
-    paragraph_index_store = paragraph_index;
-    sentence_index_store = sentence_index;
-
-    buf_malloc = *(*(paragraph + paragraph_index) + sentence_index);
-
-    return (const char**)buf_malloc;
+    return (const char**)paragraph[paragraph_index][sentence_index];
 }
 
 unsigned int get_sentence_word_count(const char** sentence)
@@ -451,8 +434,7 @@ int print_as_tree(const char* filename)
     const char delim = ':';
     int param_count = 0;
     int sentence_count = 0;
-
-    FILE* fp2;
+    FILE* fp;
 
     if (is_empty)
     {
@@ -464,16 +446,19 @@ int print_as_tree(const char* filename)
         return FALSE;
     }
 
-    fp2 = fopen(filename, "w");
-    if (fp2 == NULL)
+    //char* a = ***paragraph;
+
+    fp = fopen(filename, "w");
+    if (fp == NULL)
     {
         return FALSE;
     }
 
 
-    if (total_paragraph_count == 0)
+
+    if (s_total_paragraph_count == 0)
     {
-        if (fclose(fp2) == EOF)
+        if (fclose(fp) == EOF)
         {
             return FALSE;
         }
@@ -485,27 +470,27 @@ int print_as_tree(const char* filename)
         int j;
         int k;
         int word_count = 0;
-        for (i = 0; i < total_paragraph_count; i++)
+        for (i = 0; i < s_total_paragraph_count; i++)
         {
-            fprintf(fp2, "%s %d%c\n", param_str, param_count, delim);
-            for (j = 0; j < total_sentence_count[i]; j++)
+            fprintf(fp, "%s %d%c\n", param_str, param_count, delim);
+            for (j = 0; j < _msize(paragraph[i]) / sizeof(char*); j++)
             {
-                fprintf(fp2, "    %s %d%c\n", sentence_str, sentence_count, delim);
-                for (k = 0; k < total_word_count[word_count]; k++)
+                fprintf(fp, "    %s %d%c\n", sentence_str, sentence_count, delim);
+                for (k = 0; k < _msize(paragraph[i][j]) / sizeof(char); k++)
                 {
-                    fprintf(fp2, "        %s\n", paragraph[i][j][k]);
+                    fprintf(fp, "        %s\n", paragraph[i][j][k]);
                 }
                 word_count++;
                 sentence_count++;
             }
-            fputc('\n', fp2);
+            fputc('\n', fp);
             param_count++;
             sentence_count = 0;
         }
     }
 
 
-    if (fclose(fp2) == EOF)
+    if (fclose(fp) == EOF)
     {
         return FALSE;
     }
