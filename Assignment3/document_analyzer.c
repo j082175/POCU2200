@@ -6,13 +6,13 @@
    각각의 간격은 4개 */
 
 static int is_empty = FALSE;
-static int paragraph_index_store;
-static int sentence_index_store;
+
+
 
 
 static char data[512] = { 0, };
-/*static char data_backup[128][32] = { 0, };*/
-static char** data_backup;
+
+
 
 static const char* recent_document = NULL;
 
@@ -27,14 +27,14 @@ static int s_total_paragraph_count = 0;
 static int total_sentence_count_int = 0;
 
 static int is_paragraph;
-static int is_word;
-static int check;
+
+
 
 static int s_word_count;
 
 char paragraph_division = '\n';
 char sentence_division[] = { '.', '?', '!' };
-//char word_division[] = { ' ', ',' , '.', '?', '!' };
+
 char word_division[] = { ',', ' ' };
 
 char**** doc;
@@ -59,28 +59,6 @@ void clear(void)
     total_word_count = 0;
 }
 
-//void print(void)
-//{
-//    {
-//        int i;
-//        int j;
-//        int k;
-//        int word_count = 0;
-//        for (i = 0; i < total_paragraph_count; i++)
-//        {
-//            for (j = 0; j < total_sentence_count[i]; j++)
-//            {
-//                for (k = 0; k < total_word_count[word_count]; k++)
-//                {
-//                    printf("%s ", *(*(*(paragraph + i) + j) + k));
-//                }
-//                printf("\n");
-//                word_count++;
-//            }
-//            printf("\n");
-//        }
-//    }
-//}
 
 
 int load_document(const char* document)
@@ -88,11 +66,11 @@ int load_document(const char* document)
     char**** doc1 = NULL;
     char*** paragraph1 = NULL;
     char** sentence1 = NULL;
-    char* word1 = NULL;
+
 
     FILE* fp;
     int i;
-    char c = 0;
+
     int count = 0;
     fp = fopen(document, "r");
     if (fp == NULL)
@@ -103,8 +81,6 @@ int load_document(const char* document)
     recent_document = document;
 
     dispose();
-
-    //memset(data, 0, 512);
 
     clear();
 
@@ -141,7 +117,7 @@ int load_document(const char* document)
             is_paragraph = FALSE;
         }
 
-                if (data[count] == EOF || data[count] == paragraph_division && !is_paragraph)
+        if (data[count] == EOF || (data[count] == paragraph_division && !is_paragraph))
         {
             /* 단락 추가 */
 
@@ -168,8 +144,6 @@ int load_document(const char* document)
             paragraph1 = paragraph1 - s_total_sentence_count;
             paragraph_store[s_total_paragraph_count] = paragraph1;
 
-            char* b = **paragraph1;
-
             s_total_paragraph_count++;
 
 
@@ -182,8 +156,8 @@ int load_document(const char* document)
 
             if (data[count] == EOF && strlen(buf) == 0)
             {
-                doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
                 int m;
+                doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
                 for (m = 0; m < s_total_paragraph_count; m++)
                 {
                     *doc1 = paragraph_store[m];
@@ -234,7 +208,7 @@ int load_document(const char* document)
                         for (l = 0; l < s_total_word_count; l++)
                         {
                             *sentence1 = word_store[l];
-							char* a = *sentence1;
+
                             sentence1++;
                         }
 
@@ -453,9 +427,9 @@ void dispose(void)
     }
 
     {
-        int i;
-        int j;
-        int k;
+        unsigned int i;
+        unsigned int j;
+        unsigned int k;
         int word_count = 0;
         for (i = 0; i < get_total_paragraph_count(); i++)
         {
@@ -471,8 +445,8 @@ void dispose(void)
     }
 
     {
-        int i;
-        int j;
+        unsigned int i;
+        unsigned int j;
         for (i = 0; i < get_total_paragraph_count(); i++)
         {
             for (j = 0; j < get_paragraph_sentence_count((const char***)*(paragraph + i)); j++)
@@ -483,7 +457,7 @@ void dispose(void)
     }
 
     {
-        int i;
+        unsigned int i;
         for (i = 0; i < get_total_paragraph_count(); i++)
         {
             free(paragraph[i]);
@@ -552,7 +526,7 @@ const char*** get_paragraph_or_null(const unsigned int paragraph_index)
     {
         return NULL;
     }
-    if (paragraph_index >= s_total_paragraph_count)
+    if (paragraph_index >= (const unsigned int)s_total_paragraph_count)
     {
         return NULL;
     }
