@@ -12,7 +12,7 @@ static int sentence_index_store;
 
 
 static char data[512] = { 0, };
-//static char data_backup[128][32] = { 0, };
+/*static char data_backup[128][32] = { 0, };*/
 static char** data_backup;
 
 static const char* recent_document = NULL;
@@ -62,8 +62,6 @@ void print(void)
                 for (k = 0; k < total_word_count[word_count]; k++)
                 {
                     printf("%s ", *(*(*(paragraph + i) + j) + k));
-                    //printf("%d ", _msize(*(*(*(paragraph + i) + j) + k)));
-
                 }
                 printf("\n");
                 word_count++;
@@ -112,7 +110,7 @@ int load_document(const char* document)
         {
             if (data[i - 1] != '\n')
             {
-				total_paragraph_count++;
+                total_paragraph_count++;
             }
             data[i] = '\0';
             break;
@@ -139,7 +137,6 @@ int load_document(const char* document)
                     total_sentence_count_int++;
                     check = TRUE;
                     break;
-                    //word_count++;
                 }
             }
         }
@@ -150,7 +147,6 @@ int load_document(const char* document)
             {
                 if (data[i] == word_division[j] && !is_word)
                 {
-                    //total_word_count++;
                     total_word_count[s_word_count]++;
                     if (check)
                     {
@@ -280,7 +276,7 @@ int load_document(const char* document)
             /*printf("\n"); */
         }
     }
-    //print();
+    /*print();*/
 
     if (fclose(fp) == EOF)
     {
@@ -364,10 +360,10 @@ unsigned int get_total_word_count(void)
 {
     unsigned int count = 0;
     {
-        int i;
+        unsigned int i;
         for (i = 0; i < get_total_paragraph_count(); i++)
         {
-            count += get_paragraph_word_count(*(paragraph + i));
+            count += get_paragraph_word_count((const char***)*(paragraph + i));
         }
     }
 
@@ -378,10 +374,10 @@ unsigned int get_total_sentence_count(void)
 {
     unsigned int count = 0;
     {
-        int i;
+        unsigned int i;
         for (i = 0; i < get_total_paragraph_count(); i++)
         {
-            count += get_paragraph_sentence_count(*(paragraph + i));
+            count += get_paragraph_sentence_count((const char***)*(paragraph + i));
         }
     }
 
@@ -390,14 +386,15 @@ unsigned int get_total_sentence_count(void)
 
 unsigned int get_total_paragraph_count(void)
 {
+    unsigned int count = 0;
+
     if (paragraph == NULL)
     {
         return 0;
     }
 
-    unsigned int count = 0;
     {
-        int i;
+        size_t i;
         for (i = 0; i < _msize(paragraph) / sizeof(char***); i++)
         {
             count++;
@@ -409,8 +406,6 @@ unsigned int get_total_paragraph_count(void)
 
 const char*** get_paragraph_or_null(const unsigned int paragraph_index)
 {
-    int buf_count = 0;
-    char buf[128][32] = { 0, };
     char*** buf_malloc;
 
     if (paragraph_index >= (unsigned int)total_paragraph_count)
@@ -431,8 +426,8 @@ unsigned int get_paragraph_word_count(const char*** paragraph)
     unsigned int count = 0;
 
     {
-        int i;
-        int j;
+        size_t i;
+        size_t j;
         for (i = 0; i < _msize(paragraph) / sizeof(char***); i++)
         {
             for (j = 0; j < _msize(*(paragraph + i)) / sizeof(char**); j++)
@@ -448,7 +443,7 @@ unsigned int get_paragraph_word_count(const char*** paragraph)
 unsigned int get_paragraph_sentence_count(const char*** paragraph)
 {
     unsigned int count = 0;
-    int i;
+    size_t i;
     for (i = 0; i < _msize(paragraph) / sizeof(char**); i++)
     {
         count++;
@@ -458,14 +453,7 @@ unsigned int get_paragraph_sentence_count(const char*** paragraph)
 
 const char** get_sentence_or_null(const unsigned int paragraph_index, const unsigned int sentence_index)
 {
-    int buf_count = 0;
-    char buf[128][32] = { 0, };
     char** buf_malloc;
-
-    int total_sentence_move_count = 0;
-
-    int total_word_move_count = 0;
-    int word_count = 0;
 
     /* paragraph_index check */
     if (paragraph_index >= (unsigned int)total_paragraph_count)
@@ -475,7 +463,6 @@ const char** get_sentence_or_null(const unsigned int paragraph_index, const unsi
 
     /* sentence_index check */
     {
-        int count = 0;
         if ((unsigned int)total_sentence_count[paragraph_index] <= sentence_index)
         {
             return NULL;
@@ -488,24 +475,13 @@ const char** get_sentence_or_null(const unsigned int paragraph_index, const unsi
 
     buf_malloc = *(*(paragraph + paragraph_index) + sentence_index);
 
-    {
-        unsigned int i;
-        for (i = 0; i < paragraph_index; i++)
-        {
-            total_sentence_move_count += total_sentence_count[i];
-        }
-    }
-
-    word_count = total_word_count[total_sentence_move_count + sentence_index];
-
-
     return (const char**)buf_malloc;
 }
 
 unsigned int get_sentence_word_count(const char** sentence)
 {
     unsigned int count = 0;
-    int i;
+    size_t i;
 
     for (i = 0; i < _msize(sentence) / sizeof(char*); i++)
     {
