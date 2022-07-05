@@ -77,8 +77,6 @@ int load_document(const char* document)
 
 	recent_document = document;
 
-	//dispose();
-
 
 	/* 총 단락 개수 구하기 */
 	do
@@ -240,7 +238,6 @@ int load_document(const char* document)
 						if (strlen(buf) != 0)
 						{
 							word_store[s_total_word_count] = (char*)malloc(sizeof(char) * strlen(buf) + 1);
-							//word1 = (char*)malloc(sizeof(char) * strlen(buf) + 1);
 
 							if (word_store[s_total_word_count] == NULL)
 							{

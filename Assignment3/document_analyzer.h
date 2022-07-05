@@ -11,6 +11,8 @@
 #include <string.h>
 #include <assert.h>
 
+void clear(void);
+
 int load_document(const char* document);
 
 void dispose(void);
