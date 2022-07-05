@@ -7,13 +7,6 @@
 
 static int is_empty = FALSE;
 
-
-
-
-
-
-
-
 static const char* recent_document = NULL;
 
 static int total_paragraph_count = 0;
@@ -28,8 +21,6 @@ static int total_sentence_count_int = 0;
 
 static int is_paragraph;
 
-
-
 static int s_word_count;
 
 char paragraph_division = '\n';
@@ -42,14 +33,14 @@ char**** paragraph = NULL;
 char** sentence;
 char* word;
 
-
-
 void clear(void)
 {
-	s_total_paragraph_count = 0;
 	total_sentence_count_int = 0;
+
+	s_total_paragraph_count = 0;
 	s_total_sentence_count = 0;
 	s_word_count = 0;
+
 	paragraph = NULL;
 
 	total_paragraph_count = 0;
@@ -70,10 +61,11 @@ int load_document(const char* document)
 	char*** paragraph_store[32] = { 0, };
 	char data[32] = { 0, };
 
-
 	FILE* fp;
 
 	int count = 0;
+	clear();
+
 	fp = fopen(document, "r");
 	if (fp == NULL)
 	{
@@ -83,8 +75,6 @@ int load_document(const char* document)
 	recent_document = document;
 
 	//dispose();
-
-	clear();
 
 
 	/* 총 단락 개수 구하기 */
@@ -120,7 +110,7 @@ int load_document(const char* document)
 
 			if (data[count] == EOF && total_word_count == 0)
 			{
-				goto end;
+				break;
 			}
 
 			strcpy(buf, data);
@@ -128,7 +118,7 @@ int load_document(const char* document)
 
 
 			/**/
-			paragraph1 = (char***)malloc(sizeof(char*) * s_total_sentence_count);
+			paragraph1 = (char***)malloc(sizeof(char**) * s_total_sentence_count);
 			if (paragraph1 == NULL)
 			{
 				return FALSE;
@@ -166,7 +156,7 @@ int load_document(const char* document)
 					doc1++;
 				}
 				doc1 = doc1 - s_total_paragraph_count;
-				goto end;
+				break;
 			}
 
 			count = -1;
@@ -268,145 +258,9 @@ int load_document(const char* document)
 				}
 			}
 		}
-		/* */
-
-		//if (data[count] == EOF || data[count] == paragraph_division && !is_paragraph)
-		//{
-		//    /* 단락 추가 */
-
-		//    /**/
-		//    char buf[32];
-		//    int l;
-
-		//    strcpy(buf, data);
-		//    buf[count] = '\0';
-
-
-		//    /**/
-		//    paragraph_store[s_total_paragraph_count] = (char***)malloc(sizeof(char*) * s_total_sentence_count);
-		//    if (paragraph_store[s_total_paragraph_count] == NULL)
-		//    {
-		//        return FALSE;
-		//    }
-
-		//    for (l = 0; l < s_total_sentence_count; l++)
-		//    {
-		//        paragraph_store[s_total_paragraph_count][l] = sentence_store[l];
-		//    }
-
-		//    s_total_paragraph_count++;
-
-
-
-
-		//    s_total_sentence_count = 0;
-		//    /**/
-		//    total_paragraph_count++;
-		//    is_paragraph = TRUE;
-
-		//    if (data[count] == EOF && strlen(buf) == 0)
-		//    {
-		//        goto end;
-		//    }
-
-		//    count = -1;
-		//    memset(data, 0, strlen(data));
-		//    memset(sentence_store, 0, 64);
-		//}
-
-
-
-		///* 문장 추가 */
-		//{
-		//    int k;
-		//    int l;
-		//    char buf[32] = { 0, };
-		//    for (k = 0; k < 3; k++)
-		//    {
-		//        if (data[count] == sentence_division[k])
-		//        {
-		//            /**/
-		//            strcpy(buf, data);
-		//            if (count < 32)
-		//            {
-
-
-		//                buf[count] = '\0';
-		//                if (strlen(buf) != 0)
-		//                {
-		//                    word_store[s_total_word_count] = (char*)malloc(sizeof(char) * strlen(buf) + 1);
-		//                    strcpy(word_store[s_total_word_count], buf);
-		//                    s_total_word_count++;
-		//                    total_word_count++;
-		//                    count = -1;
-		//                    memset(data, 0, strlen(data));
-		//                }
-		//                /**/
-		//                sentence_store[s_total_sentence_count] = (char**)malloc(sizeof(char*) * s_total_word_count);
-		//                for (l = 0; l < s_total_word_count; l++)
-		//                {
-		//                    sentence_store[s_total_sentence_count][l] = word_store[l];
-		//                }
-		//                memset(word_store, 0, 128);
-		//                s_total_sentence_count++;
-		//                total_sentence_count++;
-		//                s_total_word_count = 0;
-		//                break;
-		//            }
-		//        }
-		//    }
-		//}
-		///**/
-
-		///* 단어 추가 */
-		//{
-		//    int k;
-		//    char buf[32] = { 0, };
-		//    for (k = 0; k < 2; k++)
-		//    {
-		//        if (data[count] == word_division[k])
-		//        {
-		//            strcpy(buf, data);
-		//            if (count < 32)
-		//            {
-
-		//                buf[count] = '\0';
-		//                if (strlen(buf) != 0)
-		//                {
-		//                    //word_store[s_total_word_count] = (char*)malloc(sizeof(char) * strlen(buf) + 1);
-		//                    word1 = (char*)malloc(sizeof(char) * strlen(buf) + 1);
-		//                    
-		//                    if (word_store[s_total_word_count] == NULL)
-		//                    {
-		//                        return 0;
-		//                    }
-		//                    strcpy(word_store[s_total_word_count], buf);
-		//                    s_total_word_count++;
-		//                    total_word_count++;
-		//                    count = -1;
-		//                    memset(data, 0, strlen(data));
-		//                    break;
-		//                }
-		//                else {
-		//                    memset(data, 0, strlen(data));
-		//                    count = -1;
-		//                }
-		//            }
-		//        }
-		//    }
-		//}
-		///* */
-
-
-
-	
 	} while (data[count++] != EOF);
 
-		
-
-end:
 	paragraph = doc1;
-
 
 	if (fclose(fp) == EOF)
 	{
@@ -424,8 +278,6 @@ void dispose(void)
 	{
 		return;
 	}
-
-
 
 	if (paragraph == NULL)
 	{
@@ -470,23 +322,13 @@ void dispose(void)
 		}
 	}
 
-
+	free(paragraph);
 	paragraph = NULL;
 	clear();
 }
 
 unsigned int get_total_word_count(void)
 {
-	//unsigned int count = 0;
-	////int a = _msize(*paragraph);
-
-	//{
-	//    unsigned int i;
-	//    for (i = 0; i < s_total_paragraph_count; i++)
-	//    {
-	//        count += get_paragraph_word_count((const char***)*(paragraph + i));
-	//    }
-	//}
 
 	if (is_empty)
 	{
@@ -498,15 +340,6 @@ unsigned int get_total_word_count(void)
 
 unsigned int get_total_sentence_count(void)
 {
-	//unsigned int count = 0;
-	//{
-	//    unsigned int i;
-	//    for (i = 0; i < get_total_paragraph_count(); i++)
-	//    {
-	//        count += get_paragraph_sentence_count((const char***)*(paragraph + i));
-	//    }
-	//}
-
 	if (is_empty)
 	{
 		return 0;
@@ -619,22 +452,19 @@ int print_as_tree(const char* filename)
 		return FALSE;
 	}
 
-	//char* a = ***paragraph;
-
-	fp = fopen(filename, "w");
-	if (fp == NULL)
+	if (s_total_paragraph_count == 0)
 	{
 		return FALSE;
 	}
 
-
-
-	if (s_total_paragraph_count == 0)
+	if (paragraph == NULL)
 	{
-		if (fclose(fp) == EOF)
-		{
-			return FALSE;
-		}
+		return FALSE;
+	}
+
+	fp = fopen(filename, "w");
+	if (fp == NULL)
+	{
 		return FALSE;
 	}
 
@@ -662,8 +492,6 @@ int print_as_tree(const char* filename)
 			sentence_count = 0;
 		}
 	}
-
-
 
 	if (fclose(fp) == EOF)
 	{
