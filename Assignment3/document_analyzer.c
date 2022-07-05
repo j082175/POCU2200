@@ -35,10 +35,6 @@ char* word;
 
 void clear(void)
 {
-	if (paragraph != NULL)
-	{
-		dispose();
-	}
 
 	total_sentence_count_int = 0;
 
@@ -67,6 +63,7 @@ int load_document(const char* document)
 	FILE* fp;
 
 	int count = 0;
+	dispose();
 	clear();
 
 	fp = fopen(document, "r");
@@ -76,6 +73,17 @@ int load_document(const char* document)
 	}
 
 	recent_document = document;
+
+	{
+		data[0] = fgetc(fp);
+		if (data[0] == EOF)
+		{
+			return TRUE;
+		}
+		else {
+			fseek(fp, 0, SEEK_SET);
+		}
+	}
 
 
 	/* 총 단락 개수 구하기 */
@@ -101,18 +109,67 @@ int load_document(const char* document)
 			is_paragraph = FALSE;
 		}
 
-		if (data[count] == EOF || (data[count] == paragraph_division && !is_paragraph))
+		if (data[count] == EOF)
+		{
+			char buf[32];
+			int l;
+
+			strcpy(buf, data);
+			buf[count] = '\0';
+
+
+			/**/
+			paragraph1 = (char***)malloc(sizeof(char**) * s_total_sentence_count);
+			if (paragraph1 == NULL)
+			{
+				return FALSE;
+			}
+
+			for (l = 0; l < s_total_sentence_count; l++)
+			{
+				*paragraph1 = sentence_store[l];
+				paragraph1++;
+			}
+			paragraph1 = paragraph1 - s_total_sentence_count;
+			paragraph_store[s_total_paragraph_count] = paragraph1;
+
+			s_total_paragraph_count++;
+
+
+
+
+			s_total_sentence_count = 0;
+			/**/
+			total_paragraph_count++;
+			is_paragraph = TRUE;
+            {
+                int m;
+                doc1 = (char ****)malloc(sizeof(char ***) * s_total_paragraph_count);
+                if (doc1 == NULL)
+                {
+                    return FALSE;
+                }
+                for (m = 0; m < s_total_paragraph_count; m++)
+                {
+                    *doc1 = paragraph_store[m];
+                    doc1++;
+                }
+                doc1 = doc1 - s_total_paragraph_count;
+                break;
+            }
+            
+            count = -1;
+			memset(data, 0, strlen(data));
+			memset(sentence_store, 0, 64);
+		}
+
+		if (data[count] == paragraph_division && !is_paragraph)
 		{
 			/* 단락 추가 */
 
 			/**/
 			char buf[32];
 			int l;
-
-			if (data[count] == EOF && total_word_count == 0)
-			{
-				break;
-			}
 
 			strcpy(buf, data);
 			buf[count] = '\0';
@@ -143,22 +200,22 @@ int load_document(const char* document)
 			total_paragraph_count++;
 			is_paragraph = TRUE;
 
-			if (data[count] == EOF && strlen(buf) == 0)
-			{
-				int m;
-				doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
-				if (doc1 == NULL)
-				{
-					return FALSE;
-				}
-				for (m = 0; m < s_total_paragraph_count; m++)
-				{
-					*doc1 = paragraph_store[m];
-					doc1++;
-				}
-				doc1 = doc1 - s_total_paragraph_count;
-				break;
-			}
+			//if (data[count] == EOF && strlen(buf) == 0)
+			//{
+			//	int m;
+			//	doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
+			//	if (doc1 == NULL)
+			//	{
+			//		return FALSE;
+			//	}
+			//	for (m = 0; m < s_total_paragraph_count; m++)
+			//	{
+			//		*doc1 = paragraph_store[m];
+			//		doc1++;
+			//	}
+			//	doc1 = doc1 - s_total_paragraph_count;
+			//	break;
+			//}
 
 			count = -1;
 			memset(data, 0, strlen(data));
