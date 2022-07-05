@@ -111,12 +111,7 @@ int load_document(const char* document)
 
 		if (data[count] == EOF)
 		{
-			char buf[32];
 			int l;
-
-			strcpy(buf, data);
-			buf[count] = '\0';
-
 
 			/**/
 			paragraph1 = (char***)malloc(sizeof(char**) * s_total_sentence_count);
@@ -142,23 +137,23 @@ int load_document(const char* document)
 			/**/
 			total_paragraph_count++;
 			is_paragraph = TRUE;
-            {
-                int m;
-                doc1 = (char ****)malloc(sizeof(char ***) * s_total_paragraph_count);
-                if (doc1 == NULL)
-                {
-                    return FALSE;
-                }
-                for (m = 0; m < s_total_paragraph_count; m++)
-                {
-                    *doc1 = paragraph_store[m];
-                    doc1++;
-                }
-                doc1 = doc1 - s_total_paragraph_count;
-                break;
-            }
-            
-            count = -1;
+			{
+				int m;
+				doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
+				if (doc1 == NULL)
+				{
+					return FALSE;
+				}
+				for (m = 0; m < s_total_paragraph_count; m++)
+				{
+					*doc1 = paragraph_store[m];
+					doc1++;
+				}
+				doc1 = doc1 - s_total_paragraph_count;
+				break;
+			}
+
+			count = -1;
 			memset(data, 0, strlen(data));
 			memset(sentence_store, 0, 64);
 		}
@@ -243,7 +238,7 @@ int load_document(const char* document)
 
 						if (strlen(buf) != 0)
 						{
-							word_store[s_total_word_count] = (char*)malloc(sizeof(char) * strlen(buf) + 1);
+							word_store[s_total_word_count] = (char*)malloc(sizeof(char) * strlen(buf) + 2);
 							strcpy(word_store[s_total_word_count], buf);
 							s_total_word_count++;
 							total_word_count++;
@@ -294,7 +289,7 @@ int load_document(const char* document)
 						buf[count] = '\0';
 						if (strlen(buf) != 0)
 						{
-							word_store[s_total_word_count] = (char*)malloc(sizeof(char) * strlen(buf) + 1);
+							word_store[s_total_word_count] = (char*)malloc(sizeof(char) * strlen(buf) + 2);
 
 							if (word_store[s_total_word_count] == NULL)
 							{
