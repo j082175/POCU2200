@@ -33,6 +33,15 @@ char**** paragraph = NULL;
 char** sentence;
 char* word;
 
+char**** doc1 = NULL;
+char*** paragraph1 = NULL;
+char** sentence1 = NULL;
+
+char* word_store[128] = { 0, };
+char** sentence_store[64] = { 0, };
+char*** paragraph_store[32] = { 0, };
+char data[32] = { 0, };
+
 void clear(void)
 {
 
@@ -51,14 +60,6 @@ void clear(void)
 
 int load_document(const char* document)
 {
-	char**** doc1 = NULL;
-	char*** paragraph1 = NULL;
-	char** sentence1 = NULL;
-
-	char* word_store[128] = { 0, };
-	char** sentence_store[64] = { 0, };
-	char*** paragraph_store[32] = { 0, };
-	char data[32] = { 0, };
 
 	FILE* fp;
 
@@ -78,6 +79,7 @@ int load_document(const char* document)
 		data[0] = fgetc(fp);
 		if (data[0] == EOF)
 		{
+			is_empty = TRUE;
 			return TRUE;
 		}
 		else {
@@ -377,7 +379,6 @@ void dispose(void)
 
 	free(paragraph);
 	paragraph = NULL;
-	clear();
 }
 
 unsigned int get_total_word_count(void)
