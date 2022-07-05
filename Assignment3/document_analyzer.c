@@ -35,13 +35,16 @@ char* word;
 
 void clear(void)
 {
+	if (paragraph != NULL)
+	{
+		dispose();
+	}
+
 	total_sentence_count_int = 0;
 
 	s_total_paragraph_count = 0;
 	s_total_sentence_count = 0;
 	s_word_count = 0;
-
-	paragraph = NULL;
 
 	total_paragraph_count = 0;
 	total_sentence_count = 0;
@@ -253,6 +256,7 @@ int load_document(const char* document)
 						else {
 							memset(data, 0, strlen(data));
 							count = -1;
+							break;
 						}
 					}
 				}
