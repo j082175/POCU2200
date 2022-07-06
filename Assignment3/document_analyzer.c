@@ -4,6 +4,7 @@
    단어 : 띄어쓰기 , 문자로 구분
    단락과 단락사이엔 개행이 존재
    각각의 간격은 4개 */
+#define MAX_SIZE 768
 
 int g_total_malloc_word_count = 0;
 
@@ -60,7 +61,7 @@ int load_document(const char* document)
 	char* word_store[128] = { 0, };
 	char** sentence_store[64] = { 0, };
 	char*** paragraph_store[32] = { 0, };
-	char data[128] = { 0, };
+	char data[MAX_SIZE] = { 0, };
 
 
 	FILE* fp;
@@ -317,23 +318,57 @@ int load_document(const char* document)
 				}
 			}
 		}
-	} while (data[count++] != EOF);
+	} while (data[count] != EOF && count++ < MAX_SIZE - 1);
 
 
-	//{
-	//	int m;
-	//	doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
-	//	if (doc1 == NULL)
-	//	{
-	//		return FALSE;
-	//	}
-	//	for (m = 0; m < s_total_paragraph_count; m++)
-	//	{
-	//		*doc1 = paragraph_store[m];
-	//		doc1++;
-	//	}
-	//	doc1 = doc1 - s_total_paragraph_count;
-	//}
+
+	{
+		int l;
+
+		/**/
+		paragraph1 = (char***)malloc(sizeof(char**) * s_total_sentence_count);
+		if (paragraph1 == NULL)
+		{
+			return FALSE;
+		}
+
+		for (l = 0; l < s_total_sentence_count; l++)
+		{
+			*paragraph1 = sentence_store[l];
+			paragraph1++;
+		}
+		paragraph1 = paragraph1 - s_total_sentence_count;
+		paragraph_store[s_total_paragraph_count] = paragraph1;
+
+		s_total_paragraph_count++;
+
+
+
+
+		s_total_sentence_count = 0;
+		/**/
+		total_paragraph_count++;
+		is_paragraph = TRUE;
+		{
+			int m;
+			doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
+			if (doc1 == NULL)
+			{
+				return FALSE;
+			}
+			for (m = 0; m < s_total_paragraph_count; m++)
+			{
+				*doc1 = paragraph_store[m];
+				doc1++;
+			}
+			doc1 = doc1 - s_total_paragraph_count;
+
+		}
+
+		count = -1;
+		memset(data, 0, strlen(data));
+		memset(sentence_store, 0, 64);
+	}
 
 	paragraph = doc1;
 
