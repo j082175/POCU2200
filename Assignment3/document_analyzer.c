@@ -116,54 +116,54 @@ int load_document(const char* document)
 			is_paragraph = FALSE;
 		}
 
-		 //if (data[count] == EOF)
-		 //{
-		 //	int l;
+		 if (data[count] == EOF)
+		 {
+		 	int l;
 
-		 //	/**/
-		 //	paragraph1 = (char***)malloc(sizeof(char**) * s_total_sentence_count);
-		 //	if (paragraph1 == NULL)
-		 //	{
-		 //		return FALSE;
-		 //	}
+		 	/**/
+		 	paragraph1 = (char***)malloc(sizeof(char**) * s_total_sentence_count);
+		 	if (paragraph1 == NULL)
+		 	{
+		 		return FALSE;
+		 	}
 
-		 //	for (l = 0; l < s_total_sentence_count; l++)
-		 //	{
-		 //		*paragraph1 = sentence_store[l];
-		 //		paragraph1++;
-		 //	}
-		 //	paragraph1 = paragraph1 - s_total_sentence_count;
-		 //	paragraph_store[s_total_paragraph_count] = paragraph1;
+		 	for (l = 0; l < s_total_sentence_count; l++)
+		 	{
+		 		*paragraph1 = sentence_store[l];
+		 		paragraph1++;
+		 	}
+		 	paragraph1 = paragraph1 - s_total_sentence_count;
+		 	paragraph_store[s_total_paragraph_count] = paragraph1;
 
-		 //	s_total_paragraph_count++;
-
-
+		 	s_total_paragraph_count++;
 
 
-		 //	s_total_sentence_count = 0;
-		 //	/**/
-		 //	total_paragraph_count++;
-		 //	is_paragraph = TRUE;
-		 //	{
-		 //		int m;
-		 //		doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
-		 //		if (doc1 == NULL)
-		 //		{
-		 //			return FALSE;
-		 //		}
-		 //		for (m = 0; m < s_total_paragraph_count; m++)
-		 //		{
-		 //			*doc1 = paragraph_store[m];
-		 //			doc1++;
-		 //		}
-		 //		doc1 = doc1 - s_total_paragraph_count;
-		 //		break;
-		 //	}
 
-		 //	count = -1;
-		 //	memset(data, 0, strlen(data));
-		 //	memset(sentence_store, 0, 64);
-		 //}
+
+		 	s_total_sentence_count = 0;
+		 	/**/
+		 	total_paragraph_count++;
+		 	is_paragraph = TRUE;
+		 	/*{
+		 		int m;
+		 		doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
+		 		if (doc1 == NULL)
+		 		{
+		 			return FALSE;
+		 		}
+		 		for (m = 0; m < s_total_paragraph_count; m++)
+		 		{
+		 			*doc1 = paragraph_store[m];
+		 			doc1++;
+		 		}
+		 		doc1 = doc1 - s_total_paragraph_count;
+		 		break;
+		 	}*/
+			break;
+		 	count = -1;
+		 	memset(data, 0, strlen(data));
+		 	memset(sentence_store, 0, 64);
+		 }
 
 		if (data[count] == paragraph_division && !is_paragraph)
 		{
@@ -202,7 +202,7 @@ int load_document(const char* document)
 			total_paragraph_count++;
 			is_paragraph = TRUE;
 
-			if (data[count] == EOF && strlen(buf) == 0)
+			/*if (data[count] == EOF && strlen(buf) == 0)
 			{
 				int m;
 				doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
@@ -217,7 +217,7 @@ int load_document(const char* document)
 				}
 				doc1 = doc1 - s_total_paragraph_count;
 				break;
-			}
+			}*/
 
 			count = -1;
 			memset(data, 0, strlen(data));
@@ -322,53 +322,53 @@ int load_document(const char* document)
 
 
 
-	{
-		int l;
+	//{
+	//	int l;
 
-		/**/
-		paragraph1 = (char***)malloc(sizeof(char**) * s_total_sentence_count);
-		if (paragraph1 == NULL)
-		{
-			return FALSE;
-		}
+	//	/**/
+	//	paragraph1 = (char***)malloc(sizeof(char**) * s_total_sentence_count);
+	//	if (paragraph1 == NULL)
+	//	{
+	//		return FALSE;
+	//	}
 
-		for (l = 0; l < s_total_sentence_count; l++)
-		{
-			*paragraph1 = sentence_store[l];
-			paragraph1++;
-		}
-		paragraph1 = paragraph1 - s_total_sentence_count;
-		paragraph_store[s_total_paragraph_count] = paragraph1;
+	//	for (l = 0; l < s_total_sentence_count; l++)
+	//	{
+	//		*paragraph1 = sentence_store[l];
+	//		paragraph1++;
+	//	}
+	//	paragraph1 = paragraph1 - s_total_sentence_count;
+	//	paragraph_store[s_total_paragraph_count] = paragraph1;
 
-		s_total_paragraph_count++;
-
-
+	//	s_total_paragraph_count++;
 
 
-		s_total_sentence_count = 0;
-		/**/
-		total_paragraph_count++;
-		is_paragraph = TRUE;
-		{
-			int m;
-			doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
-			if (doc1 == NULL)
-			{
-				return FALSE;
-			}
-			for (m = 0; m < s_total_paragraph_count; m++)
-			{
-				*doc1 = paragraph_store[m];
-				doc1++;
-			}
-			doc1 = doc1 - s_total_paragraph_count;
 
-		}
 
-		count = -1;
-		memset(data, 0, strlen(data));
-		memset(sentence_store, 0, 64);
-	}
+	//	s_total_sentence_count = 0;
+	//	/**/
+	//	total_paragraph_count++;
+	//	is_paragraph = TRUE;
+	//	{
+	//		int m;
+	//		doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
+	//		if (doc1 == NULL)
+	//		{
+	//			return FALSE;
+	//		}
+	//		for (m = 0; m < s_total_paragraph_count; m++)
+	//		{
+	//			*doc1 = paragraph_store[m];
+	//			doc1++;
+	//		}
+	//		doc1 = doc1 - s_total_paragraph_count;
+
+	//	}
+
+	//	count = -1;
+	//	memset(data, 0, strlen(data));
+	//	memset(sentence_store, 0, 64);
+	//}
 
 	paragraph = doc1;
 
@@ -432,7 +432,7 @@ void dispose(void)
 		}
 	}
 
-	free(paragraph);
+	//free(paragraph);
 	paragraph = NULL;
 }
 
