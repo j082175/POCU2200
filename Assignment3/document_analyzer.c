@@ -365,20 +365,20 @@ int load_document(const char* document)
 		memset(sentence_store, 0, 64);
 	}
 
-	{
-		int m;
-		doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
-		if (doc1 == NULL)
-		{
-			return FALSE;
-		}
-		for (m = 0; m < s_total_paragraph_count; m++)
-		{
-			*doc1 = paragraph_store[m];
-			doc1++;
-		}
-		doc1 = doc1 - s_total_paragraph_count;
-	}
+	// {
+	// 	int m;
+	// 	doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
+	// 	if (doc1 == NULL)
+	// 	{
+	// 		return FALSE;
+	// 	}
+	// 	for (m = 0; m < s_total_paragraph_count; m++)
+	// 	{
+	// 		*doc1 = paragraph_store[m];
+	// 		doc1++;
+	// 	}
+	// 	doc1 = doc1 - s_total_paragraph_count;
+	// }
 
 
 	paragraph = doc1;
