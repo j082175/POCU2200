@@ -33,15 +33,6 @@ char**** paragraph = NULL;
 char** sentence;
 char* word;
 
-char**** doc1 = NULL;
-char*** paragraph1 = NULL;
-char** sentence1 = NULL;
-
-char* word_store[128] = { 0, };
-char** sentence_store[64] = { 0, };
-char*** paragraph_store[32] = { 0, };
-char data[32] = { 0, };
-
 void clear(void)
 {
 
@@ -60,10 +51,31 @@ void clear(void)
 
 int load_document(const char* document)
 {
+	char**** doc1 = NULL;
+	char*** paragraph1 = NULL;
+	char** sentence1 = NULL;
+
+	//char* word_store[128] = { 0, };
+	//char** sentence_store[64] = { 0, };
+	//char*** paragraph_store[32] = { 0, };
+	//char data[32] = { 0, };
+
+	char** word_store;
+	char*** sentence_store;
+	char**** paragraph_store;
+	char data[128] = { 0, };
 
 	FILE* fp;
 
 	int count = 0;
+
+	{
+		word_store = (char**)malloc(sizeof(char*) * 2048);
+		sentence_store = (char***)malloc(sizeof(char*) * 1024);
+		paragraph_store = (char****)malloc(sizeof(char*) * 1024);
+	}
+
+
 	dispose();
 	clear();
 
@@ -111,54 +123,54 @@ int load_document(const char* document)
 			is_paragraph = FALSE;
 		}
 
-		// if (data[count] == EOF)
-		// {
-		// 	int l;
+		 if (data[count] == EOF)
+		 {
+		 	int l;
 
-		// 	/**/
-		// 	paragraph1 = (char***)malloc(sizeof(char**) * s_total_sentence_count);
-		// 	if (paragraph1 == NULL)
-		// 	{
-		// 		return FALSE;
-		// 	}
+		 	/**/
+		 	paragraph1 = (char***)malloc(sizeof(char**) * s_total_sentence_count);
+		 	if (paragraph1 == NULL)
+		 	{
+		 		return FALSE;
+		 	}
 
-		// 	for (l = 0; l < s_total_sentence_count; l++)
-		// 	{
-		// 		*paragraph1 = sentence_store[l];
-		// 		paragraph1++;
-		// 	}
-		// 	paragraph1 = paragraph1 - s_total_sentence_count;
-		// 	paragraph_store[s_total_paragraph_count] = paragraph1;
+		 	for (l = 0; l < s_total_sentence_count; l++)
+		 	{
+		 		*paragraph1 = sentence_store[l];
+		 		paragraph1++;
+		 	}
+		 	paragraph1 = paragraph1 - s_total_sentence_count;
+		 	paragraph_store[s_total_paragraph_count] = paragraph1;
 
-		// 	s_total_paragraph_count++;
-
-
+		 	s_total_paragraph_count++;
 
 
-		// 	s_total_sentence_count = 0;
-		// 	/**/
-		// 	total_paragraph_count++;
-		// 	is_paragraph = TRUE;
-		// 	{
-		// 		int m;
-		// 		doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
-		// 		if (doc1 == NULL)
-		// 		{
-		// 			return FALSE;
-		// 		}
-		// 		for (m = 0; m < s_total_paragraph_count; m++)
-		// 		{
-		// 			*doc1 = paragraph_store[m];
-		// 			doc1++;
-		// 		}
-		// 		doc1 = doc1 - s_total_paragraph_count;
-		// 		break;
-		// 	}
 
-		// 	count = -1;
-		// 	memset(data, 0, strlen(data));
-		// 	memset(sentence_store, 0, 64);
-		// }
+
+		 	s_total_sentence_count = 0;
+		 	/**/
+		 	total_paragraph_count++;
+		 	is_paragraph = TRUE;
+		 	{
+		 		int m;
+		 		doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
+		 		if (doc1 == NULL)
+		 		{
+		 			return FALSE;
+		 		}
+		 		for (m = 0; m < s_total_paragraph_count; m++)
+		 		{
+		 			*doc1 = paragraph_store[m];
+		 			doc1++;
+		 		}
+		 		doc1 = doc1 - s_total_paragraph_count;
+		 		break;
+		 	}
+
+		 	count = -1;
+		 	memset(data, 0, strlen(data));
+		 	memset(sentence_store, 0, 64);
+		 }
 
 		if (data[count] == paragraph_division && !is_paragraph)
 		{
@@ -197,22 +209,22 @@ int load_document(const char* document)
 			total_paragraph_count++;
 			is_paragraph = TRUE;
 
-			//if (data[count] == EOF && strlen(buf) == 0)
-			//{
-			//	int m;
-			//	doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
-			//	if (doc1 == NULL)
-			//	{
-			//		return FALSE;
-			//	}
-			//	for (m = 0; m < s_total_paragraph_count; m++)
-			//	{
-			//		*doc1 = paragraph_store[m];
-			//		doc1++;
-			//	}
-			//	doc1 = doc1 - s_total_paragraph_count;
-			//	break;
-			//}
+			if (data[count] == EOF && strlen(buf) == 0)
+			{
+				int m;
+				doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
+				if (doc1 == NULL)
+				{
+					return FALSE;
+				}
+				for (m = 0; m < s_total_paragraph_count; m++)
+				{
+					*doc1 = paragraph_store[m];
+					doc1++;
+				}
+				doc1 = doc1 - s_total_paragraph_count;
+				break;
+			}
 
 			count = -1;
 			memset(data, 0, strlen(data));
@@ -316,22 +328,26 @@ int load_document(const char* document)
 	} while (data[count++] != EOF);
 
 
-	{
-		int m;
-		doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
-		if (doc1 == NULL)
-		{
-			return FALSE;
-		}
-		for (m = 0; m < s_total_paragraph_count; m++)
-		{
-			*doc1 = paragraph_store[m];
-			doc1++;
-		}
-		doc1 = doc1 - s_total_paragraph_count;
-	}
+	//{
+	//	int m;
+	//	doc1 = (char****)malloc(sizeof(char***) * s_total_paragraph_count);
+	//	if (doc1 == NULL)
+	//	{
+	//		return FALSE;
+	//	}
+	//	for (m = 0; m < s_total_paragraph_count; m++)
+	//	{
+	//		*doc1 = paragraph_store[m];
+	//		doc1++;
+	//	}
+	//	doc1 = doc1 - s_total_paragraph_count;
+	//}
 
 	paragraph = doc1;
+
+	free(word_store);
+	free(sentence_store);
+	free(paragraph_store);
 
 	if (fclose(fp) == EOF)
 	{
