@@ -29,17 +29,23 @@ size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
 
 
     size_t total_length = 0;
-    char str_buf[32] = { 0, };
-
-
-
-
+    char* str_buf = (char*)malloc(sizeof(char) * strlen(str) + 1);
+    if (str_buf == NULL)
+    {
+        assert(FALSE);
+        return 0;
+    }
 
 
     strcpy(str_buf, str);
+
+    memset(ringbuffer->parentheses, 0, MAX_SIZE);
     ringbuffer->start_index = 0;
 
-    while (count < STR_LENGTH)
+
+    ringbuffer->start_index = 0;
+
+    while (count < STR_LENGTH / 2)
     {
         {
             size_t i;
@@ -78,12 +84,12 @@ size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
 
 
     end:
-
-
         count++;
     }
 
-
-
+    if (str_buf != NULL)
+    {
+		free(str_buf);
+    }
     return total_length;
 }

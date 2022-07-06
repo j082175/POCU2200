@@ -8,6 +8,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <assert.h>
 
 typedef struct {
     size_t opening_index;
