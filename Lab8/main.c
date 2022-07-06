@@ -12,24 +12,24 @@ int main(void)
 	ringbuffer.max_size = MAX_SIZE;
 	ringbuffer.parentheses = parentheses;
 
-	/*len = find_matching_parentheses(&ringbuffer, "}{)(][><");
+	len = find_matching_parentheses(&ringbuffer, "}{)(][><");
 
 	assert(len == 0);
-	assert(ringbuffer.start_index == 0);*/
+	assert(ringbuffer.start_index == 0);
 
-	//len = find_matching_parentheses(&ringbuffer, "{{{}}}");
+	len = find_matching_parentheses(&ringbuffer, "{{{}}}");
 
-	//assert(len == 3);
-	//assert(ringbuffer.start_index == 0);
+	assert(len == 3);
+	assert(ringbuffer.start_index == 0);
 
-	//assert(parentheses[0].opening_index == 2);
-	//assert(parentheses[0].closing_index == 3);
+	assert(parentheses[0].opening_index == 2);
+	assert(parentheses[0].closing_index == 3);
 
-	//assert(parentheses[1].opening_index == 1);
-	//assert(parentheses[1].closing_index == 4);
+	assert(parentheses[1].opening_index == 1);
+	assert(parentheses[1].closing_index == 4);
 
-	//assert(parentheses[2].opening_index == 0);
-	//assert(parentheses[2].closing_index == 5);
+	assert(parentheses[2].opening_index == 0);
+	assert(parentheses[2].closing_index == 5);
 
 	len = find_matching_parentheses(&ringbuffer, " {]}[[i]{)))} ]");
 

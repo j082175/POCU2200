@@ -1,7 +1,13 @@
 #ifndef PARENTHESES_H
 #define PARENTHESES_H
 
+//#define _CRT_SECURE_NO_WARNINGS
+
+#define TRUE 1
+#define FALSE 0
+
 #include <stdio.h>
+#include <string.h>
 
 typedef struct {
     size_t opening_index;
