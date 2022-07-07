@@ -13,7 +13,7 @@ static int sentence_index_store;
 
 //static char data[4096] = { 0, };
 //static char data_backup[128][32] = { 0, };
-static char** data_backup;
+
 
 static const char* recent_document = NULL;
 
@@ -51,6 +51,7 @@ void clear(void)
 int load_document(const char* document)
 {
     char* data;
+    char** data_backup;
     FILE* fp;
     int i = 0;
     fp = fopen(document, "r");
@@ -68,7 +69,7 @@ int load_document(const char* document)
 
     data = (char*)malloc(sizeof(char) * DATA_MAX_SIZE);
 
-    memset(data, 0, 512);
+    memset(data, 0, DATA_MAX_SIZE);
 
     /* 총 단락 개수 구하기 */
     while (data[i] != EOF)
@@ -153,7 +154,7 @@ int load_document(const char* document)
         }
         for (i = 0; i < DATA_MAX_SIZE; i++)
         {
-            data_backup[i] = (char*)malloc(sizeof(char) * 32 + 1);
+            data_backup[i] = (char*)malloc(sizeof(char) * 32);
             if (data_backup[i] == NULL)
             {
                 assert(FALSE);
@@ -167,12 +168,12 @@ int load_document(const char* document)
         int count = 0;
         char* ptr;
         char* a;
-        char* data_backup1 = (char*)malloc(sizeof(char) * strlen(data) + 1);/* 메모리 문제 1*/
+        char* data_backup1 = (char*)malloc(sizeof(char) * DATA_MAX_SIZE);/* 메모리 문제 1*/
         if (data_backup1 == NULL)
         {
             assert(FALSE);
         }
-        memset(data_backup1, 0, strlen(data) + 1);
+        memset(data_backup1, 0, DATA_MAX_SIZE);
         strcpy(data_backup1, data);
         ptr = data_backup1;
         a = strtok(ptr, " ,.!?\n");
@@ -260,6 +261,19 @@ int load_document(const char* document)
 
     free(data);
 
+    {
+        int i;
+        if (data_backup != NULL)
+        {
+            for (i = 0; i < 128; i++)
+            {
+                free(data_backup[i]);
+            }
+            free(data_backup);
+        }
+        data_backup = NULL;
+    }
+
     if (fclose(fp) == EOF)
     {
         return FALSE;
@@ -275,19 +289,6 @@ void dispose(void)
     if (is_empty)
     {
         return;
-    }
-
-    {
-        int i;
-        if (data_backup != NULL)
-        {
-            for (i = 0; i < 128; i++)
-            {
-                free(data_backup[i]);
-            }
-            free(data_backup);
-        }
-        data_backup = NULL;
     }
 
     if (paragraph == NULL)
