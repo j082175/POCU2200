@@ -13,12 +13,13 @@ static int sentence_index_store;
 
 
 //static char data_backup[128][32] = { 0, };
+static char** data_backup;
 
 static const char* recent_document = NULL;
 
 static int total_paragraph_count = 0;
-static int* total_sentence_count = NULL;
-static int* total_word_count = NULL;
+static int total_sentence_count[128] = { 0, };
+static int total_word_count[256] = { 0, };
 
 static int total_sentence_count_int = 0;
 
@@ -37,11 +38,15 @@ char**** paragraph = NULL;
 char** sentence;
 char* word;
 
+char* data = NULL;
+
 static int s_count = 0;
 
 void clear(void)
 {
     total_paragraph_count = 0;
+    memset(total_sentence_count, 0, 32);
+    memset(total_word_count, 0, 64);
     total_sentence_count_int = 0;
     s_word_count = 0;
     paragraph = NULL;
@@ -49,8 +54,6 @@ void clear(void)
 
 int load_document(const char* document)
 {
-    char** data_backup = NULL;
-    char* data = NULL;
     FILE* fp;
     int i = 0;
     fp = fopen(document, "r");
@@ -63,39 +66,32 @@ int load_document(const char* document)
 
     dispose();
 
-
-    /* 데이터 총 몇개인지 읽어오기 */
-
+    /**/
     {
-        char c;
-        while ((c = fgetc(fp)) != EOF)
-        {
-            s_count++;
-        }
-
-        if (s_count == 0)
-        {
-            is_empty = TRUE;
-            return TRUE;
-        }
-
+        //int c;
+        //while ((c = fgetc(fp)) != EOF)
+        //{
+        //    if (c == ' ' || c == '?' || c == '!' || c == ',' || c == '.')
+        //    {
+        //        s_count++;
+        //    }
+        //}
+        ////fseek(fp, 0, SEEK_SET);
+        fseek(fp, 0, SEEK_END);
+        s_count = ftell(fp);
         fseek(fp, 0, SEEK_SET);
     }
+    clear();
 
     data = (char*)malloc(sizeof(char) * s_count + 1);
     memset(data, 0, s_count + 1);
 
-    total_sentence_count = (int*)malloc(sizeof(int) * s_count + 1);
-    memset(total_sentence_count, 0, s_count + 1);
 
-    total_word_count = (int*)malloc(sizeof(int) * s_count + 1);
-    memset(total_word_count, 0, s_count + 1);
-    /**/
 
-    clear();
+
 
     /* 총 단락 개수 구하기 */
-    while (data[i] != EOF)
+    while(data[i] != EOF)
     {
         data[i] = fgetc(fp);
 
@@ -170,14 +166,14 @@ int load_document(const char* document)
 
     {
         int i;
-        data_backup = (char**)malloc(sizeof(char*) * s_count + 1);
+        data_backup = (char**)malloc(sizeof(char*) * s_count);
         if (data_backup == NULL)
         {
             assert(FALSE);
         }
         for (i = 0; i < 128; i++)
         {
-            data_backup[i] = (char*)malloc(sizeof(char) * 32 + 1);
+            data_backup[i] = (char*)malloc(sizeof(char) * 32);
             if (data_backup[i] == NULL)
             {
                 assert(FALSE);
@@ -191,7 +187,7 @@ int load_document(const char* document)
         int count = 0;
         char* ptr;
         char* a;
-        char* data_backup1 = (char*)malloc(sizeof(char) * s_count + 1);/* 메모리 문제 1*/
+        char* data_backup1 = (char*)malloc(sizeof(char) * strlen(data) + 1);/* 메모리 문제 1*/
         if (data_backup1 == NULL)
         {
             assert(FALSE);
@@ -284,19 +280,6 @@ int load_document(const char* document)
 
     free(data);
 
-    {
-        int i;
-        if (data_backup != NULL)
-        {
-            for (i = 0; i < s_count + 1; i++)
-            {
-                free(data_backup[i]);
-            }
-            free(data_backup);
-        }
-        data_backup = NULL;
-    }
-
     if (fclose(fp) == EOF)
     {
         return FALSE;
@@ -312,6 +295,19 @@ void dispose(void)
     if (is_empty)
     {
         return;
+    }
+
+    {
+        int i;
+        if (data_backup != NULL)
+        {
+            for (i = 0; i < 128; i++)
+            {
+                free(data_backup[i]);
+            }
+            free(data_backup);
+        }
+        data_backup = NULL;
     }
 
     if (paragraph == NULL)
@@ -359,17 +355,6 @@ void dispose(void)
 
     free(paragraph);
     paragraph = NULL;
-
-    if (total_sentence_count != NULL)
-    {
-        free(total_sentence_count);
-    }
-
-    if (total_word_count != NULL)
-    {
-        free(total_word_count);
-    }
-
     clear();
 }
 
@@ -460,6 +445,7 @@ unsigned int get_paragraph_word_count(const char*** paragraph)
 
     {
         size_t i;
+        size_t j;
         for (i = 0; i < total_sentence_count[paragraph_index_store]; i++)
         {
             count += total_word_count[i + sentence_sum];
