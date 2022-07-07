@@ -392,17 +392,39 @@ const char*** get_paragraph_or_null(const unsigned int paragraph_index)
 
 unsigned int get_paragraph_word_count(const char*** paragraph)
 {
+    //unsigned int count = 0;
+
+    //{
+    //    size_t i;
+    //    size_t j;
+    //    for (i = 0; i < _msize(paragraph) / sizeof(char***); i++)
+    //    {
+    //        for (j = 0; j < _msize(*(paragraph + i)) / sizeof(char**); j++)
+    //        {
+    //            count++;
+    //        }
+    //    }
+    //}
+
+    //return count;
+
     unsigned int count = 0;
+    unsigned int sentence_sum = 0;
+
+    {
+        size_t i;
+        for (i = 0; i < paragraph_index_store; i++)
+        {
+            sentence_sum += total_sentence_count[i];
+        }
+    }
 
     {
         size_t i;
         size_t j;
-        for (i = 0; i < _msize(paragraph) / sizeof(char***); i++)
+        for (i = 0; i < total_sentence_count[paragraph_index_store]; i++)
         {
-            for (j = 0; j < _msize(*(paragraph + i)) / sizeof(char**); j++)
-            {
-                count++;
-            }
+            count += total_word_count[i + sentence_sum];
         }
     }
 
@@ -425,31 +447,54 @@ unsigned int get_paragraph_sentence_count(const char*** paragraph)
 
 const char** get_sentence_or_null(const unsigned int paragraph_index, const unsigned int sentence_index)
 {
+
     if (paragraph_index >= (unsigned)total_paragraph_count)
     {
         return NULL;
     }
 
 
-    if (sentence_index >= _msize(paragraph[paragraph_index]) / sizeof(char***))
+    if (sentence_index >= total_sentence_count[paragraph_index])
     {
         return NULL;
     }
+
+    paragraph_index_store = paragraph_index;
+    sentence_index_store = sentence_index;
 
     return (const char**)paragraph[paragraph_index][sentence_index];
 }
 
 unsigned int get_sentence_word_count(const char** sentence)
 {
-    unsigned int count = 0;
-    size_t i;
+    //unsigned int count = 0;
+    //size_t i;
 
-    for (i = 0; i < _msize(sentence) / sizeof(char*); i++)
+    //for (i = 0; i < _msize(sentence) / sizeof(char*); i++)
+    //{
+    //    count++;
+    //}
+
+    //return count;
+
+    unsigned int count = 0;
+    unsigned int sentence_sum = 0;
+
     {
-        count++;
+        size_t i;
+        for (i = 0; i < paragraph_index_store; i++)
+        {
+            sentence_sum += total_sentence_count[i];
+        }
     }
 
+
+	count += total_word_count[sentence_sum + sentence_index_store];
+
+
+
     return count;
+
 }
 
 int print_as_tree(const char* filename)
