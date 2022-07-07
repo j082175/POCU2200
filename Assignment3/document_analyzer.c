@@ -62,14 +62,15 @@ int load_document(const char* document)
 
     recent_document = document;
 
+    data = (char*)malloc(sizeof(char) * DATA_MAX_SIZE);
+    memset(data, 0, DATA_MAX_SIZE);
+
     dispose();
 
 
     clear();
 
-    data = (char*)malloc(sizeof(char) * DATA_MAX_SIZE);
 
-    memset(data, 0, DATA_MAX_SIZE);
 
     /* 총 단락 개수 구하기 */
     while (data[i] != EOF)
@@ -79,7 +80,7 @@ int load_document(const char* document)
         if (data[0] == EOF)
         {
             is_empty = TRUE;
-            return TRUE;
+            goto end;
         }
 
         is_empty = FALSE;
@@ -260,7 +261,6 @@ int load_document(const char* document)
     }
     //print();
 
-    free(data);
 
     {
         int i;
@@ -274,6 +274,10 @@ int load_document(const char* document)
         }
         data_backup = NULL;
     }
+
+end:
+
+    free(data);
 
     if (fclose(fp) == EOF)
     {
