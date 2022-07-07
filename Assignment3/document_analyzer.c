@@ -385,6 +385,8 @@ const char*** get_paragraph_or_null(const unsigned int paragraph_index)
         return NULL;
     }
 
+    paragraph_index_store = paragraph_index;
+
     return (const char***)paragraph[paragraph_index];
 }
 
@@ -409,14 +411,16 @@ unsigned int get_paragraph_word_count(const char*** paragraph)
 
 unsigned int get_paragraph_sentence_count(const char*** paragraph)
 {
-    unsigned int count = 0;
-    size_t i;
+    //unsigned int count = 0;
+    //size_t i;
 
-    for (i = 0; i < _msize(paragraph) / sizeof(char**); i++)
-    {
-        count++;
-    }
-    return count;
+    //for (i = 0; i < _msize(paragraph) / sizeof(char**); i++)
+    //{
+    //    count++;
+    //}
+    //return count;
+
+    return (unsigned int)total_sentence_count[paragraph_index_store];
 }
 
 const char** get_sentence_or_null(const unsigned int paragraph_index, const unsigned int sentence_index)
