@@ -13,7 +13,6 @@ static int sentence_index_store;
 
 
 //static char data_backup[128][32] = { 0, };
-static char** data_backup;
 
 static const char* recent_document = NULL;
 
@@ -50,6 +49,7 @@ void clear(void)
 
 int load_document(const char* document)
 {
+    char** data_backup = NULL;
     char* data = NULL;
     FILE* fp;
     int i = 0;
@@ -170,7 +170,7 @@ int load_document(const char* document)
 
     {
         int i;
-        data_backup = (char**)malloc(sizeof(char*) * 128);
+        data_backup = (char**)malloc(sizeof(char*) * s_count + 1);
         if (data_backup == NULL)
         {
             assert(FALSE);
@@ -191,7 +191,7 @@ int load_document(const char* document)
         int count = 0;
         char* ptr;
         char* a;
-        char* data_backup1 = (char*)malloc(sizeof(char) * strlen(data) + 1);/* 메모리 문제 1*/
+        char* data_backup1 = (char*)malloc(sizeof(char) * s_count + 1);/* 메모리 문제 1*/
         if (data_backup1 == NULL)
         {
             assert(FALSE);
@@ -284,6 +284,19 @@ int load_document(const char* document)
 
     free(data);
 
+    {
+        int i;
+        if (data_backup != NULL)
+        {
+            for (i = 0; i < s_count + 1; i++)
+            {
+                free(data_backup[i]);
+            }
+            free(data_backup);
+        }
+        data_backup = NULL;
+    }
+
     if (fclose(fp) == EOF)
     {
         return FALSE;
@@ -301,32 +314,9 @@ void dispose(void)
         return;
     }
 
-    {
-        int i;
-        if (data_backup != NULL)
-        {
-            for (i = 0; i < 128; i++)
-            {
-                free(data_backup[i]);
-            }
-            free(data_backup);
-        }
-        data_backup = NULL;
-    }
-
     if (paragraph == NULL)
     {
         return;
-    }
-
-    if (total_sentence_count != NULL)
-    {
-        free(total_sentence_count);
-    }
-
-    if (total_word_count != NULL)
-    {
-        free(total_word_count);
     }
 
     {
@@ -369,6 +359,17 @@ void dispose(void)
 
     free(paragraph);
     paragraph = NULL;
+
+    if (total_sentence_count != NULL)
+    {
+        free(total_sentence_count);
+    }
+
+    if (total_word_count != NULL)
+    {
+        free(total_word_count);
+    }
+
     clear();
 }
 
@@ -526,7 +527,7 @@ unsigned int get_sentence_word_count(const char** sentence)
     }
 
 
-	count += total_word_count[sentence_sum + sentence_index_store];
+    count += total_word_count[sentence_sum + sentence_index_store];
 
 
 
