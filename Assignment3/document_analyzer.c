@@ -4,14 +4,14 @@
    단어 : 띄어쓰기 , 문자로 구분
    단락과 단락사이엔 개행이 존재
    각각의 간격은 4개 */
-
+#define DATA_MAX_SIZE 4096
 
 static int is_empty = FALSE;
 static int paragraph_index_store;
 static int sentence_index_store;
 
 
-
+//static char data[4096] = { 0, };
 //static char data_backup[128][32] = { 0, };
 static char** data_backup;
 
@@ -38,15 +38,11 @@ char**** paragraph = NULL;
 char** sentence;
 char* word;
 
-char* data = NULL;
-
-static int s_count = 0;
-
 void clear(void)
 {
     total_paragraph_count = 0;
-    memset(total_sentence_count, 0, 32);
-    memset(total_word_count, 0, 64);
+    memset(total_sentence_count, 0, 128);
+    memset(total_word_count, 0, 256);
     total_sentence_count_int = 0;
     s_word_count = 0;
     paragraph = NULL;
@@ -54,6 +50,7 @@ void clear(void)
 
 int load_document(const char* document)
 {
+    char* data;
     FILE* fp;
     int i = 0;
     fp = fopen(document, "r");
@@ -66,32 +63,15 @@ int load_document(const char* document)
 
     dispose();
 
-    /**/
-    {
-        //int c;
-        //while ((c = fgetc(fp)) != EOF)
-        //{
-        //    if (c == ' ' || c == '?' || c == '!' || c == ',' || c == '.')
-        //    {
-        //        s_count++;
-        //    }
-        //}
-        ////fseek(fp, 0, SEEK_SET);
-        fseek(fp, 0, SEEK_END);
-        s_count = ftell(fp);
-        fseek(fp, 0, SEEK_SET);
-    }
+
     clear();
 
-    data = (char*)malloc(sizeof(char) * s_count + 1);
-    memset(data, 0, s_count + 1);
+    data = (char*)malloc(sizeof(char) * DATA_MAX_SIZE);
 
-
-
-
+    memset(data, 0, 512);
 
     /* 총 단락 개수 구하기 */
-    while(data[i] != EOF)
+    while (data[i] != EOF)
     {
         data[i] = fgetc(fp);
 
@@ -166,14 +146,14 @@ int load_document(const char* document)
 
     {
         int i;
-        data_backup = (char**)malloc(sizeof(char*) * s_count);
+        data_backup = (char**)malloc(sizeof(char*) * DATA_MAX_SIZE);
         if (data_backup == NULL)
         {
             assert(FALSE);
         }
-        for (i = 0; i < 128; i++)
+        for (i = 0; i < DATA_MAX_SIZE; i++)
         {
-            data_backup[i] = (char*)malloc(sizeof(char) * 32);
+            data_backup[i] = (char*)malloc(sizeof(char) * 32 + 1);
             if (data_backup[i] == NULL)
             {
                 assert(FALSE);
