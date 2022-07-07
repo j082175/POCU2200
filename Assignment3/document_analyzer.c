@@ -168,14 +168,15 @@ int load_document(const char* document)
         int count = 0;
         char* ptr;
         char* a;
-        char* data_backup1 = (char*)malloc(sizeof(char) * DATA_MAX_SIZE);/* 메모리 문제 1*/
-        if (data_backup1 == NULL)
-        {
-            assert(FALSE);
-        }
-        memset(data_backup1, 0, DATA_MAX_SIZE);
-        strcpy(data_backup1, data);
-        ptr = data_backup1;
+        //char* data_backup1 = (char*)malloc(sizeof(char) * DATA_MAX_SIZE);/* 메모리 문제 1*/
+        //if (data_backup1 == NULL)
+        //{
+        //    assert(FALSE);
+        //}
+        //memset(data_backup1, 0, DATA_MAX_SIZE);
+        //strcpy(data_backup1, data);
+        //ptr = data_backup1;
+        ptr = data;
         a = strtok(ptr, " ,.!?\n");
         if (a == NULL)
         {
@@ -192,7 +193,7 @@ int load_document(const char* document)
             strcpy(data_backup[count++], ptr);
         }
 
-        free(data_backup1);
+        //free(data_backup1);
     }
     /**/
 
