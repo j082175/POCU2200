@@ -51,7 +51,7 @@ void clear(void)
 int load_document(const char* document)
 {
     FILE* fp;
-    int i = 0;
+    int i;
     fp = fopen(document, "r");
     if (fp == NULL)
     {
@@ -70,7 +70,7 @@ int load_document(const char* document)
 
 
     /* 총 단락 개수 구하기 */
-    while (data[i] != EOF)
+    for (i = 0; i < 512; i++)
     {
         data[i] = fgetc(fp);
 
@@ -144,14 +144,14 @@ int load_document(const char* document)
 
     {
         int i;
-        data_backup = (char**)malloc(sizeof(char*) * 512);
+        data_backup = (char**)malloc(sizeof(char*) * 128);
         if (data_backup == NULL)
         {
             assert(FALSE);
         }
-        for (i = 0; i < 512; i++)
+        for (i = 0; i < 128; i++)
         {
-            data_backup[i] = (char*)malloc(sizeof(char) * 32);
+            data_backup[i] = (char*)malloc(sizeof(char) * 32 + 1);
             if (data_backup[i] == NULL)
             {
                 assert(FALSE);
@@ -165,12 +165,12 @@ int load_document(const char* document)
         int count = 0;
         char* ptr;
         char* a;
-        char* data_backup1 = (char*)malloc(sizeof(char) * 512);/* 메모리 문제 1*/
+        char* data_backup1 = (char*)malloc(sizeof(char) * strlen(data) + 1);/* 메모리 문제 1*/
         if (data_backup1 == NULL)
         {
             assert(FALSE);
         }
-        memset(data_backup1, 0, 512);
+        memset(data_backup1, 0, strlen(data) + 1);
         strcpy(data_backup1, data);
         ptr = data_backup1;
         a = strtok(ptr, " ,.!?\n");
@@ -489,7 +489,7 @@ unsigned int get_sentence_word_count(const char** sentence)
     }
 
 
-    count += total_word_count[sentence_sum + sentence_index_store];
+	count += total_word_count[sentence_sum + sentence_index_store];
 
 
 
