@@ -4,9 +4,9 @@
    단어 : 띄어쓰기 , 문자로 구분
    단락과 단락사이엔 개행이 존재
    각각의 간격은 4개 */
-#define DATA_MAX_SIZE 4096
 
 
+int DATA_MAX_SIZE = 4096;
 static int is_empty = FALSE;
 static int paragraph_index_store;
 static int sentence_index_store;
@@ -53,7 +53,7 @@ void clear(void)
 int load_document(const char* document)
 {
     FILE* fp;
-    int i;
+    int i = 0;
     fp = fopen(document, "r");
     if (fp == NULL)
     {
@@ -64,6 +64,7 @@ int load_document(const char* document)
 
     dispose();
 
+
     data = (char*)malloc(sizeof(char) * DATA_MAX_SIZE);
 
     memset(data, 0, DATA_MAX_SIZE);
@@ -72,7 +73,7 @@ int load_document(const char* document)
 
 
     /* 총 단락 개수 구하기 */
-    for (i = 0; i < DATA_MAX_SIZE; i++)
+    while (data[i] != EOF)
     {
         data[i] = fgetc(fp);
 
@@ -141,6 +142,7 @@ int load_document(const char* document)
                 }
             }
         }
+        i++;
     }
     /**/
 
@@ -275,11 +277,6 @@ void dispose(void)
 {
     /*동적으로 할당된 메모리를 모두 해제*/
 
-    if (is_empty)
-    {
-        return;
-    }
-
     if (data != NULL)
     {
         free(data);
@@ -348,41 +345,23 @@ void dispose(void)
 
 unsigned int get_total_word_count(void)
 {
-    if (is_empty)
-    {
-        return 0;
-    }
+	int sum = 0;
+	int i;
 
-    if (recent_document != NULL)
-    {
-        int sum = 0;
-        int i;
-        for (i = 0; i < total_sentence_count_int; i++)
-        {
-            sum += total_word_count[i];
-        }
-        return (unsigned int)sum;
-    }
-    else {
-        return 0;
-    }
+	for (i = 0; i < total_sentence_count_int; i++)
+	{
+		sum += total_word_count[i];
+	}
+	return (unsigned int)sum;
 }
 
 unsigned int get_total_sentence_count(void)
 {
-    if (is_empty)
-    {
-        return 0;
-    }
     return (unsigned int)total_sentence_count_int;
 }
 
 unsigned int get_total_paragraph_count(void)
 {
-    if (is_empty)
-    {
-        return 0;
-    }
     return (unsigned int)total_paragraph_count;
 }
 
