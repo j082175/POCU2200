@@ -24,8 +24,11 @@ static int pcount = 0;
 static const char* recent_document = NULL;
 
 static int total_paragraph_count = 0;
-static int total_sentence_count[128] = { 0, };
-static int total_word_count[256] = { 0, };
+
+//static int total_sentence_count[128] = { 0, };
+//static int total_word_count[256] = { 0, };
+static int* total_sentence_count = NULL;
+static int* total_word_count = NULL;
 
 static int total_sentence_count_int = 0;
 
@@ -49,15 +52,18 @@ char*** paragraph1 = NULL;
 char** sentence1 = NULL;
 char* word1 = NULL;
 
-char* word_store[512] = { 0, };
-char** sentence_store[128] = { 0, };
-char*** paragraph_store[64] = { 0, };
+//char* word_store[512] = { 0, };
+//char** sentence_store[128] = { 0, };
+//char*** paragraph_store[64] = { 0, };
+
+char** word_store = NULL;
+char*** sentence_store = NULL;
+char**** paragraph_store = NULL;
 
 void clear(void)
 {
     total_paragraph_count = 0;
-    memset(total_sentence_count, 0, 128);
-    memset(total_word_count, 0, 256);
+
     total_sentence_count_int = 0;
     s_word_count = 0;
     paragraph = NULL;
@@ -84,13 +90,21 @@ int load_document(const char* document)
 
     recent_document = document;
 
+    clear();
     dispose();
-
 
     data = (char*)malloc(sizeof(char) * DATA_MAX_SIZE);
 
     memset(data, 0, DATA_MAX_SIZE);
 
+    total_sentence_count = (int*)malloc(sizeof(int) * DATA_MAX_SIZE / 2);
+    total_word_count = (int*)malloc(sizeof(int) * DATA_MAX_SIZE / 2);
+    memset(total_sentence_count, 0, DATA_MAX_SIZE / 2);
+    memset(total_word_count, 0, DATA_MAX_SIZE / 2);
+
+    word_store = (char**)malloc(sizeof(char*) * DATA_MAX_SIZE);
+    sentence_store = (char***)malloc(sizeof(char**) * DATA_MAX_SIZE / 2);
+    paragraph_store = (char****)malloc(sizeof(char***) * DATA_MAX_SIZE / 3);
 
 
 
@@ -406,6 +420,19 @@ void dispose(void)
     //    paragraph = NULL;
     //}
 
+
+    if (total_sentence_count != NULL)
+    {
+		free(total_sentence_count);
+        total_sentence_count = NULL;
+    }
+
+    if (total_word_count != NULL)
+    {
+		free(total_word_count);
+        total_word_count = NULL;
+    }
+
     if (paragraph != NULL)
     {
         {
@@ -437,6 +464,24 @@ void dispose(void)
 
         free(paragraph);
         paragraph = NULL;
+
+        if (word_store != NULL)
+        {
+            free(word_store);
+            word_store = NULL;
+        }
+
+        if (sentence_store != NULL)
+        {
+            free(sentence_store);
+            sentence_store = NULL;
+        }
+
+        if (paragraph_store != NULL)
+        {
+            free(paragraph_store);
+            paragraph_store = NULL;
+        }
     }
 
 
