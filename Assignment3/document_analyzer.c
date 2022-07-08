@@ -12,14 +12,14 @@ static int sentence_index_store;
 
 
 static char data[512] = { 0, };
-//static char data_backup[128][32] = { 0, };
+
 static char** data_backup;
 
 static const char* recent_document = NULL;
 
 static int total_paragraph_count = 0;
-static int total_sentence_count[32] = { 0, };
-static int total_word_count[64] = { 0, };
+static int total_sentence_count[64] = { 0, };
+static int total_word_count[128] = { 0, };
 
 static int total_sentence_count_int = 0;
 
@@ -41,8 +41,8 @@ char* word;
 void clear(void)
 {
     total_paragraph_count = 0;
-    memset(total_sentence_count, 0, 32);
-    memset(total_word_count, 0, 64);
+    memset(total_sentence_count, 0, 64);
+    memset(total_word_count, 0, 128);
     total_sentence_count_int = 0;
     s_word_count = 0;
     paragraph = NULL;
@@ -144,14 +144,14 @@ int load_document(const char* document)
 
     {
         int i;
-        data_backup = (char**)malloc(sizeof(char*) * 128);
+        data_backup = (char**)malloc(sizeof(char*) * 512);
         if (data_backup == NULL)
         {
             assert(FALSE);
         }
-        for (i = 0; i < 128; i++)
+        for (i = 0; i < 512; i++)
         {
-            data_backup[i] = (char*)malloc(sizeof(char) * 32 + 1);
+            data_backup[i] = (char*)malloc(sizeof(char) * 32);
             if (data_backup[i] == NULL)
             {
                 assert(FALSE);
@@ -165,12 +165,12 @@ int load_document(const char* document)
         int count = 0;
         char* ptr;
         char* a;
-        char* data_backup1 = (char*)malloc(sizeof(char) * strlen(data) + 1);/* 메모리 문제 1*/
+        char* data_backup1 = (char*)malloc(sizeof(char) * 512);/* 메모리 문제 1*/
         if (data_backup1 == NULL)
         {
             assert(FALSE);
         }
-        memset(data_backup1, 0, strlen(data) + 1);
+        memset(data_backup1, 0, 512);
         strcpy(data_backup1, data);
         ptr = data_backup1;
         a = strtok(ptr, " ,.!?\n");
@@ -277,7 +277,7 @@ void dispose(void)
         int i;
         if (data_backup != NULL)
         {
-            for (i = 0; i < 128; i++)
+            for (i = 0; i < 512; i++)
             {
                 free(data_backup[i]);
             }
@@ -489,7 +489,7 @@ unsigned int get_sentence_word_count(const char** sentence)
     }
 
 
-	count += total_word_count[sentence_sum + sentence_index_store];
+    count += total_word_count[sentence_sum + sentence_index_store];
 
 
 
