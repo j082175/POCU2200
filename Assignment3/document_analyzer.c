@@ -63,13 +63,17 @@ char**** paragraph_store = NULL;
 void clear(void)
 {
     total_paragraph_count = 0;
-
+    total_sentence_count = 0;
     total_sentence_count_int = 0;
+    total_word_count = 0;
+
     s_word_count = 0;
-    paragraph = NULL;
     wcount = 0;
     scount = 0;
     pcount = 0;
+
+    paragraph_index_store = 0;
+    sentence_index_store = 0;
 }
 
 int load_document(const char* document)
@@ -90,7 +94,6 @@ int load_document(const char* document)
 
     recent_document = document;
 
-    clear();
     dispose();
 
     data = (char*)malloc(sizeof(char) * DATA_MAX_SIZE);
@@ -433,58 +436,60 @@ void dispose(void)
         total_word_count = NULL;
     }
 
-    if (paragraph != NULL)
-    {
-        {
-            int i;
-            for (i = 0; i < wcount; i++)
-            {
-                free(word_store[i]);
-                word_store[i] = NULL;
-            }
-        }
-
-        {
-            int i;
-            for (i = 0; i < scount; i++)
-            {
-                free(sentence_store[i]);
-                sentence_store[i] = NULL;
-            }
-        }
-
-        {
-            int i;
-            for (i = 0; i < pcount; i++)
-            {
-                free(paragraph_store[i]);
-                paragraph_store[i] = NULL;
-            }
-        }
-
-        free(paragraph);
-        paragraph = NULL;
-
-        if (word_store != NULL)
-        {
-            free(word_store);
-            word_store = NULL;
-        }
-
-        if (sentence_store != NULL)
-        {
-            free(sentence_store);
-            sentence_store = NULL;
-        }
-
-        if (paragraph_store != NULL)
-        {
-            free(paragraph_store);
-            paragraph_store = NULL;
-        }
-    }
 
 
+
+
+
+
+	if (paragraph != NULL)
+	{
+		free(paragraph);
+		paragraph = NULL;
+
+	}
+
+	if (word_store != NULL)
+	{
+		{
+			int i;
+			for (i = 0; i < wcount; i++)
+			{
+				free(word_store[i]);
+				word_store[i] = NULL;
+			}
+		}
+		free(word_store);
+		word_store = NULL;
+	}
+
+	if (sentence_store != NULL)
+	{
+		{
+			int i;
+			for (i = 0; i < scount; i++)
+			{
+				free(sentence_store[i]);
+				sentence_store[i] = NULL;
+			}
+		}
+		free(sentence_store);
+		sentence_store = NULL;
+	}
+
+	if (paragraph_store != NULL)
+	{
+		{
+			int i;
+			for (i = 0; i < pcount; i++)
+			{
+				free(paragraph_store[i]);
+				paragraph_store[i] = NULL;
+			}
+		}
+		free(paragraph_store);
+		paragraph_store = NULL;
+	}
 
     clear();
 }
