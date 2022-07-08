@@ -25,6 +25,7 @@ static int total_sentence_count[128] = { 0, };
 static int total_word_count[256] = { 0, };
 
 static int total_sentence_count_int = 0;
+static int total_word_count_int = 0;
 
 static int is_paragraph;
 static int is_word;
@@ -49,6 +50,7 @@ void clear(void)
     total_sentence_count_int = 0;
     s_word_count = 0;
     paragraph = NULL;
+    total_word_count_int = 0;
 }
 
 int load_document(const char* document)
@@ -64,6 +66,12 @@ int load_document(const char* document)
     recent_document = document;
 
     dispose();
+
+    if (data != NULL)
+    {
+        free(data);
+        data = NULL;
+    }
 
     data = (char*)malloc(sizeof(char) * 4096);
 
@@ -200,11 +208,12 @@ int load_document(const char* document)
     {
         assert(FALSE);
     }
+
     {
         int i;
         for (i = 0; i < total_paragraph_count; i++)
         {
-            paragraph[i] = (char***)malloc(sizeof(char**) * total_sentence_count[i]);
+            paragraph[i] = (char***)malloc(sizeof(char**) * (total_sentence_count[i] + 1));
             if (paragraph[i] == NULL)
             {
                 assert(FALSE);
@@ -220,11 +229,12 @@ int load_document(const char* document)
         {
             for (j = 0; j < total_sentence_count[i]; j++)
             {
-                paragraph[i][j] = (char**)malloc(sizeof(char*) * total_word_count[count++]);
+                paragraph[i][j] = (char**)malloc(sizeof(char*) * (total_word_count[count++] + 1));
                 if (paragraph[i][j] == NULL)
                 {
                     assert(FALSE);
                 }
+                paragraph[i][total_sentence_count[i]] = NULL;
             }
         }
     }
@@ -246,7 +256,9 @@ int load_document(const char* document)
                     {
                         assert(FALSE);
                     }
+                    paragraph[i][j][total_word_count[word_count]] = NULL;
 
+                    total_word_count_int++;
                     strcpy(*(*(*(paragraph + i) + j) + k), data_backup[count++]);
                 }
                 word_count++;
@@ -259,6 +271,7 @@ end:
     if (data != NULL)
     {
 		free(data);
+        data = NULL;
     }
 
     if (fclose(fp) == EOF)
@@ -302,7 +315,7 @@ void dispose(void)
 			{
 				for (j = 0; j < total_sentence_count[i]; j++)
 				{
-					for (k = 0; k < total_word_count[word_count]; k++)
+					for (k = 0; k < total_word_count[word_count] + 1; k++)
 					{
 						free(paragraph[i][j][k]);
 					}
@@ -316,7 +329,7 @@ void dispose(void)
 			int j;
 			for (i = 0; i < total_paragraph_count; i++)
 			{
-				for (j = 0; j < total_sentence_count[i]; j++)
+				for (j = 0; j < total_sentence_count[i] + 1; j++)
 				{
 					free(paragraph[i][j]);
 				}
@@ -345,19 +358,21 @@ unsigned int get_total_word_count(void)
         return 0;
     }
 
-    if (recent_document != NULL)
-    {
-        int sum = 0;
-        int i;
-        for (i = 0; i < total_sentence_count_int; i++)
-        {
-            sum += total_word_count[i];
-        }
-        return (unsigned int)sum;
-    }
-    else {
-        return 0;
-    }
+    return (unsigned int)total_word_count_int;
+
+    //if (recent_document != NULL)
+    //{
+    //    int sum = 0;
+    //    int i;
+    //    for (i = 0; i < total_sentence_count_int; i++)
+    //    {
+    //        sum += total_word_count[i];
+    //    }
+    //    return (unsigned int)sum;
+    //}
+    //else {
+    //    return 0;
+    //}
 }
 
 unsigned int get_total_sentence_count(void)
@@ -396,22 +411,6 @@ const char*** get_paragraph_or_null(const unsigned int paragraph_index)
 
 unsigned int get_paragraph_word_count(const char*** paragraph)
 {
-    //unsigned int count = 0;
-
-    //{
-    //    size_t i;
-    //    size_t j;
-    //    for (i = 0; i < _msize(paragraph) / sizeof(char***); i++)
-    //    {
-    //        for (j = 0; j < _msize(*(paragraph + i)) / sizeof(char**); j++)
-    //        {
-    //            count++;
-    //        }
-    //    }
-    //}
-
-    //return count;
-
     unsigned int count = 0;
     unsigned int sentence_sum = 0;
 
