@@ -11,6 +11,10 @@ static int is_empty = FALSE;
 static int paragraph_index_store;
 static int sentence_index_store;
 
+static int wcount = 0;
+static int scount = 0;
+static int pcount = 0;
+
 
 //static char data[512] = { 0, };
 //static char* data;
@@ -45,6 +49,10 @@ char*** paragraph1 = NULL;
 char** sentence1 = NULL;
 char* word1 = NULL;
 
+char* word_store[512] = { 0, };
+char** sentence_store[128] = { 0, };
+char*** paragraph_store[64] = { 0, };
+
 void clear(void)
 {
     total_paragraph_count = 0;
@@ -53,6 +61,9 @@ void clear(void)
     total_sentence_count_int = 0;
     s_word_count = 0;
     paragraph = NULL;
+    wcount = 0;
+    scount = 0;
+    pcount = 0;
 }
 
 int load_document(const char* document)
@@ -262,11 +273,13 @@ int load_document(const char* document)
                         assert(FALSE);
                     }
                     strcpy(word1, data_backup[count++]);
+                    word_store[wcount++] = word1;
                     *sentence1 = word1;
                     sentence1++;
                 }
                 //*sentence1 = NULL;
                 //sentence1++;
+                sentence_store[scount++] = sentence1 - total_word_count[word_count];
 
                 *paragraph1 = sentence1 - total_word_count[word_count];
                 paragraph1++;
@@ -274,6 +287,7 @@ int load_document(const char* document)
             }
             //*paragraph1 = NULL;
             //paragraph1++;
+            paragraph_store[pcount++] = paragraph1 - total_sentence_count[i];
 
             *doc1 = paragraph1 - total_sentence_count[i];
             doc1++;
@@ -347,51 +361,85 @@ void dispose(void)
     //    data_backup = NULL;
     //}
 
+    //if (paragraph != NULL)
+    //{
+    //    {
+    //        int i;
+    //        int j;
+    //        int k;
+    //        int word_count = 0;
+    //        for (i = 0; i < total_paragraph_count; i++)
+    //        {
+    //            for (j = 0; j < total_sentence_count[i]; j++)
+    //            {
+    //                for (k = 0; k < total_word_count[word_count]; k++)
+    //                {
+    //                    free(paragraph[i][j][k]);
+    //                }
+    //                word_count++;
+    //            }
+    //        }
+    //    }
+
+    //    {
+    //        int i;
+    //        int j;
+    //        for (i = 0; i < total_paragraph_count; i++)
+    //        {
+    //            for (j = 0; j < total_sentence_count[i]; j++)
+    //            {
+    //                free(paragraph[i][j]);
+    //            }
+    //        }
+    //    }
+
+    //    {
+    //        int i;
+    //        for (i = 0; i < total_paragraph_count; i++)
+    //        {
+    //            free(paragraph[i]);
+    //        }
+    //    }
+
+
+    //    free(paragraph);
+    //    paragraph = NULL;
+    //}
+
     if (paragraph != NULL)
     {
         {
             int i;
-            int j;
-            int k;
-            int word_count = 0;
-            for (i = 0; i < total_paragraph_count; i++)
+            for (i = 0; i < wcount; i++)
             {
-                for (j = 0; j < total_sentence_count[i]; j++)
-                {
-                    for (k = 0; k < total_word_count[word_count]; k++)
-                    {
-                        free(paragraph[i][j][k]);
-                    }
-                    word_count++;
-                }
+                free(word_store[i]);
+                word_store[i] = NULL;
             }
         }
 
         {
             int i;
-            int j;
-            for (i = 0; i < total_paragraph_count; i++)
+            for (i = 0; i < scount; i++)
             {
-                for (j = 0; j < total_sentence_count[i]; j++)
-                {
-                    free(paragraph[i][j]);
-                }
+                free(sentence_store[i]);
+                sentence_store[i] = NULL;
             }
         }
 
         {
             int i;
-            for (i = 0; i < total_paragraph_count; i++)
+            for (i = 0; i < pcount; i++)
             {
-                free(paragraph[i]);
+                free(paragraph_store[i]);
+                paragraph_store[i] = NULL;
             }
         }
-
 
         free(paragraph);
         paragraph = NULL;
     }
-    
+
+
 
     clear();
 }
@@ -570,6 +618,7 @@ int print_as_tree(const char* filename)
         int j;
         int k;
         int word_count = 0;
+        int count = 0;
         for (i = 0; i < total_paragraph_count; i++)
         {
             fprintf(fp2, "%s %d%c\n", param_str, param_count, delim);
@@ -578,7 +627,8 @@ int print_as_tree(const char* filename)
                 fprintf(fp2, "    %s %d%c\n", sentence_str, sentence_count, delim);
                 for (k = 0; k < total_word_count[word_count]; k++)
                 {
-                    fprintf(fp2, "        %s\n", paragraph[i][j][k]);
+                    fprintf(fp2, "        %s\n", word_store[count]);
+                    count++;
                 }
                 word_count++;
                 sentence_count++;
