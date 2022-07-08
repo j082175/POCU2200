@@ -13,9 +13,9 @@ static int sentence_index_store;
 
 
 //static char data[512] = { 0, };
-static char* data;
-
-static char** data_backup;
+//static char* data;
+//
+//static char** data_backup;
 
 static const char* recent_document = NULL;
 
@@ -52,6 +52,9 @@ void clear(void)
 
 int load_document(const char* document)
 {
+    char* data = NULL;
+
+    char** data_backup = NULL;
     FILE* fp;
     int i = 0;
     fp = fopen(document, "r");
@@ -265,18 +268,6 @@ end:
     //free(data);
     //data = NULL;
 
-    if (fclose(fp) == EOF)
-    {
-        return FALSE;
-    }
-
-    return TRUE;
-}
-
-void dispose(void)
-{
-    /*동적으로 할당된 메모리를 모두 해제*/
-
     if (data != NULL)
     {
         free(data);
@@ -295,6 +286,37 @@ void dispose(void)
         }
         data_backup = NULL;
     }
+
+    if (fclose(fp) == EOF)
+    {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+void dispose(void)
+{
+    /*동적으로 할당된 메모리를 모두 해제*/
+
+    //if (data != NULL)
+    //{
+    //    free(data);
+    //    data = NULL;
+    //}
+
+    //{
+    //    int i;
+    //    if (data_backup != NULL)
+    //    {
+    //        for (i = 0; i < DATA_MAX_SIZE; i++)
+    //        {
+    //            free(data_backup[i]);
+    //        }
+    //        free(data_backup);
+    //    }
+    //    data_backup = NULL;
+    //}
 
 	if (paragraph != NULL)
 	{
@@ -347,7 +369,6 @@ unsigned int get_total_word_count(void)
 {
 	int sum = 0;
 	int i;
-
 	for (i = 0; i < total_sentence_count_int; i++)
 	{
 		sum += total_word_count[i];
