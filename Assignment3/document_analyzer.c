@@ -260,8 +260,8 @@ int load_document(const char* document)
     //print();
 
 end:
-    free(data);
-    data = NULL;
+    //free(data);
+    //data = NULL;
 
     if (fclose(fp) == EOF)
     {
@@ -278,6 +278,12 @@ void dispose(void)
     if (is_empty)
     {
         return;
+    }
+
+    if (data != NULL)
+    {
+        free(data);
+        data = NULL;
     }
 
     {
