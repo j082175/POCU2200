@@ -4,6 +4,7 @@
    단어 : 띄어쓰기 , 문자로 구분
    단락과 단락사이엔 개행이 존재
    각각의 간격은 4개 */
+#define DATA_MAX_SIZE 4096
 
 
 static int is_empty = FALSE;
@@ -11,15 +12,16 @@ static int paragraph_index_store;
 static int sentence_index_store;
 
 
-static char data[512] = { 0, };
+//static char data[512] = { 0, };
+static char* data;
 
 static char** data_backup;
 
 static const char* recent_document = NULL;
 
 static int total_paragraph_count = 0;
-static int total_sentence_count[64] = { 0, };
-static int total_word_count[128] = { 0, };
+static int total_sentence_count[128] = { 0, };
+static int total_word_count[256] = { 0, };
 
 static int total_sentence_count_int = 0;
 
@@ -41,8 +43,8 @@ char* word;
 void clear(void)
 {
     total_paragraph_count = 0;
-    memset(total_sentence_count, 0, 64);
-    memset(total_word_count, 0, 128);
+    memset(total_sentence_count, 0, 128);
+    memset(total_word_count, 0, 256);
     total_sentence_count_int = 0;
     s_word_count = 0;
     paragraph = NULL;
@@ -62,22 +64,22 @@ int load_document(const char* document)
 
     dispose();
 
-    memset(data, 0, 512);
+    data = (char*)malloc(sizeof(char) * DATA_MAX_SIZE);
 
-    clear();
+    memset(data, 0, DATA_MAX_SIZE);
 
 
 
 
     /* 총 단락 개수 구하기 */
-    for (i = 0; i < 512; i++)
+    for (i = 0; i < DATA_MAX_SIZE; i++)
     {
         data[i] = fgetc(fp);
 
         if (data[0] == EOF)
         {
             is_empty = TRUE;
-            return TRUE;
+            goto end;
         }
 
         is_empty = FALSE;
@@ -144,12 +146,12 @@ int load_document(const char* document)
 
     {
         int i;
-        data_backup = (char**)malloc(sizeof(char*) * 512);
+        data_backup = (char**)malloc(sizeof(char*) * DATA_MAX_SIZE);
         if (data_backup == NULL)
         {
             assert(FALSE);
         }
-        for (i = 0; i < 512; i++)
+        for (i = 0; i < DATA_MAX_SIZE; i++)
         {
             data_backup[i] = (char*)malloc(sizeof(char) * 32);
             if (data_backup[i] == NULL)
@@ -257,6 +259,10 @@ int load_document(const char* document)
     }
     //print();
 
+end:
+    free(data);
+    data = NULL;
+
     if (fclose(fp) == EOF)
     {
         return FALSE;
@@ -278,7 +284,7 @@ void dispose(void)
         int i;
         if (data_backup != NULL)
         {
-            for (i = 0; i < 512; i++)
+            for (i = 0; i < DATA_MAX_SIZE; i++)
             {
                 free(data_backup[i]);
             }
@@ -287,51 +293,50 @@ void dispose(void)
         data_backup = NULL;
     }
 
-    if (paragraph == NULL)
-    {
-        return;
-    }
+	if (paragraph != NULL)
+	{
+		{
+			int i;
+			int j;
+			int k;
+			int word_count = 0;
+			for (i = 0; i < total_paragraph_count; i++)
+			{
+				for (j = 0; j < total_sentence_count[i]; j++)
+				{
+					for (k = 0; k < total_word_count[word_count]; k++)
+					{
+						free(paragraph[i][j][k]);
+					}
+					word_count++;
+				}
+			}
+		}
 
-    {
-        int i;
-        int j;
-        int k;
-        int word_count = 0;
-        for (i = 0; i < total_paragraph_count; i++)
-        {
-            for (j = 0; j < total_sentence_count[i]; j++)
-            {
-                for (k = 0; k < total_word_count[word_count]; k++)
-                {
-                    free(paragraph[i][j][k]);
-                }
-                word_count++;
-            }
-        }
-    }
+		{
+			int i;
+			int j;
+			for (i = 0; i < total_paragraph_count; i++)
+			{
+				for (j = 0; j < total_sentence_count[i]; j++)
+				{
+					free(paragraph[i][j]);
+				}
+			}
+		}
 
-    {
-        int i;
-        int j;
-        for (i = 0; i < total_paragraph_count; i++)
-        {
-            for (j = 0; j < total_sentence_count[i]; j++)
-            {
-                free(paragraph[i][j]);
-            }
-        }
-    }
+		{
+			int i;
+			for (i = 0; i < total_paragraph_count; i++)
+			{
+				free(paragraph[i]);
+			}
+		}
 
-    {
-        int i;
-        for (i = 0; i < total_paragraph_count; i++)
-        {
-            free(paragraph[i]);
-        }
-    }
+		free(paragraph);
+		paragraph = NULL;
+	}
 
-    free(paragraph);
-    paragraph = NULL;
     clear();
 }
 
@@ -521,16 +526,6 @@ int print_as_tree(const char* filename)
     fp2 = fopen(filename, "w");
     if (fp2 == NULL)
     {
-        return FALSE;
-    }
-
-
-    if (total_paragraph_count == 0)
-    {
-        if (fclose(fp2) == EOF)
-        {
-            return FALSE;
-        }
         return FALSE;
     }
 
