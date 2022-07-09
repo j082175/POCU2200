@@ -98,12 +98,12 @@ size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
     //}
 
     arr = (int**)malloc(sizeof(int*) * MAX_SIZE);
-    arr[0] = (int*)malloc(sizeof(int) * MAX_SIZE * 3);
+    arr[0] = (int*)malloc(sizeof(int) * MAX_SIZE * 2);
     
     {
         int i;
         for (i = 1; i < MAX_SIZE; i++) {
-            arr[i] = arr[i - 1] + 3;
+            arr[i] = arr[i - 1] + 2;
         }
     }
 

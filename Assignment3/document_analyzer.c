@@ -419,7 +419,7 @@ int print_as_tree(const char* filename)
 {
     const char* param_str = "Paragraph";
     const char* sentence_str = "Sentence";
-    const char delim = 58;
+    char c = ':';
     int param_count = 0;
     int sentence_count = 0;
 
@@ -449,9 +449,9 @@ int print_as_tree(const char* filename)
         int word_count = 0;
         int count = 0;
         for (i = 0; i < s_total_paragraph_count; i++) {
-            fprintf(fp2, "%s %d%c\n", param_str, param_count, delim);
+            fprintf(fp2, "%s %d%c\n", param_str, param_count, c);
             for (j = 0; j < s_total_sentence_count[i]; j++) {
-                fprintf(fp2, "    %s %d%c\n", sentence_str, sentence_count, delim);
+                fprintf(fp2, "    %s %d%c\n", sentence_str, sentence_count, c);
                 for (k = 0; k < s_total_word_count[word_count]; k++) {
                     fprintf(fp2, "        %s\n", s_word_store[count]);
                     count++;
