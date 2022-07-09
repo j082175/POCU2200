@@ -1,119 +1,160 @@
 #include "parentheses.h"
 
-int MAX;
+typedef int element;
 
-int front = -1;
-int rear = -1;
-int* queue;
+typedef struct QueueType {
+    element* data;
+    int front, rear;
+}QueueType;
 
-int IsEmpty(void) {
-	if (front == rear)//front와 rear가 같으면 큐는 비어있는 상태 
-		return TRUE;
-	else return FALSE;
+//큐 초기화 
+void init_queue(QueueType* q) {
+    q->front = q->rear = 0;
 }
-int IsFull(void) {
-	int tmp = (rear + 1) % MAX; //원형 큐에서 rear+1을 MAX로 나눈 나머지값이
-	if (tmp == front)//front와 같으면 큐는 가득차 있는 상태 
-		return TRUE;
-	else
-		return FALSE;
-}
-void addq(int value) {
-	if (IsFull())
-		printf("Queue is Full.\n");
-	else {
-		rear = (rear + 1) % MAX;
-		queue[rear] = value;
-	}
 
+//큐가 비어 있는지 확인
+int is_empty(QueueType* q) {
+    return (q->front == q->rear);
 }
-int deleteq() {
-	if (IsEmpty())
-		printf("Queue is Empty.\n");
-	else {
-		front = (front + 1) % MAX;
-		return queue[front];
-	}
+
+//큐가 가득 찼는지 확인
+int is_full(QueueType* q, size_t size) {
+    return (q->front == ((q->rear + 1) % size));
+}
+
+//큐가 가득 차 있는지 확인 후 삽입 연산
+void enqueue(QueueType* q, int data, size_t size) {
+    if (is_full(q, size)) {
+        printf("Queue is full \n");
+    }
+    else {
+        q->rear = (q->rear + 1) % size;
+        q->data[q->rear] = data;
+    }
+}
+
+//큐가 비어 있는지 확인 후 삭제 연산
+element dequeue(QueueType* q, size_t size) {
+    if (is_empty(q)) {
+        printf("Queue is empty \n");
+        exit(1);
+    }
+    else {
+        q->front = (q->front + 1) % size;
+        int data = q->data[q->front];
+        return data;
+    }
+}
+
+//큐의 모든 요소 출력
+void print_queue(QueueType* q, size_t size) {
+    if (is_empty(q)) {
+        printf("Empty Queue \n");
+    }
+    else {
+        printf("Queue:");
+        if (!is_empty(q)) {
+            int i = q->front;
+            do {
+                i = (i + 1) % size;
+                printf(" %d |", q->data[i]);
+                if (i == q->rear)
+                    break;
+            } while (i != q->front);
+            printf("\n");
+        }
+    }
 }
 
 
 
 size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
 {
-	const char outter[] = { '}', ')', ']', '>' };
-	const char inner[] = { '{',  '(',  '[',  '<' };
-	int* arr1;
-	int* arr2;
+    const char outter[] = { '}', ')', ']', '>' };
+    const char inner[] = { '{',  '(',  '[',  '<' };
 
-	const size_t MAX_SIZE = ringbuffer->max_size;
-	const size_t STR_LENGTH = strlen(str);
-	size_t count = 0;
-	size_t total_length = 0;
-	char* str_buf = (char*)malloc(sizeof(char) * strlen(str) + 1);
-	if (str_buf == NULL) {
-		assert(FALSE);
-		return 0;
-	}
-
-	arr1 = (int*)malloc(sizeof(int) * STR_LENGTH);
-	arr2 = (int*)malloc(sizeof(int) * STR_LENGTH);
+    int* arr = NULL;
+    int* arr2 = NULL;
+    const size_t MAX_SIZE = ringbuffer->max_size;
+    const size_t STR_LENGTH = strlen(str);
+    size_t count = 0;
+    size_t total_length = 0;
+    char* str_buf = (char*)malloc(sizeof(char) * strlen(str) + 1);
+    if (str_buf == NULL) {
+        assert(FALSE);
+        return 0;
+    }
 
 
-	strcpy(str_buf, str);
+    //for (int i = 0; i < 5; i++) {
+    //	enqueue(&q, i);
+    //	queue_print(q);
+    //}
 
-	memset(ringbuffer->parentheses, 0, MAX_SIZE);
-	ringbuffer->start_index = 0;
+    //for (int i = 0; i < 5; i++) {
+    //	dequeue(&q);
+    //	queue_print(q);
+    //}
 
-	while (count < STR_LENGTH / 2) {
-		{
-			size_t i;
-			int j;
-			int k;
-			for (i = 0; i < STR_LENGTH; i++) {
-				for (j = 0; j < 4; j++) {
-					if (str_buf[i] == outter[j]) {
-						for (k = i - 1; k >= 0; k--) {
-							if (str_buf[k] == inner[j]) {
-								str_buf[k] = '?';
-								str_buf[i] = '?';
+    arr = (int*)malloc(sizeof(int) * MAX_SIZE);
+    arr2 = (int*)malloc(sizeof(int) * MAX_SIZE);
 
-								arr1[count] = k;
-								arr2[count] = i;
+    strcpy(str_buf, str);
 
-								if (count / MAX_SIZE) {
-									ringbuffer->start_index++;
-								}
+    memset(ringbuffer->parentheses, 0, MAX_SIZE);
+    ringbuffer->start_index = 0;
 
-								total_length++;
-								goto end;
-							}
-						}
-					}
-				}
-			}
-		}
+    while (count < STR_LENGTH / 2) {
+        {
+            size_t i;
+            int j;
+            int k;
+            for (i = 0; i < STR_LENGTH; i++) {
+                for (j = 0; j < 4; j++) {
+                    if (str_buf[i] == outter[j]) {
+                        for (k = i - 1; k >= 0; k--) {
+                            if (str_buf[k] == inner[j]) {
+                                str_buf[k] = '?';
+                                str_buf[i] = '?';
 
-	end:
-		count++;
-	}
+                                arr[count % MAX_SIZE] = k;
+                                arr2[count % MAX_SIZE] = i;
 
-	{
-		int i;
-		for (i = 0; i < MAX_SIZE; i++)
-		{
-			ringbuffer->parentheses[i].opening_index = arr1[i + ringbuffer->start_index];
-			ringbuffer->parentheses[i].closing_index = arr2[i + ringbuffer->start_index];
-		}
-	}
+                                if (count / MAX_SIZE) {
+                                    ringbuffer->start_index++;
+                                }
+
+                                total_length++;
+                                goto end;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    end:
+        count++;
+    }
 
 
-	free(arr1);
-	free(arr2);
 
-	if (str_buf != NULL) {
-		free(str_buf);
-	}
-	str_buf = NULL;
+    {
+        int i;
+        for (i = 0; i < MAX_SIZE; i++)
+        {
+            ringbuffer->parentheses[(ringbuffer->start_index + i) % MAX_SIZE].opening_index = arr[(ringbuffer->start_index + i) % MAX_SIZE];
+            ringbuffer->parentheses[(ringbuffer->start_index + i) % MAX_SIZE].closing_index = arr2[(ringbuffer->start_index + i) % MAX_SIZE];
+        }
+    }
 
-	return total_length;
+
+    free(arr);
+
+    if (str_buf != NULL) {
+        free(str_buf);
+    }
+    str_buf = NULL;
+
+    return total_length;
 }
