@@ -1,7 +1,7 @@
 #ifndef PARENTHESES_H
 #define PARENTHESES_H
 
-//#define _CRT_SECURE_NO_WARNINGS
+/*#define _CRT_SECURE_NO_WARNINGS*/
 
 #define TRUE 1
 #define FALSE 0
