@@ -128,12 +128,41 @@ size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
                                 str_buf[k] = '?';
                                 str_buf[i] = '?';
 
-                                arr[count % MAX_SIZE][0] = k;
-                                arr[count % MAX_SIZE][1] = i;
 
                                 if (count / MAX_SIZE) {
                                     ringbuffer->start_index++;
                                 }
+
+                                if (count > MAX_SIZE - 1)
+                                {
+                                    {
+                                        int check_count = 0;
+                                        int m;
+                                        int min = arr[0][1];
+                                        int min2 = arr[0][0];
+                                        for (m = 0; m < MAX_SIZE; m++)
+                                        {
+                                            if (arr[m][1] < min)
+                                            {
+                                                min = arr[m][1];
+                                                min2 = arr[m][0];
+                                                check_count = m;
+                                            }
+                                        }
+
+                                        arr[check_count][0] = k;
+                                        arr[check_count][1] = i;
+                                        total_length++;
+                                        goto end;
+                                    }
+                                }
+
+                                    arr[count % MAX_SIZE][0] = k;
+                                    arr[count % MAX_SIZE][1] = i;
+
+
+
+
 
                                 total_length++;
                                 goto end;
