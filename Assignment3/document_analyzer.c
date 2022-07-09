@@ -419,7 +419,7 @@ int print_as_tree(const char* filename)
 {
     const char* param_str = "Paragraph";
     const char* sentence_str = "Sentence";
-    const char delim = ' : ';
+    const char delim = 58;
     int param_count = 0;
     int sentence_count = 0;
 
