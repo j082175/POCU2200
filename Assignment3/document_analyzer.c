@@ -657,6 +657,11 @@ int print_as_tree(const char* filename)
         return FALSE;
     }
 
+    if (total_paragraph_count == 0)
+    {
+        return FALSE;
+    }
+
     fp2 = fopen(filename, "w");
     if (fp2 == NULL)
     {
