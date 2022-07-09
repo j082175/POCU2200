@@ -6,8 +6,8 @@
 /* < > */
 size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
 {
-    const char outter[] = {'}', ')', ']', '>'};
-    const char inner[] = {'{', '(', '[', '<'};
+    const char outter[] = { '}',')',']','>' };
+    const char inner[] = { '{','(','[','<' };
 
     const size_t MAX_SIZE = ringbuffer->max_size;
     const size_t STR_LENGTH = strlen(str);
