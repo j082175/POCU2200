@@ -16,17 +16,10 @@ static int s_scount = 0;
 static int s_pcount = 0;
 
 
-//static char data[512] = { 0, };
-//static char* data;
-//
-//static char** data_backup;
-
 static const char* recent_document = NULL;
 
 static int s_total_paragraph_count = 0;
 
-//static int total_sentence_count[128] = { 0, };
-//static int total_word_count[256] = { 0, };
 static int* s_total_sentence_count = NULL;
 static int* s_total_word_count = NULL;
 
@@ -42,16 +35,9 @@ static char s_paragraph_division = '\n';
 static char s_sentence_division[] = { '.', '?', '!' };
 static char s_word_division[] = { ' ', ',' , '.', '?', '!' };
 
-//char**** doc;
+
 static char**** s_paragraph = NULL;
-//char** sentence;
-//char* word;
 
-
-
-//char* word_store[512] = { 0, };
-//char** sentence_store[128] = { 0, };
-//char*** paragraph_store[64] = { 0, };
 
 static char** s_word_store = NULL;
 static char*** s_sentence_store = NULL;
@@ -158,7 +144,7 @@ int load_document(const char* document)
             int j;
             for (j = 0; j < 5; j++) {
                 if (data[i] == s_word_division[j] && !s_is_word) {
-                    //total_word_count++;
+
                     s_total_word_count[s_word_count]++;
                     if (s_check) {
                         s_word_count++;
@@ -474,9 +460,12 @@ int print_as_tree(const char* filename)
                 word_count++;
                 sentence_count++;
             }
-            fputc('\n', fp2);
             param_count++;
             sentence_count = 0;
+            if (i == s_total_paragraph_count - 1) {
+                break;
+            }
+            fputc('\n', fp2);
         }
     }
 
