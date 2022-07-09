@@ -33,7 +33,7 @@ static int s_word_count;
 
 static char s_paragraph_division = '\n';
 static char s_sentence_division[] = { '.', '?', '!' };
-static char s_word_division[] = { ' ', ',' , '.', '?', '!' };
+static char s_word_division[] = { ' ', ',', '.', '?', '!' };
 
 
 static char**** s_paragraph = NULL;
@@ -135,7 +135,6 @@ int load_document(const char* document)
                     s_total_sentence_count_int++;
                     s_check = TRUE;
                     break;
-                    //word_count++;
                 }
             }
         }
@@ -210,7 +209,7 @@ int load_document(const char* document)
             for (j = 0; j < s_total_sentence_count[i]; j++) {
                 sentence1 = (char**)malloc(sizeof(char*) * s_total_word_count[word_count]);
                 for (k = 0; k < s_total_word_count[word_count]; k++) {
-                    word1 = (char*)malloc(sizeof(char) * strlen(data_backup[count]) + 1);/* 메모리 문제 */
+                    word1 = (char*)malloc(sizeof(char) * strlen(data_backup[count]) + 1);
                     if (word1 == NULL) {
                         assert(FALSE);
                     }
