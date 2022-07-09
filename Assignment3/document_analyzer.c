@@ -453,7 +453,11 @@ int print_as_tree(const char* filename)
             for (j = 0; j < s_total_sentence_count[i]; j++) {
                 fprintf(fp2, "    %s %d%c\n", sentence_str, sentence_count, c);
                 for (k = 0; k < s_total_word_count[word_count]; k++) {
-                    fprintf(fp2, "        %s\n", s_word_store[count]);
+                    fprintf(fp2, "        %s", s_word_store[count]);
+                    if (i == s_total_paragraph_count - 1 && j == s_total_sentence_count[i] - 1 && k == s_total_word_count[word_count] - 1) {
+                        goto end;
+                    }
+                    fputc('\n', fp2);
                     count++;
                 }
                 word_count++;
@@ -468,7 +472,7 @@ int print_as_tree(const char* filename)
         }
     }
 
-
+end:
     if (fclose(fp2) == EOF) {
         return FALSE;
     }
