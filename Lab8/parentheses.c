@@ -73,8 +73,9 @@ size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
     const char outter[] = { '}', ')', ']', '>' };
     const char inner[] = { '{',  '(',  '[',  '<' };
 
-    int* arr = NULL;
-    int* arr2 = NULL;
+    int** arr = NULL;
+    int rbuf = 0;
+
     const size_t MAX_SIZE = ringbuffer->max_size;
     const size_t STR_LENGTH = strlen(str);
     size_t count = 0;
@@ -96,12 +97,18 @@ size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
     //	queue_print(q);
     //}
 
-    arr = (int*)malloc(sizeof(int) * MAX_SIZE);
-    arr2 = (int*)malloc(sizeof(int) * MAX_SIZE);
-    if (arr2 = NULL)
+    arr = (int**)malloc(sizeof(int*) * MAX_SIZE);
+    arr[0] = (int*)malloc(sizeof(int) * MAX_SIZE * 3);
+    
     {
-        return 0;
+        int i;
+        for (i = 1; i < MAX_SIZE; i++) {
+            arr[i] = arr[i - 1] + 3;
+        }
     }
+
+    
+
 
     strcpy(str_buf, str);
 
@@ -121,8 +128,8 @@ size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
                                 str_buf[k] = '?';
                                 str_buf[i] = '?';
 
-                                arr[count % MAX_SIZE] = k;
-                                arr2[count % MAX_SIZE] = i;
+                                arr[count % MAX_SIZE][0] = k;
+                                arr[count % MAX_SIZE][1] = i;
 
                                 if (count / MAX_SIZE) {
                                     ringbuffer->start_index++;
@@ -141,20 +148,20 @@ size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
         count++;
     }
 
-
+    rbuf = ringbuffer->start_index;
 
     {
         int i;
         for (i = 0; i < MAX_SIZE; i++)
         {
-            ringbuffer->parentheses[(ringbuffer->start_index + i) % MAX_SIZE].opening_index = arr[(ringbuffer->start_index + i) % MAX_SIZE];
-            ringbuffer->parentheses[(ringbuffer->start_index + i) % MAX_SIZE].closing_index = arr2[(ringbuffer->start_index + i) % MAX_SIZE];
+            ringbuffer->parentheses[(rbuf + i) % MAX_SIZE].opening_index = arr[(rbuf + i) % MAX_SIZE][0];
+            ringbuffer->parentheses[(rbuf + i) % MAX_SIZE].closing_index = arr[(rbuf + i) % MAX_SIZE][1];
         }
     }
 
 
+    free(arr[0]);
     free(arr);
-    free(arr2);
 
     if (str_buf != NULL) {
         free(str_buf);
