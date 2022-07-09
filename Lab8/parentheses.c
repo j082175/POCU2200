@@ -1,5 +1,72 @@
 #include "parentheses.h"
 
+//typedef int element;
+//
+//typedef struct QueueType {
+//	element* data;
+//	int front, rear;
+//}QueueType;
+//
+////큐 초기화 
+//void init_queue(QueueType* q) {
+//	q->front = q->rear = 0;
+//}
+//
+////큐가 비어 있는지 확인
+//int is_empty(QueueType* q) {
+//	return (q->front == q->rear);
+//}
+//
+////큐가 가득 찼는지 확인
+//int is_full(QueueType* q, size_t size) {
+//	return (q->front == ((q->rear + 1) % size));
+//}
+//
+////큐가 가득 차 있는지 확인 후 삽입 연산
+//void enqueue(QueueType* q, int data, size_t size) {
+//	if (is_full(q, size)) {
+//		printf("Queue is full \n");
+//	}
+//	else {
+//		q->rear = (q->rear + 1) % size;
+//		q->data[q->rear] = data;
+//	}
+//}
+//
+////큐가 비어 있는지 확인 후 삭제 연산
+//element dequeue(QueueType* q, size_t size) {
+//	if (is_empty(q)) {
+//		printf("Queue is empty \n");
+//		exit(1);
+//	}
+//	else {
+//		q->front = (q->front + 1) % size;
+//		int data = q->data[q->front];
+//		return data;
+//	}
+//}
+//
+////큐의 모든 요소 출력
+//void print_queue(QueueType* q, size_t size) {
+//	if (is_empty(q)) {
+//		printf("Empty Queue \n");
+//	}
+//	else {
+//		printf("Queue:");
+//		if (!is_empty(q)) {
+//			int i = q->front;
+//			do {
+//				i = (i + 1) % size;
+//				printf(" %d |", q->data[i]);
+//				if (i == q->rear)
+//					break;
+//			} while (i != q->front);
+//			printf("\n");
+//		}
+//	}
+//}
+
+
 
 size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
 {
@@ -19,8 +86,22 @@ size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
     }
 
 
+    //for (int i = 0; i < 5; i++) {
+    //	enqueue(&q, i);
+    //	queue_print(q);
+    //}
+
+    //for (int i = 0; i < 5; i++) {
+    //	dequeue(&q);
+    //	queue_print(q);
+    //}
+
     arr = (int*)malloc(sizeof(int) * MAX_SIZE);
     arr2 = (int*)malloc(sizeof(int) * MAX_SIZE);
+    if (arr2 = NULL)
+    {
+        return 0;
+    }
 
     strcpy(str_buf, str);
 
@@ -73,6 +154,7 @@ size_t find_matching_parentheses(ringbuffer_t* ringbuffer, const char* str)
 
 
     free(arr);
+    free(arr2);
 
     if (str_buf != NULL) {
         free(str_buf);
