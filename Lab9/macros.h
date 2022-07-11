@@ -1,18 +1,24 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-#define MAX(x, y) (x > y ? x : y)
+#undef MAX
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
-#define MIN(x, y) (x < y ? x : y)
+#undef MIN
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
-#define ABS(x) (x > 0 ? x : x * -1)
+#undef ABS
+#define ABS(x) (((x) > (0)) ? (x) : ((x) * (-1)))
 
+#undef RANGE
 #define RANGE(curr, min, max)\
-        for (curr = min; curr <= max; curr++)\
+        for (((curr) = (min)); ((curr) <= (max)); (curr++))\
 
+#undef RANGE_DESC
 #define RANGE_DESC(curr, max, min)\
-        for (curr = max; curr >= min; curr--)\
+        for (((curr) = (max)); ((curr) >= (min)); (curr--))\
 
+#undef SET
 #define SET(ary, start, count, value)\
     {\
         int i;\
