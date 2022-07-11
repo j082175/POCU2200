@@ -3,21 +3,21 @@
 
 #endif
 
-#undef MAX
+
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
 
-#undef MIN
+
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
-#undef ABS
+
 #define ABS(x) (((x) < 0) ? (-(x)) : ((x)))
 
-#undef RANGE
+
 #define RANGE(curr, min, max)\
         for (((curr) = (min)); ((curr) <= (max)); (curr++))\
 
-#undef RANGE_DESC
+
 #define RANGE_DESC(curr, max, min)\
         for (((curr) = (max)); ((curr) >= (min)); (curr--))\
 
