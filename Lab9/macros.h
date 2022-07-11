@@ -1,6 +1,8 @@
 #ifndef MACROS_H
 #define MACROS_H
 
+#endif
+
 #undef MAX
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
@@ -19,7 +21,9 @@
 #define RANGE_DESC(curr, max, min)\
         for (((curr) = (max)); ((curr) >= (min)); (curr--))\
 
-#undef SET
+#define I 
+
+#ifndef SET
 #define SET(ary, start, count, value)\
     {\
         unsigned i;\
@@ -27,7 +31,6 @@
             (ary[i]) = (value);\
         }\
     }\
-
 
 void test();
 
