@@ -9,7 +9,7 @@
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 #undef ABS
-#define ABS(x) (((x) > 0) ? (x) : ((x) * -1))
+#define ABS(x) (((x) > 0) ? (x) : ((-1 * (x))))
 
 #undef RANGE
 #define RANGE(curr, min, max)\
@@ -22,7 +22,7 @@
 #undef SET
 #define SET(ary, start, count, value)\
     {\
-        int i;\
+        unsigned i;\
         for (i = (start); i < ((count) + (start)); i++) {\
             (ary[i]) = (value);\
         }\
