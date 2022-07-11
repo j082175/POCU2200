@@ -7,19 +7,19 @@
 
 #define ABS(x) (x > 0 ? x : x * -1)
 
-#define RANGE(curr, min, max)						\
-        for (curr = min; curr <= max; curr++)		\
+#define RANGE(curr, min, max)\
+        for (curr = min; curr <= max; curr++)\
 
-#define RANGE_DESC(curr, max, min)					\
-        for (curr = max; curr >= min; curr--)		\
+#define RANGE_DESC(curr, max, min)\
+        for (curr = max; curr >= min; curr--)\
 
-#define SET(ary, start, count, value)				\
-    {												\
-        int i;										\
-        for (i = start; i < count + start; i++) {	\
-            ary[i] = value;							\
-        }											\
-    }												\
+#define SET(ary, start, count, value)\
+    {\
+        int i;\
+        for (i = start; i < count + start; i++) {\
+            ary[i] = value;\
+        }\
+    }\
 
 void test();
 
