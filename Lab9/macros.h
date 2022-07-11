@@ -21,6 +21,6 @@
         }											\
     }												\
 
-#endif /* MACROS_H */
-
 void test();
+
+#endif /* MACROS_H */
