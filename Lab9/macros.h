@@ -4,11 +4,12 @@
 #undef MAX
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
+
 #undef MIN
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 #undef ABS
-#define ABS(x) (((x) > (0)) ? (x) : ((x) * (-1)))
+#define ABS(x) (((x) > 0) ? (x) : ((x) * -1))
 
 #undef RANGE
 #define RANGE(curr, min, max)\
@@ -22,10 +23,11 @@
 #define SET(ary, start, count, value)\
     {\
         int i;\
-        for (i = start; i < count + start; i++) {\
-            ary[i] = value;\
+        for (i = (start); i < ((count) + (start)); i++) {\
+            (ary[i]) = (value);\
         }\
     }\
+
 
 void test();
 
