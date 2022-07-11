@@ -21,12 +21,12 @@
 #define RANGE_DESC(curr, max, min)\
         for (((curr) = (max)); ((curr) >= (min)); (curr--))\
 
-#define I 
+#define TEST(i) unsigned i 
 
 #ifndef SET
 #define SET(ary, start, count, value)\
     {\
-        unsigned i;\
+        TEST(i);\
         for (i = (start); i < ((count) + (start)); i++) {\
             (ary[i]) = (value);\
         }\
