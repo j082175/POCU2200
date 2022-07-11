@@ -22,3 +22,5 @@
     }												\
 
 #endif /* MACROS_H */
+
+void test();
