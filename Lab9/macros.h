@@ -7,12 +7,23 @@
 
 #define ABS(x) (((x) < 0) ? (-(x)) : ((x)))
 
+//#define RANGE(curr, min, max)\
+//        for (((curr) = (min)); ((curr) <= (max)); (curr++))\
+//
+//
+//#define RANGE_DESC(curr, max, min)\
+//        for (((curr) = (max)); ((curr) >= (min)); (curr--))\
+
 #define RANGE(curr, min, max)\
-        for (((curr) = min); ((curr) <= max); (curr++))\
+        curr = min;\
+        curr--;\
+        while (curr++ < max)\
 
 
 #define RANGE_DESC(curr, max, min)\
-        for (((curr) = max); ((curr) >= min); (curr--))\
+        curr = max;\
+        curr++;\
+        while (curr-- > min)\
 
 
 #define SET(ary, start, count, value)\
