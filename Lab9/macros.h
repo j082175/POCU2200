@@ -15,15 +15,15 @@
 //        for (((curr) = (max)); ((curr) >= (min)); (curr--))\
 
 #define RANGE(curr, min, max)\
-        curr = min;\
-        curr--;\
-        while (curr++ < max)\
+        (curr) = (min);\
+        (curr--);\
+        while ((curr++) < (max))\
 
 
 #define RANGE_DESC(curr, max, min)\
-        curr = max;\
-        curr++;\
-        while (curr-- > min)\
+        (curr) = (max);\
+        (curr++);\
+        while ((curr--) > (min))\
 
 
 #define SET(ary, start, count, value)\
