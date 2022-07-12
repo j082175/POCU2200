@@ -39,6 +39,6 @@ do\
             (ary[i]) = (value);\
         }\
     }\
-} while (0);\
+} while (0)\
 
 #endif /* MACROS_H */
