@@ -12,7 +12,7 @@
 
 
 #define RANGE_DESC(curr, max, min)\
-        for (((curr) = (max)); ((curr) >= (min)); (curr) = (curr) - 1)\
+        for (((curr) = (max)); ((curr) >= (min)); (curr)--)\
 
 //#define RANGE(curr, min, max)\
 //        (curr) = (min);\
