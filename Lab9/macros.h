@@ -8,11 +8,11 @@
 #define ABS(x) (((x) < 0) ? (-(x)) : ((x)))
 
 #define RANGE(curr, min, max)\
-        for (((curr) = (min)); ((curr) <= (max)); (curr) = (curr) + 1)\ /* 전방, 후방 증감,감소연산자 쓰면안됨 */
+        for (((curr) = (min)); ((curr) <= (max)); (curr)++)\
 
 
 #define RANGE_DESC(curr, max, min)\
-        for (((curr) = (max)); ((curr) >= (min)); (curr) = (curr) - 1)\ /* 전방, 후방 증감,감소연산자 쓰면안됨 */
+        for (((curr) = (max)); ((curr) >= (min)); (curr) = (curr) - 1)\
 
 //#define RANGE(curr, min, max)\
 //        (curr) = (min);\
@@ -26,14 +26,13 @@
 //        while ((curr--) > (min))\
 
 
-
 #define SET(ary, start, count, value)\
         do\
         {\
             {\
                 unsigned i;\
                 for (i = (start); i < ((count) + (start)); i++) {\
-                (*(ary + i)) = (value);\/* 배열형식말고 포인터형식만됨 */
+                (*(ary + i)) = (value);\
             }\
             }\
         } while (0)\
