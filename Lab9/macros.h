@@ -32,7 +32,7 @@
             {\
                 unsigned i;\
                 for (i = (start); i < ((count) + (start)); i++) {\
-                (*(ary + i)) = (value);\
+                ((ary)[i]) = (value);\
             }\
             }\
         } while (0)\
