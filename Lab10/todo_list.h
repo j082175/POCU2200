@@ -1,10 +1,13 @@
 #ifndef TODO_LIST_H
 #define TODO_LIST_H
 
+//#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <string.h>
 
 typedef struct todo_list todo_list_t;
 
