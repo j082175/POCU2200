@@ -29,8 +29,7 @@ void finalize_todo_list(todo_list_t* todo_list)
     int size = todo_list->size;
 
     for (size_t i = 0; i < size; i++) {
-        if (todo_list->list[i].task != NULL)
-        {
+        if (todo_list->list[i].task != NULL) {
             free(todo_list->list[i].task);
             todo_list->list[i].task = NULL;
         }
@@ -78,8 +77,7 @@ bool complete_todo(todo_list_t* todo_list)
     }
 
     for (size_t i = 0; i < size; i++) {
-        if (max_value < todo_list->list[i].priority)
-        {
+        if (max_value < todo_list->list[i].priority) {
             max_value = todo_list->list[i].priority;
             index = i;
         }
@@ -104,8 +102,7 @@ const char* peek_or_null(const todo_list_t* todo_list)
     }
 
     for (size_t i = 0; i < size; i++) {
-        if (max_value < todo_list->list[i].priority)
-        {
+        if (max_value < todo_list->list[i].priority) {
             max_value = todo_list->list[i].priority;
             index = i;
         }
