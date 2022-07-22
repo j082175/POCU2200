@@ -13,14 +13,14 @@
 #define FALSE (0)
 
 typedef struct hashmap {
-    size_t(*hash_func)(const char* key);
+    size_t (*hash_func)(const char *key);
     node_t** plist;
     size_t length;
 } hashmap_t;
 
 size_t get_prime_number(size_t length);
 
-hashmap_t* init_hashmap_malloc(size_t length, size_t(*p_hash_func)(const char* key));
+hashmap_t* init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char *key));
 
 int add_key(hashmap_t* hashmap, const char* key, const int value);
 
