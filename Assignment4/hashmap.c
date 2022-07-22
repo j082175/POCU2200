@@ -30,7 +30,6 @@ size_t get_prime_number(size_t length)
     size_t prime_number;
     size_t prime_number_divided;
     {
-        int count = 0;
         size_t i;
         int is_prime = FALSE;
         size_t double_num = length * 2;
@@ -74,7 +73,7 @@ hashmap_t* init_hashmap_malloc(size_t length, size_t(*p_hash_func)(const char* k
     }
 
     {
-        int i;
+        size_t i;
         for (i = 0; i < length; i++)
         {
             hash_table[i] = NULL;
@@ -97,25 +96,23 @@ hashmap_t* init_hashmap_malloc(size_t length, size_t(*p_hash_func)(const char* k
 
 int add_key(hashmap_t* hashmap, const char* key, const int value)
 {
-    int is_added = FALSE;
-    size_t count = 0;
     size_t hash = 0;
     node_t** cursor;
 
     hash = (hashmap->hash_func(key)) % (hashmap->length);
 
-	cursor = &(hashmap->plist)[hash];
+    cursor = &(hashmap->plist)[hash];
 
-	while (*cursor != NULL)
-	{
-		if (!strcmp((*cursor)->key, key))
-		{
-			return FALSE;
-		}
-		cursor = &(*cursor)->next;
-	}
+    while (*cursor != NULL)
+    {
+        if (!strcmp((*cursor)->key, key))
+        {
+            return FALSE;
+        }
+        cursor = &(*cursor)->next;
+    }
 
-	return insert_front(hashmap->plist, key, value, hash);
+    return insert_front(hashmap->plist, key, value, hash);
 }
 
 int get_value(const hashmap_t* hashmap, const char* key)
@@ -185,7 +182,7 @@ int remove_key(hashmap_t* hashmap, const char* key)
 
 void destroy(hashmap_t* hashmap)
 {
-    int i;
+    size_t i;
     node_t* p;
     node_t* next;
 
@@ -195,14 +192,14 @@ void destroy(hashmap_t* hashmap)
     {
         p = hashmap->plist[i];
 
-		while (p != NULL)
-		{
-			next = p->next;
-			free(p->key);
-			free(p);
-			p = next;
+        while (p != NULL)
+        {
+            next = p->next;
+            free(p->key);
+            free(p);
+            p = next;
 
-		}
+        }
         
     }
 
