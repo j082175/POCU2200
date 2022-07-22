@@ -58,7 +58,7 @@ hashmap_t* init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char* 
     node_t** hash_table;
     hashmap_t* hashmap;
 
-    hash_table = (node_t** )malloc(sizeof(node_t*) * length);
+    hash_table = (node_t**)malloc(sizeof(node_t*) * length);
     if (hash_table == NULL) {
         assert(FALSE);
     }
