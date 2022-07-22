@@ -151,6 +151,7 @@ int remove_key(hashmap_t* hashmap, const char* key)
         if (!strcmp((*cursor)->key, key)) {
             tmp = *cursor;
             *cursor = (*cursor)->next;
+            free(tmp->key);
             free(tmp);
             tmp = NULL;
             return TRUE;
