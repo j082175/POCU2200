@@ -2,13 +2,13 @@
 /* 모든 함수의 포인터형에 NULL 은 들어가지 않는다고 가정한다. */
 /* hashmap 이란? 데이터가 2개가 있는 거 + 배열이 아닌 링크드 리스트로 구현 */
 
-int insert_front(node_t **phead, const char *key, int value, int index)
+int insert_front(node_t** phead, const char* key, int value, int index)
 {
-    node_t *new_node;
+    node_t* new_node;
 
     new_node = malloc(sizeof(node_t));
 
-    new_node->key = (char *)malloc(sizeof(char) * strlen(key) + 1);
+    new_node->key = (char*)malloc(sizeof(char) * strlen(key) + 1);
     if (new_node->key == NULL) {
         assert(FALSE);
     }
@@ -52,13 +52,13 @@ size_t get_prime_number(size_t length)
     return prime_number_divided;
 }
 
-hashmap_t *init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char *key))
+hashmap_t* init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char* key))
 {
 
-    node_t **hash_table;
-    hashmap_t *hashmap;
+    node_t** hash_table;
+    hashmap_t* hashmap;
 
-    hash_table = (node_t **)malloc(sizeof(node_t *) * length);
+    hash_table = (node_t** )malloc(sizeof(node_t*) * length);
     if (hash_table == NULL) {
         assert(FALSE);
     }
@@ -70,7 +70,7 @@ hashmap_t *init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char *
         }
     }
 
-    hashmap = (hashmap_t *)malloc(sizeof(hashmap_t));
+    hashmap = (hashmap_t*)malloc(sizeof(hashmap_t));
     if (hashmap == NULL) {
         assert(FALSE);
     }
@@ -83,10 +83,10 @@ hashmap_t *init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char *
     return hashmap;
 }
 
-int add_key(hashmap_t *hashmap, const char *key, const int value)
+int add_key(hashmap_t* hashmap, const char* key, const int value)
 {
     size_t hash = 0;
-    node_t **cursor;
+    node_t** cursor;
 
     hash = (hashmap->hash_func(key)) % (hashmap->length);
 
@@ -102,11 +102,11 @@ int add_key(hashmap_t *hashmap, const char *key, const int value)
     return insert_front(hashmap->plist, key, value, hash);
 }
 
-int get_value(const hashmap_t *hashmap, const char *key)
+int get_value(const hashmap_t* hashmap, const char* key)
 {
     size_t hash = hashmap->hash_func(key) % hashmap->length;
 
-    node_t **cursor;
+    node_t** cursor;
 
     cursor = &(hashmap->plist)[hash];
 
@@ -120,11 +120,11 @@ int get_value(const hashmap_t *hashmap, const char *key)
     return EOF;
 }
 
-int update_value(hashmap_t *hashmap, const char *key, const int value)
+int update_value(hashmap_t* hashmap, const char* key, const int value)
 {
     size_t hash = hashmap->hash_func(key) % hashmap->length;
 
-    node_t **cursor;
+    node_t** cursor;
 
     cursor = &(hashmap->plist)[hash];
 
@@ -139,10 +139,10 @@ int update_value(hashmap_t *hashmap, const char *key, const int value)
     return FALSE;
 }
 
-int remove_key(hashmap_t *hashmap, const char *key)
+int remove_key(hashmap_t* hashmap, const char* key)
 {
-    node_t **cursor;
-    node_t *tmp;
+    node_t** cursor;
+    node_t* tmp;
     size_t hash = hashmap->hash_func(key) % hashmap->length;
 
     cursor = &(hashmap->plist)[hash];
@@ -162,11 +162,11 @@ int remove_key(hashmap_t *hashmap, const char *key)
     return FALSE;
 }
 
-void destroy(hashmap_t *hashmap)
+void destroy(hashmap_t* hashmap)
 {
     size_t i;
-    node_t *p;
-    node_t *next;
+    node_t* p;
+    node_t* next;
 
     for (i = 0; i < hashmap->length; i++) {
         p = hashmap->plist[i];
