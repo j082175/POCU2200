@@ -45,6 +45,7 @@ int update_email(user_t** users_or_null, size_t id, const char* email)
 {
     user_t* user = NULL;
     FILE* fp;
+    char* old_email = NULL;
 
     if (users_or_null == NULL)
     {
@@ -56,6 +57,8 @@ int update_email(user_t** users_or_null, size_t id, const char* email)
 
         while (*(users_or_null + count) != NULL) {
             if ((*(users_or_null + count))->id == id) {
+                old_email = malloc(sizeof(char) * strlen((*(users_or_null + count))->email) + 1);
+                strcpy(old_email, (*(users_or_null + count))->email);
                 strcpy((*(users_or_null + count))->email, email);
 
                 user = (*(users_or_null + count));
@@ -102,7 +105,7 @@ int update_email(user_t** users_or_null, size_t id, const char* email)
             }
         }
 
-        fprintf(fp, "TRACE: User %zu updated email from \"%s\" to \"%s\"\n", user->id, user->email, email1);
+        fprintf(fp, "TRACE: User %zu updated email from \"%s\" to \"%s\"\n", user->id, old_email, email1);
 
         free(email1);
     }
@@ -111,13 +114,15 @@ int update_email(user_t** users_or_null, size_t id, const char* email)
 
     /* debug mode */
 #ifndef RELEASE
-    fprintf(fp, "TRACE: User %zu updated email from \"%s\" to \"%s\"\n", user->id, user->email, email);
+    fprintf(fp, "TRACE: User %zu updated email from \"%s\" to \"%s\"\n", user->id, old_email, email);
 #endif // !RELEASE
 
 
     if (fclose(fp) == EOF) {
         assert(FALSE);
     }
+
+    free(old_email);
 
     return TRUE;
 }
@@ -126,6 +131,7 @@ int update_password(user_t** users_or_null, size_t id, const char* password)
 {
     user_t* user = NULL;
     FILE* fp;
+    char* old_password = NULL;
 
     if (users_or_null == NULL)
     {
@@ -137,6 +143,8 @@ int update_password(user_t** users_or_null, size_t id, const char* password)
 
         while (*(users_or_null + count) != NULL) {
             if ((*(users_or_null + count))->id == id) {
+                old_password = malloc(sizeof(char) * strlen((*(users_or_null + count))->password) + 1);
+                strcpy(old_password, (*(users_or_null + count))->password);
                 strcpy((*(users_or_null + count))->password, password);
 
                 user = (*(users_or_null + count));
@@ -180,7 +188,7 @@ int update_password(user_t** users_or_null, size_t id, const char* password)
             }
         }
 
-        fprintf(fp, "TRACE: User %zu updated password from \"%s\" to \"%s\"\n", user->id, user->password, password1);
+        fprintf(fp, "TRACE: User %zu updated password from \"%s\" to \"%s\"\n", user->id, old_password, password1);
 
         free(password1);
     }
@@ -188,12 +196,14 @@ int update_password(user_t** users_or_null, size_t id, const char* password)
 
     /* debug mode */
 #ifndef RELEASE
-    fprintf(fp, "TRACE: User %zu updated password from \"%s\" to \"%s\"\n", user->id, user->password, password);
+    fprintf(fp, "TRACE: User %zu updated password from \"%s\" to \"%s\"\n", user->id, old_password, password);
 #endif // !RELEASE
 
     if (fclose(fp) == EOF) {
         assert(FALSE);
     }
+
+    free(old_password);
 
     return TRUE;
 }
